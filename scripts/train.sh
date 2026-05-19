@@ -13,4 +13,5 @@ python ./main.py \
   --cr 4 \
   --scheduler cosine \
   --lr_init 5e-4 \
-  --gpu 0
+  --gpu 0 \
+  --seed 42
