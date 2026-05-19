@@ -47,9 +47,7 @@ class Trainer:
         self.test_loader = None
         if self.tensorboard_dir is None:
             self.tensorboard_dir = os.path.join("exps", "default", "tensorboard")
-        self.vision_test = SummaryWriter(log_dir=os.path.join(self.tensorboard_dir, "test"))
-        self.vision_best = SummaryWriter(log_dir=os.path.join(self.tensorboard_dir, "best"))
-        self.vision_every = SummaryWriter(log_dir=os.path.join(self.tensorboard_dir, "every"))
+        self.vision = SummaryWriter(log_dir=self.tensorboard_dir)
 
     def loop(self, epochs, train_loader, val_loader, test_loader):
         r""" The main loop function which runs training and validation iteratively.
@@ -74,9 +72,9 @@ class Trainer:
 
             if ep % self.test_freq == 0:
                 self.test_loss, nmse = self.test(test_loader)
-                self.vision_test.add_scalar("test loss", self.test_loss, global_step=ep)
-                self.vision_test.add_scalar("test nmse", nmse, global_step=ep)
-                self.vision_test.add_scalar("train loss", self.train_loss, global_step=ep)
+                self.vision.add_scalar("test/loss", self.test_loss, global_step=ep)
+                self.vision.add_scalar("test/nmse", nmse, global_step=ep)
+                self.vision.add_scalar("test/train_loss", self.train_loss, global_step=ep)
             else:
                 nmse = None
 
@@ -145,9 +143,9 @@ class Trainer:
                             f'lr: {self.scheduler.get_lr()[0]:.2e} | '
                             f'MSE loss: {iter_loss.avg:.4e} | '
                             f'time: {iter_time.avg:.3f}')
-                self.vision_every.add_scalar(" lr ", self.scheduler.get_lr()[0],
-                                             global_step=self.cur_epoch)
-                self.vision_every.add_scalar(" MSE loss", iter_loss.avg, self.cur_epoch)
+                self.vision.add_scalar("every/lr", self.scheduler.get_lr()[0],
+                                       global_step=self.cur_epoch)
+                self.vision.add_scalar("every/mse_loss", iter_loss.avg, self.cur_epoch)
 
         mode = 'Train' if self.model.training else 'Val'
         logger.info(f'=> {mode}  Loss: {iter_loss.avg:.4e}\n')
@@ -207,8 +205,28 @@ class Trainer:
         if self.best_nmse.nmse is not None:
             logger.info(f'\n=! Best NMSE: {self.best_nmse.nmse:.4e} ('
                         f'epoch={self.best_nmse.epoch})\n')
-            self.vision_best.add_scalar(" best MSE ", self.best_nmse.nmse,
-                                        global_step=self.best_nmse.epoch)
+            self.vision.add_scalar("best/mse", self.best_nmse.nmse,
+                                   global_step=self.best_nmse.epoch)
+
+    def save_encoder_outputs(self, data_loader, output_path):
+        if output_path is None:
+            logger.warning('No path to save encoder outputs.')
+            return
+        output_dir = os.path.dirname(output_path)
+        if output_dir:
+            os.makedirs(output_dir, exist_ok=True)
+
+        self.model.eval()
+        encoder_outputs = []
+        with torch.no_grad():
+            for batch_idx, (sparse_gt, ) in enumerate(data_loader):
+                sparse_gt = sparse_gt.to(self.device)
+                encoder_output = self.model.encode(sparse_gt)
+                encoder_outputs.append(encoder_output.cpu())
+
+        encoder_outputs_tensor = torch.cat(encoder_outputs, dim=0)
+        torch.save(encoder_outputs_tensor, output_path)
+        logger.info(f'=> Saved encoder outputs to {output_path}')
 
 
 

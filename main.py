@@ -79,6 +79,9 @@ def main():
     # Start training
     trainer.loop(args.epochs, train_loader, val_loader, test_loader)
 
+    encoder_output_path = os.path.join(exp_dir, "encoder_output.pth")
+    trainer.save_encoder_outputs(train_loader, encoder_output_path)
+
     # Final testing
     loss, nmse = Tester(model, device, criterion)(test_loader)
     logger.info(f'\n=! Final test loss: {loss:.4e}'

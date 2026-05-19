@@ -68,6 +68,6 @@ def init_model(args):
                 f'input dim={args.channel * args.nt * args.nc}')
     logger.info(f'=> Model Flops: {flops}')
     logger.info(f'=> Model Params Num: {params}\n')
-    logger.info(f'{line_seg}\n{model}\n{line_seg}\n')
+    logger.info(f'\n{line_seg}\n{model}\n{line_seg}\n')
 
     return model

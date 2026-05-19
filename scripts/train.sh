@@ -12,4 +12,5 @@ python ./main.py \
   --workers 4 \
   --cr 4 \
   --scheduler cosine \
+  --lr_init 5e-4 \
   --gpu 0

@@ -403,6 +403,14 @@ class Transformer(nn.Module):
                                   memory_key_padding_mask=memory_key_padding_mask)
             output = output.view(batch_size, self.channel, self.nt, self.nc)
             return output
+    
+    def encode(self, src: Tensor, src_mask: Optional[Tensor] = None,
+               src_key_padding_mask: Optional[Tensor] = None) -> Tensor:
+            batch_size = src.size(0)
+            memory = self.encoder(src.view(batch_size, self.feature_shape[0], self.feature_shape[1]),
+                                  mask=src_mask, src_key_padding_mask=src_key_padding_mask)
+            memory_encoder = self.fc_encoder(memory.view(memory.shape[0], -1))
+            return memory_encoder
 
     def generate_square_subsequent_mask(self, sz: int) -> Tensor:
         
