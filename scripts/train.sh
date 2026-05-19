@@ -1,14 +1,14 @@
 python ./main.py \
   --exp_name exp1 \
-  --train_path /home/z-jiuri/workspace/Huawei/TransNet/data/COST2100/in_train.pt \
-  --val_path /home/z-jiuri/workspace/Huawei/TransNet/data/COST2100/in_val.pt \
-  --test_path /home/z-jiuri/workspace/Huawei/TransNet/data/COST2100/in_test.pt \
+  --train_path /storage/hujiacong/zxd/datasets/WAIRD/data/scenario_2/01878/train.pt \
+  --val_path /storage/hujiacong/zxd/datasets/WAIRD/data/scenario_2/01878/test.pt \
+  --test_path /storage/hujiacong/zxd/datasets/WAIRD/data/scenario_2/01878/test.pt \
   --epochs 400 \
   --d_model 64 \
-  --nt 32 \
-  --nc 32 \
+  --nt 64 \
+  --nc 64 \
   --dim_feedforward 2048 \
-  --batch_size 200 \
+  --batch_size 512 \
   --workers 4 \
   --cr 4 \
   --scheduler cosine \

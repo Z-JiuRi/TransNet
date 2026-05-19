@@ -63,15 +63,15 @@ class MyDataLoader(object):
         self.nc = nc
         
         # Training data loading
-        data_train = torch.load(train_path, weights_only=True,map_location=torch.device('cpu'))
+        data_train = torch.load(train_path, weights_only=False, map_location=torch.device('cpu'))
         self.train_dataset = TensorDataset(data_train)
 
         # Validation data loading
-        data_val = torch.load(val_path, weights_only=True, map_location=torch.device('cpu'))
+        data_val = torch.load(val_path, weights_only=False, map_location=torch.device('cpu'))
         self.val_dataset = TensorDataset(data_val)
 
         # Test data loading
-        data_test = torch.load(test_path, weights_only=True, map_location=torch.device('cpu'))
+        data_test = torch.load(test_path, weights_only=False, map_location=torch.device('cpu'))
         self.test_dataset = TensorDataset(data_test)
 
     def __call__(self):
