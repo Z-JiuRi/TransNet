@@ -4,8 +4,7 @@ from utils.parser import args
 from utils import logger, Trainer, Tester
 from utils import init_device, init_model, FakeLR, WarmUpCosineAnnealingLR
 from dataloader import Cost2100DataLoader
-from tensorboardX import SummaryWriter
-from torchviz import make_dot
+
 
 def main():
     logger.info('=> PyTorch Version: {}'.format(torch.__version__))
@@ -22,7 +21,7 @@ def main():
         scenario=args.scenario)()
 
     # Define model
- 
+
     model = init_model(args)
     model.to(device)
 
@@ -35,13 +34,13 @@ def main():
         return
 
     # Define optimizer and scheduler
-   
+
     lr_init = 1e-4 if args.scheduler == 'const' else 2e-4
     optimizer = torch.optim.Adam(model.parameters(), lr_init)
 
     if args.scheduler == 'const':
         scheduler = FakeLR(optimizer=optimizer)
-        
+
     else:
         scheduler = WarmUpCosineAnnealingLR(optimizer=optimizer,
                                             T_max=args.epochs * len(train_loader),
@@ -49,7 +48,7 @@ def main():
                                             eta_min=5e-5)
 
     # Define the training pipeline
-    
+
     trainer = Trainer(model=model,
                       device=device,
                       optimizer=optimizer,
@@ -62,8 +61,8 @@ def main():
 
     # Final testing
     loss, nmse = Tester(model, device, criterion)(test_loader)
-    print(f"\n=! Final test loss: {loss:.3e}"
-          f"\n         test NMSE: {nmse:.3e}\n")
+    print(f"\n=! Final test loss: {loss:.4e}"
+          f"\n         test NMSE: {nmse:.4e}\n")
 
     # Create images for loss and nmse
 

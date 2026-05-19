@@ -2,7 +2,7 @@ import time
 import os
 import torch
 from collections import namedtuple
-from tensorboardX import SummaryWriter
+from torch.utils.tensorboard import SummaryWriter
 from utils import logger
 from utils.statics import AverageMeter, evaluator
 
@@ -139,13 +139,13 @@ class Trainer:
                 logger.info(f'Epoch: [{self.cur_epoch}/{self.all_epoch}]'
                             f'[{batch_idx + 1}/{len(data_loader)}] '
                             f'lr: {self.scheduler.get_lr()[0]:.2e} | '
-                            f'MSE loss: {iter_loss.avg:.3e} | '
+                            f'MSE loss: {iter_loss.avg:.4e} | '
                             f'time: {iter_time.avg:.3f}')
                 vision_every.add_scalar(" lr ",self.scheduler.get_lr()[0],global_step=self.cur_epoch)
                 vision_every.add_scalar(" MSE loss",iter_loss.avg , self.cur_epoch)
 
         mode = 'Train' if self.model.training else 'Val'
-        logger.info(f'=> {mode}  Loss: {iter_loss.avg:.3e}\n')
+        logger.info(f'=> {mode}  Loss: {iter_loss.avg:.4e}\n')
 
         return iter_loss.avg
 
@@ -200,7 +200,7 @@ class Trainer:
 
         # print current best results
         if self.best_nmse.nmse is not None:
-            print(f'\n=! Best NMSE: {self.best_nmse.nmse:.3e} ('
+            print(f'\n=! Best NMSE: {self.best_nmse.nmse:.4e} ('
                   f'epoch={self.best_nmse.epoch})\n')
             vision_best.add_scalar(" best MSE ", self.best_nmse.nmse, global_step=self.best_nmse.epoch)
 
@@ -227,8 +227,8 @@ class Tester:
         with torch.no_grad():
             loss, nmse = self._iteration(test_data)
         if verbose:
-            print(f'\n=> Test result: \nloss: {loss:.3e}'
-                  f'    NMSE: {nmse:.3e}\n')
+            print(f'\n=> Test result: \nloss: {loss:.4e}'
+                  f'    NMSE: {nmse:.4e}\n')
         return loss, nmse
 
     def _iteration(self, data_loader):
@@ -255,10 +255,10 @@ class Tester:
             # plot progress
             if (batch_idx + 1) % self.print_freq == 0:
                 logger.info(f'[{batch_idx + 1}/{len(data_loader)}] '
-                            f'loss: {iter_loss.avg:.3e} | '
-                            f'NMSE: {iter_nmse.avg:.3e} | time: {iter_time.avg:.3f}')
+                            f'loss: {iter_loss.avg:.4e} | '
+                            f'NMSE: {iter_nmse.avg:.4e} | time: {iter_time.avg:.3f}')
 
-        logger.info(f'=> Test NMSE: {iter_nmse.avg:.3e}\n')
+        logger.info(f'=> Test NMSE: {iter_nmse.avg:.4e}\n')
 
 
         return iter_loss.avg, iter_nmse.avg

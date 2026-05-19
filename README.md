@@ -30,8 +30,7 @@ to get a useable environment. Or manually install and build your own environment
 - scipy
 - [1.2 =< PyTorch <= 1.6](https://pytorch.org/get-started/locally/)
 - [thop==0.0.31-2005241907](https://github.com/Lyken17/pytorch-OpCounter) Note that the latest version leads to bug.
-- [torchviz](https://github.com/szagoruyko/pytorchviz)
-- [tensorboardX](https://github.com/lanpa/tensorboardX)
+- [TensorBoard](https://www.tensorflow.org/tensorboard)
 
 ## Project Preparation
 
