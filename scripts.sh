@@ -1,11 +1,15 @@
 python ./main.py \
-  --data-dir './COST2100' \ # root dir path for cost2100
-  --scenario 'in' \ # in or out
-  --epochs 1000 \
-  --d_model 64 \  # dimension of feature in transformer
+  --train-path /home/z-jiuri/workspace/Huawei/TransNet/COST2100/in_train.pt \
+  --val-path /home/z-jiuri/workspace/Huawei/TransNet/COST2100/in_val.pt \
+  --test-path /home/z-jiuri/workspace/Huawei/TransNet/COST2100/in_test.pt \
+  --epochs 400 \
+  --d_model 64 \
+  --nt 32 \
+  --nc 32 \
+  --dim-feedforward 2048 \
   --batch-size 200 \
-  --workers 3 \
+  --workers 4 \
   --cr 4 \
-  --scheduler const \ const or cosine
+  --scheduler cosine \
   --gpu 0 \
   2>&1 | tee log.out

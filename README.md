@@ -58,7 +58,9 @@ home
 │   ├── utils
 │   ├── main.py
 ├── COST2100  # The data folder
-│   ├── DATA_Htestin.mat
+│   ├── trainin.pt
+│   ├── valin.pt
+│   ├── testin.pt
 │   ├── ...
 ├── Experiments
 │   ├── checkpoints  # The checkpoints folder
@@ -80,6 +82,8 @@ python /home/TransNet/main.py \
   --batch-size 200 \
   --workers 0 \
   --cr 4 \
+  --nt 32 \
+  --nc 32 \
   --scheduler const \
   --gpu 0 \
   2>&1 | tee log.out
@@ -127,6 +131,8 @@ python /home/TransNet/main.py \
   --evaluate \
   --batch-size 200 \
   --workers 0 \
+  --nt 32 \
+  --nc 32 \
   --cr 4\ # Note that cr should be same as  checkpoints
   --cpu \
   2>&1 | tee test_log.out

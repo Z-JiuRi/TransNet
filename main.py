@@ -14,11 +14,14 @@ def main():
     # Create the data loader
 
     train_loader, val_loader, test_loader = Cost2100DataLoader(
-        root=args.data_dir,
+        train_path=args.train_path,
+        val_path=args.val_path,
+        test_path=args.test_path,
         batch_size=args.batch_size,
         num_workers=args.workers,
         pin_memory=pin_memory,
-        scenario=args.scenario)()
+        nt=args.nt,
+        nc=args.nc)()
 
     # Define model
 

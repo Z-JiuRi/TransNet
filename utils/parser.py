@@ -5,10 +5,12 @@ parser = argparse.ArgumentParser(description='CRNet PyTorch Training')
 
 # ========================== Indispensable arguments ==========================
 
-parser.add_argument('--data-dir', type=str, required=True,
-                    help='the path of dataset.')
-parser.add_argument('--scenario', type=str, required=True, choices=["in", "out"],
-                    help="the channel scenario")
+parser.add_argument('--train-path', type=str, metavar='PATH', required=True,
+                    help='path to training data')
+parser.add_argument('--val-path', type=str, metavar='PATH', required=True,
+                    help='path to validation data')
+parser.add_argument('--test-path', type=str, metavar='PATH', required=True,
+                    help='path to test data')
 parser.add_argument('-b', '--batch-size', type=int, required=True, metavar='N',
                     help='mini-batch size')
 parser.add_argument('-j', '--workers', type=int, metavar='N', required=True,
@@ -38,7 +40,18 @@ parser.add_argument('--epochs', type=int, metavar='N',
                     help='number of total epochs to run')
 parser.add_argument('--cr', metavar='N', type=int, default=4,
                     help='compression ratio')
-parser.add_argument('-d', '--d_model', type=int, default=64, metavar= 'N', help= 'number of Transformer feature dimension.' )
+parser.add_argument('--exp-name', metavar='N', type=str, default='exp_1',
+                    help='experiment name for saving and visualization')
+parser.add_argument('--channel', type=int, default=2,
+                    help='number of CSI channels, usually 2 for real and imaginary parts')
+parser.add_argument('--nt', type=int, default=32,
+                    help='number of antennas in the CSI tensor')
+parser.add_argument('--nc', type=int, default=32,
+                    help='number of delay/frequency bins in the CSI tensor')
+parser.add_argument('-d', '--d_model', type=int, default=64, metavar='N',
+                    help='number of Transformer feature dimension')
+parser.add_argument('--dim-feedforward', type=int, default=2048,
+                    help='hidden dimension of Transformer feed-forward layers')
 parser.add_argument('--scheduler', type=str, default='const', choices=['const', 'cosine'],
                     help='learning rate scheduler')
 

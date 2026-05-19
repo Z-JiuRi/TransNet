@@ -232,9 +232,11 @@ class MultiheadAttention(nn.Module):
 
 class TransformerEncoderLayer(nn.Module):
 
-    def __init__(self, d_model, nhead, dim_feedforward=2048, dropout=0.1, activation=F.relu,
+    def __init__(self, d_model, nhead, dim_feedforward=None, dropout=0.1, activation=F.relu,
                  layer_norm_eps=1e-5, batch_first=False) -> None:
         super(TransformerEncoderLayer, self).__init__()
+        if dim_feedforward is None:
+            dim_feedforward = 4 * d_model
         self.self_attn = MultiheadAttention(d_model,nhead,
                                             dropout=dropout, batch_first=batch_first)
 
@@ -282,9 +284,11 @@ class TransformerEncoder(nn.Module):
 
 #Decoder Layer:
 class TransformerDecoderLayer(nn.Module):
-    def __init__(self, d_model, nhead, dim_feedforward=2048, dropout=0.1, activation=F.relu,
+    def __init__(self, d_model, nhead, dim_feedforward=None, dropout=0.1, activation=F.relu,
                  layer_norm_eps=1e-5, batch_first=False) -> None:
         super(TransformerDecoderLayer, self).__init__()
+        if dim_feedforward is None:
+            dim_feedforward = 4 * d_model
         self.self_attn = MultiheadAttention(d_model,nhead,
                                             dropout=dropout, batch_first=batch_first)
         self.multihead_attn = MultiheadAttention(d_model,nhead,dropout=dropout, batch_first=batch_first)
@@ -344,9 +348,10 @@ class TransformerDecoder(nn.Module):
 class Transformer(nn.Module):
 
     def __init__(self, d_model: int = 64, nhead: int = 8, num_encoder_layers: int = 6,
-                 num_decoder_layers: int = 6, dim_feedforward: int = 2048, dropout: float = 0.1,
+                 num_decoder_layers: int = 6, dim_feedforward: Optional[int] = None, dropout: float = 0.1,
                  activation = F.relu, custom_encoder: Optional[Any] = None, custom_decoder: Optional[Any] = None,
-                 layer_norm_eps: float = 1e-5, batch_first: bool = False,  reduction=64) -> None:
+                 layer_norm_eps: float = 1e-5, batch_first: bool = False,  reduction=64,
+                 channel: int = 2, nt: int = 32, nc: int = 32) -> None:
         super(Transformer, self).__init__()
         if custom_encoder is not None:
             self.encoder = custom_encoder
@@ -364,16 +369,23 @@ class Transformer(nn.Module):
             decoder_norm = nn.LayerNorm(d_model, eps=layer_norm_eps)
             self.decoder = TransformerDecoder(decoder_layer, num_decoder_layers, decoder_norm)
         
+        self.channel = channel
+        self.nt = nt
+        self.nc = nc
+        self.input_dim = channel * nt * nc
         self.d_model = d_model
-        
-        assert not (2048 % self.d_model), 'd_model needs to be divisible by the size of the entire csi matrix (2048)'
-        self.feature_shape = (2048//self.d_model, self.d_model)
-        
+
+        assert self.input_dim % self.d_model == 0, (
+            f"d_model needs to divide the flattened CSI size ({self.input_dim})")
+        assert self.input_dim % reduction == 0, (
+            f"reduction needs to divide the flattened CSI size ({self.input_dim})")
+        self.feature_shape = (self.input_dim // self.d_model, self.d_model)
+
         self.nhead = nhead
 
         self.batch_first = batch_first
-        self.fc_encoder = nn.Linear(2048,2048//reduction)
-        self.fc_decoder = nn.Linear(2048//reduction,2048)
+        self.fc_encoder = nn.Linear(self.input_dim, self.input_dim // reduction)
+        self.fc_decoder = nn.Linear(self.input_dim // reduction, self.input_dim)
         self._reset_parameters()
         
 
@@ -382,13 +394,14 @@ class Transformer(nn.Module):
                     memory_mask: Optional[Tensor] = None, src_key_padding_mask: Optional[Tensor] = None,
                     tgt_key_padding_mask: Optional[Tensor] = None,
                     memory_key_padding_mask: Optional[Tensor] = None) -> Tensor:
-            memory = self.encoder(src.view(-1, self.feature_shape[0], self.feature_shape[1]), mask=src_mask, src_key_padding_mask=src_key_padding_mask)
+            batch_size = src.size(0)
+            memory = self.encoder(src.view(batch_size, self.feature_shape[0], self.feature_shape[1]), mask=src_mask, src_key_padding_mask=src_key_padding_mask)
             memory_encoder = self.fc_encoder(memory.view(memory.shape[0],-1))
             memory_decoder = self.fc_decoder(memory_encoder).view(-1, self.feature_shape[0], self.feature_shape[1])
             output = self.decoder(memory_decoder, memory_decoder, tgt_mask=tgt_mask, memory_mask=memory_mask,
                                   tgt_key_padding_mask=tgt_key_padding_mask,
                                   memory_key_padding_mask=memory_key_padding_mask)
-            output = output.view(-1,2,32,32)
+            output = output.view(batch_size, self.channel, self.nt, self.nc)
             return output
 
     def generate_square_subsequent_mask(self, sz: int) -> Tensor:
@@ -404,12 +417,16 @@ class Transformer(nn.Module):
             if p.dim() > 1:
                 xavier_uniform_(p)
 
-def transnet(reduction=64, d_model=64):
+def transnet(reduction=64, d_model=64, channel=2, nt=32, nc=32,
+             dim_feedforward=None):
 
     r""" Create a proposed TransNet.
 
         :param reduction: the reciprocal of compression ratio
         :return: an instance of TransNet
     """
-    model = Transformer(d_model=d_model, num_encoder_layers=2, num_decoder_layers=2, nhead=2, reduction =reduction, dropout= 0.)
+    model = Transformer(d_model=d_model, num_encoder_layers=2, num_decoder_layers=2,
+                        nhead=2, reduction=reduction, dropout=0.,
+                        channel=channel, nt=nt, nc=nc,
+                        dim_feedforward=dim_feedforward)
     return model
