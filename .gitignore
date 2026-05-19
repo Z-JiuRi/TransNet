@@ -43,3 +43,5 @@ data/*
 snapshots/
 checkpoints/
 *.pth
+
+exps/*

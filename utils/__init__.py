@@ -1,5 +1,4 @@
-from . import logger
-from .logger import log_level, line_seg
+from .logger import logger, line_seg, setup_logging
 from .init import *
 from .scheduler import *
 from .solver import *

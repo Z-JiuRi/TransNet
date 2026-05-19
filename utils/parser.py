@@ -40,10 +40,10 @@ parser.add_argument('--epochs', type=int, metavar='N',
                     help='number of total epochs to run')
 parser.add_argument('--cr', metavar='N', type=int, default=4,
                     help='compression ratio')
-parser.add_argument('--exp-name', metavar='N', type=str, default='exp_1',
-                    help='experiment name for saving and visualization')
+parser.add_argument('--exp-name', metavar='NAME', type=str, default='exp_1',
+                    help='experiment name; outputs are saved under ./exps/NAME')
 parser.add_argument('--channel', type=int, default=2,
-                    help='number of CSI channels, usually 2 for real and imaginary parts')
+                    help='number of channels in the CSI tensor')
 parser.add_argument('--nt', type=int, default=32,
                     help='number of antennas in the CSI tensor')
 parser.add_argument('--nc', type=int, default=32,

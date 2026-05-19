@@ -5,7 +5,7 @@ __all__ = ['WarmUpCosineAnnealingLR', 'FakeLR']
 
 
 class WarmUpCosineAnnealingLR(_LRScheduler):
-    def __init__(self, optimizer, T_max, T_warmup, eta_min=0, last_epoch=-1):
+    def __init__(self, optimizer, T_max, T_warmup, eta_min=0., last_epoch=-1):
         self.T_max = T_max
         self.T_warmup = T_warmup
         self.eta_min = eta_min

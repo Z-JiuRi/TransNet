@@ -1,13 +1,28 @@
+import json
+import os
+
 import torch
 import torch.nn as nn
 from utils.parser import args
-from utils import logger, Trainer, Tester
+from utils import logger, setup_logging, Trainer, Tester
 from utils import init_device, init_model, FakeLR, WarmUpCosineAnnealingLR
 from dataloader import Cost2100DataLoader
 
 
 def main():
+    exp_dir = os.path.join(os.getcwd(), "exps", args.exp_name)
+    checkpoint_dir = os.path.join(exp_dir, "checkpoints")
+    tensorboard_dir = os.path.join(exp_dir, "tensorboard")
+    os.makedirs(checkpoint_dir, exist_ok=True)
+    os.makedirs(tensorboard_dir, exist_ok=True)
+    setup_logging(exp_dir)
+
+    with open(os.path.join(exp_dir, "args.json"), "w") as f:
+        json.dump(vars(args), f, indent=2, sort_keys=True)
+
+    logger.info(f'=> Experiment directory: {exp_dir}')
     logger.info('=> PyTorch Version: {}'.format(torch.__version__))
+    
     # Environment initialization
     device, pin_memory = init_device(args.seed, args.cpu, args.gpu, args.cpu_affinity)
 
@@ -57,15 +72,17 @@ def main():
                       optimizer=optimizer,
                       criterion=criterion,
                       scheduler=scheduler,
-                      resume=args.resume)
+                      resume=args.resume,
+                      save_path=checkpoint_dir,
+                      tensorboard_dir=tensorboard_dir)
 
     # Start training
     trainer.loop(args.epochs, train_loader, val_loader, test_loader)
 
     # Final testing
     loss, nmse = Tester(model, device, criterion)(test_loader)
-    print(f"\n=! Final test loss: {loss:.4e}"
-          f"\n         test NMSE: {nmse:.4e}\n")
+    logger.info(f'\n=! Final test loss: {loss:.4e}'
+                f'\n         test NMSE: {nmse:.4e}\n')
 
     # Create images for loss and nmse
 

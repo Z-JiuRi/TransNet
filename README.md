@@ -72,12 +72,14 @@ home
 
 ## Train TransNet from Scratch
 
-An example of run.sh is listed below. Simply use it with `sh run.sh`. It will start  TransNet training from scratch. Change scenario by using `--scenario` . Change training epochs with '--epochs' and compression ratio with `--cr`.
+An example of run.sh is listed below. Simply use it with `sh run.sh`. It will start TransNet training from scratch. Select data by passing `--train-path`, `--val-path`, and `--test-path`. Change training epochs with `--epochs` and compression ratio with `--cr`.
 
 ``` bash
 python /home/TransNet/main.py \
-  --data-dir '/home/COST2100' \
-  --scenario 'in' \
+  --exp-name 'exp_1' \
+  --train-path '/home/COST2100/in_train.pt' \
+  --val-path '/home/COST2100/in_val.pt' \
+  --test-path '/home/COST2100/in_test.pt' \
   --epochs 400 \
   --batch-size 200 \
   --workers 0 \
@@ -85,8 +87,7 @@ python /home/TransNet/main.py \
   --nt 32 \
   --nc 32 \
   --scheduler const \
-  --gpu 0 \
-  2>&1 | tee log.out
+  --gpu 0
 ```
 
 ## Results and Reproduction
@@ -125,8 +126,10 @@ outdoor | 1/64 | -2.62 | 33.75M
 
 ``` bash
 python /home/TransNet/main.py \
-  --data-dir '/home/COST2100' \
-  --scenario 'in' \
+  --exp-name 'eval_4_in' \
+  --train-path '/home/COST2100/in_train.pt' \
+  --val-path '/home/COST2100/in_val.pt' \
+  --test-path '/home/COST2100/in_test.pt' \
   --pretrained './checkpoints/4_in.pth' \
   --evaluate \
   --batch-size 200 \
@@ -134,8 +137,7 @@ python /home/TransNet/main.py \
   --nt 32 \
   --nc 32 \
   --cr 4\ # Note that cr should be same as  checkpoints
-  --cpu \
-  2>&1 | tee test_log.out
+  --cpu
 
 ```
 

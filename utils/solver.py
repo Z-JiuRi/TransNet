@@ -2,7 +2,7 @@ import time
 import os
 import torch
 from collections import namedtuple
-from torch.utils.tensorboard import SummaryWriter
+from torch.utils.tensorboard.writer import SummaryWriter
 from utils import logger
 from utils.statics import AverageMeter, evaluator
 
@@ -11,16 +11,14 @@ __all__ = ['Trainer', 'Tester']
 
 field = ('nmse', 'epoch')
 Result = namedtuple('Result', field, defaults=(None,) * len(field))
-vision_test = SummaryWriter(log_dir="data_vision/test")
-vision_best = SummaryWriter(log_dir="data_vision/best")
-vision_every = SummaryWriter(log_dir="data_vision/every")
 
 class Trainer:
     r""" The training pipeline for encoder-decoder architecture
     """
 
     def __init__(self, model, device, optimizer, criterion, scheduler, resume=None,
-                 save_path='./checkpoints', print_freq=20, val_freq=10, test_freq=10):
+                 save_path='./checkpoints', tensorboard_dir=None, print_freq=20,
+                 val_freq=10, test_freq=10):
 
         # Basic arguments
         self.model = model
@@ -32,6 +30,7 @@ class Trainer:
         # Verbose arguments
         self.resume_file = resume
         self.save_path = save_path
+        self.tensorboard_dir = tensorboard_dir
         self.print_freq = print_freq
         self.val_freq = val_freq
         self.test_freq = test_freq
@@ -46,6 +45,11 @@ class Trainer:
 
         self.tester = Tester(model, device, criterion, print_freq)
         self.test_loader = None
+        if self.tensorboard_dir is None:
+            self.tensorboard_dir = os.path.join("exps", "default", "tensorboard")
+        self.vision_test = SummaryWriter(log_dir=os.path.join(self.tensorboard_dir, "test"))
+        self.vision_best = SummaryWriter(log_dir=os.path.join(self.tensorboard_dir, "best"))
+        self.vision_every = SummaryWriter(log_dir=os.path.join(self.tensorboard_dir, "every"))
 
     def loop(self, epochs, train_loader, val_loader, test_loader):
         r""" The main loop function which runs training and validation iteratively.
@@ -70,9 +74,9 @@ class Trainer:
 
             if ep % self.test_freq == 0:
                 self.test_loss, nmse = self.test(test_loader)
-                vision_test.add_scalar("test loss", self.test_loss, global_step=ep)
-                vision_test.add_scalar("test nmse", nmse, global_step=ep)
-                vision_test.add_scalar("train loss", self.train_loss, global_step=ep)
+                self.vision_test.add_scalar("test loss", self.test_loss, global_step=ep)
+                self.vision_test.add_scalar("test nmse", nmse, global_step=ep)
+                self.vision_test.add_scalar("train loss", self.train_loss, global_step=ep)
             else:
                 nmse = None
 
@@ -141,8 +145,9 @@ class Trainer:
                             f'lr: {self.scheduler.get_lr()[0]:.2e} | '
                             f'MSE loss: {iter_loss.avg:.4e} | '
                             f'time: {iter_time.avg:.3f}')
-                vision_every.add_scalar(" lr ",self.scheduler.get_lr()[0],global_step=self.cur_epoch)
-                vision_every.add_scalar(" MSE loss",iter_loss.avg , self.cur_epoch)
+                self.vision_every.add_scalar(" lr ", self.scheduler.get_lr()[0],
+                                             global_step=self.cur_epoch)
+                self.vision_every.add_scalar(" MSE loss", iter_loss.avg, self.cur_epoch)
 
         mode = 'Train' if self.model.training else 'Val'
         logger.info(f'=> {mode}  Loss: {iter_loss.avg:.4e}\n')
@@ -200,9 +205,10 @@ class Trainer:
 
         # print current best results
         if self.best_nmse.nmse is not None:
-            print(f'\n=! Best NMSE: {self.best_nmse.nmse:.4e} ('
-                  f'epoch={self.best_nmse.epoch})\n')
-            vision_best.add_scalar(" best MSE ", self.best_nmse.nmse, global_step=self.best_nmse.epoch)
+            logger.info(f'\n=! Best NMSE: {self.best_nmse.nmse:.4e} ('
+                        f'epoch={self.best_nmse.epoch})\n')
+            self.vision_best.add_scalar(" best MSE ", self.best_nmse.nmse,
+                                        global_step=self.best_nmse.epoch)
 
 
 
@@ -227,8 +233,8 @@ class Tester:
         with torch.no_grad():
             loss, nmse = self._iteration(test_data)
         if verbose:
-            print(f'\n=> Test result: \nloss: {loss:.4e}'
-                  f'    NMSE: {nmse:.4e}\n')
+            logger.info(f'\n=> Test result: \nloss: {loss:.4e}'
+                        f'    NMSE: {nmse:.4e}\n')
         return loss, nmse
 
     def _iteration(self, data_loader):
