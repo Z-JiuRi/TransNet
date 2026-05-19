@@ -5,13 +5,13 @@ parser = argparse.ArgumentParser(description='CRNet PyTorch Training')
 
 # ========================== Indispensable arguments ==========================
 
-parser.add_argument('--train-path', type=str, metavar='PATH', required=True,
+parser.add_argument('--train_path', type=str, metavar='PATH', required=True,
                     help='path to training data')
-parser.add_argument('--val-path', type=str, metavar='PATH', required=True,
+parser.add_argument('--val_path', type=str, metavar='PATH', required=True,
                     help='path to validation data')
-parser.add_argument('--test-path', type=str, metavar='PATH', required=True,
+parser.add_argument('--test_path', type=str, metavar='PATH', required=True,
                     help='path to test data')
-parser.add_argument('-b', '--batch-size', type=int, required=True, metavar='N',
+parser.add_argument('-b', '--batch_size', type=int, required=True, metavar='N',
                     help='mini-batch size')
 parser.add_argument('-j', '--workers', type=int, metavar='N', required=True,
                     help='number of data loading workers')
@@ -32,7 +32,7 @@ parser.add_argument('--gpu', default=None, type=int,
                     help='GPU id to use.')
 parser.add_argument('--cpu', action='store_true',
                     help='disable GPU training (default: False)')
-parser.add_argument('--cpu-affinity', default=None, type=str,
+parser.add_argument('--cpu_affinity', default=None, type=str,
                     help='CPU affinity, like "0xffff"')
 
 # Other arguments
@@ -40,7 +40,7 @@ parser.add_argument('--epochs', type=int, metavar='N',
                     help='number of total epochs to run')
 parser.add_argument('--cr', metavar='N', type=int, default=4,
                     help='compression ratio')
-parser.add_argument('--exp-name', metavar='NAME', type=str, default='exp_1',
+parser.add_argument('--exp_name', metavar='NAME', type=str, default='exp_1',
                     help='experiment name; outputs are saved under ./exps/NAME')
 parser.add_argument('--channel', type=int, default=2,
                     help='number of channels in the CSI tensor')
@@ -50,9 +50,10 @@ parser.add_argument('--nc', type=int, default=32,
                     help='number of delay/frequency bins in the CSI tensor')
 parser.add_argument('-d', '--d_model', type=int, default=64, metavar='N',
                     help='number of Transformer feature dimension')
-parser.add_argument('--dim-feedforward', type=int, default=2048,
+parser.add_argument('--dim_feedforward', type=int, default=2048,
                     help='hidden dimension of Transformer feed-forward layers')
 parser.add_argument('--scheduler', type=str, default='const', choices=['const', 'cosine'],
                     help='learning rate scheduler')
-
+parser.add_argument('--lr_init', type=float, default=5e-4,
+                    help='initial learning rate')
 args = parser.parse_args()

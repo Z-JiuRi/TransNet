@@ -1,14 +1,14 @@
 python ./main.py \
-  --exp-name exp1 \
-  --train-path /home/z-jiuri/workspace/Huawei/TransNet/data/COST2100/in_train.pt \
-  --val-path /home/z-jiuri/workspace/Huawei/TransNet/data/COST2100/in_val.pt \
-  --test-path /home/z-jiuri/workspace/Huawei/TransNet/data/COST2100/in_test.pt \
+  --exp_name exp1 \
+  --train_path /home/z-jiuri/workspace/Huawei/TransNet/data/COST2100/in_train.pt \
+  --val_path /home/z-jiuri/workspace/Huawei/TransNet/data/COST2100/in_val.pt \
+  --test_path /home/z-jiuri/workspace/Huawei/TransNet/data/COST2100/in_test.pt \
   --epochs 400 \
   --d_model 64 \
   --nt 32 \
   --nc 32 \
-  --dim-feedforward 2048 \
-  --batch-size 200 \
+  --dim_feedforward 2048 \
+  --batch_size 200 \
   --workers 4 \
   --cr 4 \
   --scheduler cosine \

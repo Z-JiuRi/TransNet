@@ -22,7 +22,7 @@ def main():
 
     logger.info(f'=> Experiment directory: {exp_dir}')
     logger.info('=> PyTorch Version: {}'.format(torch.__version__))
-    
+
     # Environment initialization
     device, pin_memory = init_device(args.seed, args.cpu, args.gpu, args.cpu_affinity)
 
@@ -35,6 +35,7 @@ def main():
         batch_size=args.batch_size,
         num_workers=args.workers,
         pin_memory=pin_memory,
+        channel=args.channel,
         nt=args.nt,
         nc=args.nc)()
 

@@ -5,8 +5,8 @@ This is the PyTorch implementation of paper ["TransNet: Full Attention Network f
 ```
 @ARTICLE{9705497,
   author={Cui, Yaodong and Guo, Aihuang and Song, Chunlin},
-  journal={IEEE Wireless Communications Letters}, 
-  title={TransNet: Full Attention Network for CSI Feedback in FDD Massive MIMO System}, 
+  journal={IEEE Wireless Communications Letters},
+  title={TransNet: Full Attention Network for CSI Feedback in FDD Massive MIMO System},
   year={2022},
   volume={11},
   number={5},
@@ -72,16 +72,16 @@ home
 
 ## Train TransNet from Scratch
 
-An example of run.sh is listed below. Simply use it with `sh run.sh`. It will start TransNet training from scratch. Select data by passing `--train-path`, `--val-path`, and `--test-path`. Change training epochs with `--epochs` and compression ratio with `--cr`.
+An example of run.sh is listed below. Simply use it with `sh run.sh`. It will start TransNet training from scratch. Select data by passing `--train_path`, `--val_path`, and `--test_path`. Change training epochs with `--epochs` and compression ratio with `--cr`.
 
 ``` bash
 python /home/TransNet/main.py \
-  --exp-name 'exp_1' \
-  --train-path '/home/COST2100/in_train.pt' \
-  --val-path '/home/COST2100/in_val.pt' \
-  --test-path '/home/COST2100/in_test.pt' \
+  --exp_name 'exp_1' \
+  --train_path '/home/COST2100/in_train.pt' \
+  --val_path '/home/COST2100/in_val.pt' \
+  --test_path '/home/COST2100/in_test.pt' \
   --epochs 400 \
-  --batch-size 200 \
+  --batch_size 200 \
   --workers 0 \
   --cr 4 \
   --nt 32 \
@@ -96,43 +96,43 @@ The main results reported in our paper are presented as follows. All the listed 
 
 Results of 400 epochs
 Scenario | Compression Ratio | NMSE | Flops
-:--: | :--: | :--: | :--: 
-indoor | 1/4 | -29.22 | 35.72M 
-indoor | 1/8 | -21.62 | 34.70M 
-indoor | 1/16 | -14.98 | 34.14M 
-indoor | 1/32 | -9.83 | 33.88M 
-indoor | 1/64 | -5.77 | 33.75M 
-outdoor | 1/4 | -13.99 | 35.72M 
-outdoor | 1/8 | -9.57 | 34.70M 
-outdoor | 1/16 | -6.90 | 34.14M 
-outdoor | 1/32 | -3.77 | 33.88M 
-outdoor | 1/64 | -2.20 | 33.75M 
+:--: | :--: | :--: | :--:
+indoor | 1/4 | -29.22 | 35.72M
+indoor | 1/8 | -21.62 | 34.70M
+indoor | 1/16 | -14.98 | 34.14M
+indoor | 1/32 | -9.83 | 33.88M
+indoor | 1/64 | -5.77 | 33.75M
+outdoor | 1/4 | -13.99 | 35.72M
+outdoor | 1/8 | -9.57 | 34.70M
+outdoor | 1/16 | -6.90 | 34.14M
+outdoor | 1/32 | -3.77 | 33.88M
+outdoor | 1/64 | -2.20 | 33.75M
 
 Results of 1000 epochs
 Scenario | Compression Ratio | NMSE | Flops
-:--: | :--: | :--: | :--: 
-indoor | 1/4 | -32.38 | 35.72M 
-indoor | 1/8 | -22.91 | 34.70M 
-indoor | 1/16 | -15.00 | 34.14M 
-indoor | 1/32 | -10.49 | 33.88M 
-indoor | 1/64 | -6.08 | 33.75M 
-outdoor | 1/4 | -14.86 | 35.72M 
-outdoor | 1/8 | -9.99 | 34.70M 
-outdoor | 1/16 | -7.82 | 34.14M 
-outdoor | 1/32 | -4.13 | 33.88M 
-outdoor | 1/64 | -2.62 | 33.75M 
+:--: | :--: | :--: | :--:
+indoor | 1/4 | -32.38 | 35.72M
+indoor | 1/8 | -22.91 | 34.70M
+indoor | 1/16 | -15.00 | 34.14M
+indoor | 1/32 | -10.49 | 33.88M
+indoor | 1/64 | -6.08 | 33.75M
+outdoor | 1/4 | -14.86 | 35.72M
+outdoor | 1/8 | -9.99 | 34.70M
+outdoor | 1/16 | -7.82 | 34.14M
+outdoor | 1/32 | -4.13 | 33.88M
+outdoor | 1/64 | -2.62 | 33.75M
 
 **To reproduce all these results, simplely add `--evaluate` to `scripts.sh` and pick the corresponding pre-trained model with `--pretrained`.** An example is shown as follows.
 
 ``` bash
 python /home/TransNet/main.py \
-  --exp-name 'eval_4_in' \
-  --train-path '/home/COST2100/in_train.pt' \
-  --val-path '/home/COST2100/in_val.pt' \
-  --test-path '/home/COST2100/in_test.pt' \
+  --exp_name 'eval_4_in' \
+  --train_path '/home/COST2100/in_train.pt' \
+  --val_path '/home/COST2100/in_val.pt' \
+  --test_path '/home/COST2100/in_test.pt' \
   --pretrained './checkpoints/4_in.pth' \
   --evaluate \
-  --batch-size 200 \
+  --batch_size 200 \
   --workers 0 \
   --nt 32 \
   --nc 32 \
@@ -146,10 +146,10 @@ python /home/TransNet/main.py \
 
 ## Acknowledgment
 
-Thank Chao-Kai Wen and Shi Jin group again for providing the pre-processed COST2100 dataset, you can find their related work named CsiNet in [Github-Python_CsiNet](https://github.com/sydney222/Python_CsiNet) 
+Thank Chao-Kai Wen and Shi Jin group again for providing the pre-processed COST2100 dataset, you can find their related work named CsiNet in [Github-Python_CsiNet](https://github.com/sydney222/Python_CsiNet)
 
 
 Thanks two open source works, CRNet and CLNet, that build on work above and advance the CSI feedback problem in DL, you can find their related work in [Github-Python-PyTorch CRNet](https://github.com/Kylin9511/CRNet) and [Github-Python-PyTorch CLNet](https://github.com/SIJIEJI/CLNet)
 
-Thanks  the Github project members for the open source [Transformer tutorial](https://github.com/datawhalechina/Learn-NLP-with-Transformers), our base model for TransNet is based on their work.  
+Thanks  the Github project members for the open source [Transformer tutorial](https://github.com/datawhalechina/Learn-NLP-with-Transformers), our base model for TransNet is based on their work.
 

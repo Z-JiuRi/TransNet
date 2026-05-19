@@ -51,14 +51,14 @@ class MyDataLoader(object):
     r""" PyTorch DataLoader for COST2100 dataset.
     """
 
-    def __init__(self, train_path, val_path, test_path, batch_size, num_workers, pin_memory, nt=32, nc=32):
+    def __init__(self, train_path, val_path, test_path, batch_size, num_workers, pin_memory, channel=2, nt=32, nc=32):
         assert os.path.exists(train_path)
         assert os.path.exists(val_path)
         assert os.path.exists(test_path)
         self.batch_size = batch_size
         self.num_workers = num_workers
         self.pin_memory = pin_memory
-        self.channel = 2
+        self.channel = channel
         self.nt = nt
         self.nc = nc
         
