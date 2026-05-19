@@ -9,7 +9,7 @@ from utils.statics import AverageMeter, evaluator
 __all__ = ['Trainer', 'Tester']
 
 
-field = ('nmse', 'rho', 'epoch')
+field = ('nmse', 'epoch')
 Result = namedtuple('Result', field, defaults=(None,) * len(field))
 vision_test = SummaryWriter(log_dir="data_vision/test")
 vision_best = SummaryWriter(log_dir="data_vision/best")
@@ -42,7 +42,6 @@ class Trainer:
         self.train_loss = None
         self.val_loss = None
         self.test_loss = None
-        self.best_rho = Result()
         self.best_nmse = Result()
 
         self.tester = Tester(model, device, criterion, print_freq)
@@ -70,16 +69,15 @@ class Trainer:
                 self.val_loss = self.val(val_loader)
 
             if ep % self.test_freq == 0:
-                self.test_loss, rho, nmse = self.test(test_loader)
+                self.test_loss, nmse = self.test(test_loader)
                 vision_test.add_scalar("test loss", self.test_loss, global_step=ep)
-                vision_test.add_scalar("test rho", rho, global_step=ep)
                 vision_test.add_scalar("test nmse", nmse, global_step=ep)
                 vision_test.add_scalar("train loss", self.train_loss, global_step=ep)
             else:
-                rho, nmse = None, None
+                nmse = None
 
             # conduct saving, visualization and log printing
-            self._loop_postprocessing(rho, nmse)
+            self._loop_postprocessing(nmse)
 
     def train(self, train_loader):
         r""" train the model on the given data loader for one epoch.
@@ -172,14 +170,13 @@ class Trainer:
         self.model.load_state_dict(checkpoint['state_dict'])
         self.optimizer.load_state_dict(checkpoint['optimizer'])
         self.scheduler.load_state_dict(checkpoint['scheduler'])
-        self.best_rho = checkpoint['best_rho']
-        self.best_nmse = checkpoint['best_nmse']
+        self.best_nmse = checkpoint.get('best_nmse', Result())
         self.cur_epoch += 1  # start from the next epoch
 
         logger.info(f'=> successfully loaded checkpoint {self.resume_file} '
                     f'from epoch {checkpoint["epoch"]}.\n')
 
-    def _loop_postprocessing(self, rho, nmse):
+    def _loop_postprocessing(self, nmse):
         r""" private function which makes loop() function neater.
         """
 
@@ -189,32 +186,22 @@ class Trainer:
             'state_dict': self.model.state_dict(),
             'optimizer': self.optimizer.state_dict(),
             'scheduler': self.scheduler.state_dict(),
-            'best_rho': self.best_rho,
             'best_nmse': self.best_nmse
         }
 
-        # save model with best rho and nmse
-        if rho is not None:
-            if self.best_rho.rho is None or self.best_rho.rho < rho:
-                self.best_rho = Result(rho=rho, nmse=nmse, epoch=self.cur_epoch)
-                state['best_rho'] = self.best_rho
-                self._save(state, name=f"best_rho.pth")
+        # save model with best nmse
+        if nmse is not None:
             if self.best_nmse.nmse is None or self.best_nmse.nmse > nmse:
-                self.best_nmse = Result(rho=rho, nmse=nmse, epoch=self.cur_epoch)
+                self.best_nmse = Result(nmse=nmse, epoch=self.cur_epoch)
                 state['best_nmse'] = self.best_nmse
                 self._save(state, name=f"best_nmse.pth")
 
         self._save(state, name='last.pth')
 
         # print current best results
-        if self.best_rho.rho is not None:
-            print(f'\n=! Best rho: {self.best_rho.rho:.3e} ('
-                  f'Corresponding nmse={self.best_rho.nmse:.3e}; '
-                  f'epoch={self.best_rho.epoch})'
-                  f'\n   Best NMSE: {self.best_nmse.nmse:.3e} ('
-                  f'Corresponding rho={self.best_nmse.rho:.3e};  '
+        if self.best_nmse.nmse is not None:
+            print(f'\n=! Best NMSE: {self.best_nmse.nmse:.3e} ('
                   f'epoch={self.best_nmse.epoch})\n')
-            vision_best.add_scalar(" best rho ",self.best_rho.rho, global_step=self.best_rho.epoch)
             vision_best.add_scalar(" best MSE ", self.best_nmse.nmse, global_step=self.best_nmse.epoch)
 
 
@@ -238,31 +225,29 @@ class Tester:
 
         self.model.eval()
         with torch.no_grad():
-            loss, rho, nmse = self._iteration(test_data)
+            loss, nmse = self._iteration(test_data)
         if verbose:
             print(f'\n=> Test result: \nloss: {loss:.3e}'
-                  f'    rho: {rho:.3e}    NMSE: {nmse:.3e}\n')
-        return loss, rho, nmse
+                  f'    NMSE: {nmse:.3e}\n')
+        return loss, nmse
 
     def _iteration(self, data_loader):
         r""" protected function which test the model on given data loader for one epoch.
         """
 
-        iter_rho = AverageMeter('Iter rho')
         iter_nmse = AverageMeter('Iter nmse')
         iter_loss = AverageMeter('Iter loss')
         iter_time = AverageMeter('Iter time')
         time_tmp = time.time()
 
-        for batch_idx, (sparse_gt, raw_gt) in enumerate(data_loader):
+        for batch_idx, (sparse_gt, ) in enumerate(data_loader):
             sparse_gt = sparse_gt.to(self.device)
             sparse_pred = self.model(sparse_gt)
             loss = self.criterion(sparse_pred, sparse_gt)
-            rho, nmse = evaluator(sparse_pred, sparse_gt, raw_gt)
+            nmse = evaluator(sparse_pred, sparse_gt)
 
             # Log and visdom update
             iter_loss.update(loss)
-            iter_rho.update(rho)
             iter_nmse.update(nmse)
             iter_time.update(time.time() - time_tmp)
             time_tmp = time.time()
@@ -270,10 +255,10 @@ class Tester:
             # plot progress
             if (batch_idx + 1) % self.print_freq == 0:
                 logger.info(f'[{batch_idx + 1}/{len(data_loader)}] '
-                            f'loss: {iter_loss.avg:.3e} | rho: {iter_rho.avg:.3e} | '
+                            f'loss: {iter_loss.avg:.3e} | '
                             f'NMSE: {iter_nmse.avg:.3e} | time: {iter_time.avg:.3f}')
 
-        logger.info(f'=> Test rho:{iter_rho.avg:.3e}  NMSE: {iter_nmse.avg:.3e}\n')
+        logger.info(f'=> Test NMSE: {iter_nmse.avg:.3e}\n')
 
 
-        return iter_loss.avg, iter_rho.avg, iter_nmse.avg
+        return iter_loss.avg, iter_nmse.avg

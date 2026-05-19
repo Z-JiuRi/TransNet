@@ -61,12 +61,11 @@ def main():
     trainer.loop(args.epochs, train_loader, val_loader, test_loader)
 
     # Final testing
-    loss, rho, nmse = Tester(model, device, criterion)(test_loader)
+    loss, nmse = Tester(model, device, criterion)(test_loader)
     print(f"\n=! Final test loss: {loss:.3e}"
-          f"\n         test rho: {rho:.3e}"
           f"\n         test NMSE: {nmse:.3e}\n")
 
-    # Create images for loss, rho ,nmse
+    # Create images for loss and nmse
 
 
 

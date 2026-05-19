@@ -1,5 +1,4 @@
 import os
-import numpy as np
 import scipy.io as sio
 
 import torch
@@ -62,8 +61,7 @@ class Cost2100DataLoader(object):
         dir_train = os.path.join(root, f"DATA_Htrain{scenario}.mat")
         dir_val = os.path.join(root, f"DATA_Hval{scenario}.mat")
         dir_test = os.path.join(root, f"DATA_Htest{scenario}.mat")
-        dir_raw = os.path.join(root, f"DATA_HtestF{scenario}_all.mat")
-        channel, nt, nc, nc_expand = 2, 32, 32, 125
+        channel, nt, nc = 2, 32, 32
 
         # Training data loading
         data_train = sio.loadmat(dir_train)['HT']
@@ -77,17 +75,11 @@ class Cost2100DataLoader(object):
             data_val.shape[0], channel, nt, nc)
         self.val_dataset = TensorDataset(data_val)
 
-        # Test data loading, including the sparse data and the raw data
+        # Test data loading
         data_test = sio.loadmat(dir_test)['HT']
         data_test = torch.tensor(data_test, dtype=torch.float32).view(
             data_test.shape[0], channel, nt, nc)
-
-        raw_test = sio.loadmat(dir_raw)['HF_all']
-        real = torch.tensor(np.real(raw_test), dtype=torch.float32)
-        imag = torch.tensor(np.imag(raw_test), dtype=torch.float32)
-        raw_test = torch.cat((real.view(raw_test.shape[0], nt, nc_expand, 1),
-                              imag.view(raw_test.shape[0], nt, nc_expand, 1)), dim=3)
-        self.test_dataset = TensorDataset(data_test, raw_test)
+        self.test_dataset = TensorDataset(data_test)
 
     def __call__(self):
         train_loader = DataLoader(self.train_dataset,
