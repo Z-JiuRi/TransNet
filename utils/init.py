@@ -6,7 +6,15 @@ import torch
 from models import transnet
 from utils import logger, line_seg
 
-__all__ = ["init_device", "init_model"]
+__all__ = ["seed_everything", "init_device", "init_model"]
+
+
+def seed_everything(seed):
+    random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
 
 
 def init_device(seed=None, cpu=None, gpu=None, affinity=None):
@@ -16,9 +24,7 @@ def init_device(seed=None, cpu=None, gpu=None, affinity=None):
 
     # Set the random seed
     if seed is not None:
-        random.seed(seed)
-        torch.manual_seed(seed)
-        torch.backends.cudnn.deterministic = True
+        seed_everything(seed)
 
     # Set the GPU id you choose
     if gpu is not None:
@@ -27,11 +33,8 @@ def init_device(seed=None, cpu=None, gpu=None, affinity=None):
     # Env setup
     if not cpu and torch.cuda.is_available():
         device = torch.device('cuda')
-        torch.backends.cudnn.benchmark = True
-        if seed is not None:
-            torch.cuda.manual_seed(seed)
         pin_memory = True
-        logger.info("Running on GPU%d" % (gpu if gpu else 0))
+        logger.info("Running on GPU %d" % (gpu if gpu else -1))
     else:
         pin_memory = False
         device = torch.device('cpu')
