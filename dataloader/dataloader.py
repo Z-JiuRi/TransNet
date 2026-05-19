@@ -4,7 +4,7 @@ import torch
 from torch.utils.data import DataLoader, TensorDataset
 from pathlib import Path
 
-__all__ = ['Cost2100DataLoader', 'PreFetcher']
+__all__ = ['MyDataLoader', 'PreFetcher']
 
 
 class PreFetcher:
@@ -47,7 +47,7 @@ class PreFetcher:
         return input
 
 
-class Cost2100DataLoader(object):
+class MyDataLoader(object):
     r""" PyTorch DataLoader for COST2100 dataset.
     """
 

@@ -6,7 +6,7 @@ import torch.nn as nn
 from utils.parser import args
 from utils import logger, setup_logging, Trainer, Tester
 from utils import init_device, init_model, FakeLR, WarmUpCosineAnnealingLR
-from dataloader import Cost2100DataLoader
+from dataloader import MyDataLoader
 
 
 def main():
@@ -28,7 +28,7 @@ def main():
 
     # Create the data loader
 
-    train_loader, val_loader, test_loader = Cost2100DataLoader(
+    train_loader, val_loader, test_loader = MyDataLoader(
         train_path=args.train_path,
         val_path=args.val_path,
         test_path=args.test_path,
@@ -53,8 +53,7 @@ def main():
 
     # Define optimizer and scheduler
 
-    lr_init = 1e-4 if args.scheduler == 'const' else 2e-4
-    optimizer = torch.optim.Adam(model.parameters(), lr_init)
+    optimizer = torch.optim.Adam(model.parameters(), args.lr_init)
 
     if args.scheduler == 'const':
         scheduler = FakeLR(optimizer=optimizer)
@@ -62,7 +61,7 @@ def main():
     else:
         scheduler = WarmUpCosineAnnealingLR(optimizer=optimizer,
                                             T_max=args.epochs * len(train_loader),
-                                            T_warmup=30 * len(train_loader),
+                                            T_warmup=0.1 * args.epochs * len(train_loader),
                                             eta_min=5e-5)
 
     # Define the training pipeline
