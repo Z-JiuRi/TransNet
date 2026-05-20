@@ -105,9 +105,11 @@ def lora_component(model, components, rank, alpha):
 
 def show_parameter(model):
     logger.info(f'\n{line_seg}\n=> Parameter trainable status\n{line_seg}')
-    logger.info(f"name\ttrainable\tshape")
+    
+    fmt_str = "{:<47} {:<8} {}"
     for name, param in model.named_parameters():
-        logger.info(f"{name}\t{param.requires_grad}\t{tuple(param.shape)}")
+        logger.info(fmt_str.format(name, str(param.requires_grad), str(tuple(param.shape))))
+        
     logger.info(line_seg)
 
 

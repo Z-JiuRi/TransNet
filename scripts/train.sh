@@ -1,18 +1,18 @@
 python ./main.py \
-  --exp_name freeze_fc_decoder\
-  --train_path /storage/hujiacong/zxd/datasets/WAIRD/data/base/01878/train.pt \
-  --val_path /storage/hujiacong/zxd/datasets/WAIRD/data/base/01878/val.pt \
-  --test_path /storage/hujiacong/zxd/datasets/WAIRD/data/base/01878/test.pt \
+  --exp_name cost2100/seed42/base\
+  --train_path /home/z-jiuri/workspace/Huawei/TransNet/data/COST2100/in_train.pt \
+  --val_path /home/z-jiuri/workspace/Huawei/TransNet/data/COST2100/in_val.pt \
+  --test_path /home/z-jiuri/workspace/Huawei/TransNet/data/COST2100/in_test.pt \
   --epochs 400 \
   --d_model 64 \
-  --nt 64 \
-  --nc 64 \
+  --nt 32 \
+  --nc 32 \
   --dim_feedforward 2048 \
-  --batch_size 1024 \
+  --batch_size 32 \
   --workers 4 \
   --cr 4 \
   --scheduler cosine \
-  --lr_init 5e-4 \
-  --gpu 3 \
-  --seed 3447 \
-  --freeze_components fc_decoder
+  --lr_init 2e-4 \
+  --weight_decay 1e-3 \
+  --gpu 0 \
+  --seed 42 \

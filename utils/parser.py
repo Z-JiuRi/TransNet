@@ -56,6 +56,8 @@ parser.add_argument('--scheduler', type=str, default='const', choices=['const', 
                     help='learning rate scheduler')
 parser.add_argument('--lr_init', type=float, default=5e-4,
                     help='initial learning rate')
+parser.add_argument('--weight_decay', type=float, default=1e-3,
+                    help='weight decay for AdamW')
 parser.add_argument('--freeze_components', type=str, nargs='+', default=[],
                     choices=['encoder_self_attn', 'encoder_ffn',
                              'decoder_self_attn', 'decoder_cross_attn',

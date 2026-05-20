@@ -54,7 +54,23 @@ def main():
 
     # Define optimizer and scheduler
 
-    optimizer = torch.optim.Adam(model.parameters(), args.lr_init)
+    decay_params = []
+    no_decay_params = []
+    for name, param in model.named_parameters():
+        if not param.requires_grad:
+            continue
+        if param.ndim == 1 or name.endswith(".bias"):
+            no_decay_params.append(param)
+        else:
+            decay_params.append(param)
+
+    optimizer = torch.optim.AdamW(
+        [
+            {"params": decay_params, "weight_decay": args.weight_decay},
+            {"params": no_decay_params, "weight_decay": 0.0},
+        ],
+        lr=args.lr_init,
+    )
 
     if args.scheduler == 'const':
         scheduler = FakeLR(optimizer=optimizer)

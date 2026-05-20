@@ -73,6 +73,27 @@ class MyDataLoader(object):
         # Test data loading
         data_test = torch.load(test_path, weights_only=False, map_location=torch.device('cpu'))
         self.test_dataset = TensorDataset(data_test)
+        
+
+        # import scipy.io as sio
+        # # Training data loading
+        # data_train = sio.loadmat(train_path)['HT']
+        # data_train = torch.tensor(data_train, dtype=torch.float32).view(
+        #     data_train.shape[0], self.channel, self.nt, self.nc)
+        # self.train_dataset = TensorDataset(data_train)
+
+        # # Validation data loading
+        # data_val = sio.loadmat(val_path)['HT']
+        # data_val = torch.tensor(data_val, dtype=torch.float32).view(
+        #     data_val.shape[0], self.channel, self.nt, self.nc)
+        # self.val_dataset = TensorDataset(data_val)
+
+        # # Test data loading
+        # data_test = sio.loadmat(test_path)['HT']
+        # data_test = torch.tensor(data_test, dtype=torch.float32).view(
+        #     data_test.shape[0], self.channel, self.nt, self.nc)
+        # self.test_dataset = TensorDataset(data_test)
+
 
     def __call__(self):
         train_loader = DataLoader(self.train_dataset,

@@ -37,9 +37,9 @@ def evaluator(sparse_pred, sparse_gt):
     """
 
     with torch.no_grad():
-        # De-centralize
-        sparse_gt = sparse_gt - 0.5
-        sparse_pred = sparse_pred - 0.5
+        # # De-centralize
+        # sparse_gt = sparse_gt - 0.5
+        # sparse_pred = sparse_pred - 0.5
 
         # Calculate the NMSE
         power_gt = sparse_gt[:, 0, :, :] ** 2 + sparse_gt[:, 1, :, :] ** 2
