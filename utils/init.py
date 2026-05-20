@@ -34,18 +34,29 @@ def freeze_component(model, components):
     }
 
     for component in components:
-        modules = component_map.get(component, [])
-        for module in modules:
+        if component not in component_map:
+            raise ValueError(
+                f"Unknown freeze component '{component}'. "
+                f"Valid choices: {list(component_map.keys())}"
+            )
+        for module in component_map[component]:
             for param in module.parameters():
                 param.requires_grad = False
 
-    logger.info(f"=> Frozen components: {', '.join(components)}")
+    # Verify: count frozen vs trainable
+    frozen_count = sum(1 for p in model.parameters() if not p.requires_grad)
+    total_count = sum(1 for p in model.parameters())
+    logger.info(
+        f"=> Frozen components: {', '.join(components)} "
+        f"({frozen_count}/{total_count} params frozen)"
+    )
 
 
 def show_parameter(model):
     logger.info(f'\n{line_seg}\n=> Parameter trainable status\n{line_seg}')
+    logger.info(f"name\ttrainable\tshape")
     for name, param in model.named_parameters():
-        logger.info(f"{name} | trainable={param.requires_grad} | shape={tuple(param.shape)}")
+        logger.info(f"{name}\t{param.requires_grad}\t{tuple(param.shape)}")
     logger.info(line_seg)
 
 
