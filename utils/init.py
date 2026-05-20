@@ -6,7 +6,8 @@ import torch
 from models import transnet
 from utils import logger, line_seg
 
-__all__ = ["seed_everything", "init_device", "init_model"]
+__all__ = ["seed_everything", "init_device", "init_model",
+           "freeze_component", "show_parameter"]
 
 
 def seed_everything(seed):
@@ -16,6 +17,36 @@ def seed_everything(seed):
     torch.cuda.manual_seed_all(seed)
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
+
+
+def freeze_component(model, components):
+    if not components:
+        return
+
+    component_map = {
+        "encoder_self_attn": [model.encoder.layer.self_attn],
+        "encoder_ffn": [model.encoder.layer.linear1, model.encoder.layer.linear2],
+        "decoder_self_attn": [model.decoder.layer.self_attn],
+        "decoder_cross_attn": [model.decoder.layer.multihead_attn],
+        "decoder_ffn": [model.decoder.layer.linear1, model.decoder.layer.linear2],
+        "fc_encoder": [model.fc_encoder],
+        "fc_decoder": [model.fc_decoder],
+    }
+
+    for component in components:
+        modules = component_map.get(component, [])
+        for module in modules:
+            for param in module.parameters():
+                param.requires_grad = False
+
+    logger.info(f"=> Frozen components: {', '.join(components)}")
+
+
+def show_parameter(model):
+    logger.info(f'\n{line_seg}\n=> Parameter trainable status\n{line_seg}')
+    for name, param in model.named_parameters():
+        logger.info(f"{name} | trainable={param.requires_grad} | shape={tuple(param.shape)}")
+    logger.info(line_seg)
 
 
 def init_device(seed=None, cpu=None, gpu=None, affinity=None):
@@ -73,5 +104,10 @@ def init_model(args):
     logger.info(f'=> Model Flops: {flops}')
     logger.info(f'=> Model Params Num: {params}\n')
     logger.info(f'\n{line_seg}\n{model}\n{line_seg}\n')
+
+    if args.freeze_components:
+        freeze_component(model, args.freeze_components)
+    
+    show_parameter(model)
 
     return model

@@ -1,5 +1,5 @@
 python ./main.py \
-  --exp_name 01878_seed3447_400ep_5e-4 \
+  --exp_name freeze_decoder_cross_attn \
   --train_path /storage/hujiacong/zxd/datasets/WAIRD/data/base/01878/train.pt \
   --val_path /storage/hujiacong/zxd/datasets/WAIRD/data/base/01878/val.pt \
   --test_path /storage/hujiacong/zxd/datasets/WAIRD/data/base/01878/test.pt \
@@ -13,5 +13,6 @@ python ./main.py \
   --cr 4 \
   --scheduler cosine \
   --lr_init 5e-4 \
-  --gpu 0 \
-  --seed 3447
+  --gpu 3 \
+  --seed 3447 \
+  --freeze_components decoder_cross_attn 

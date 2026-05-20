@@ -56,4 +56,11 @@ parser.add_argument('--scheduler', type=str, default='const', choices=['const', 
                     help='learning rate scheduler')
 parser.add_argument('--lr_init', type=float, default=5e-4,
                     help='initial learning rate')
+parser.add_argument('--freeze_components', type=str, nargs='+', default=[],
+                    choices=['encoder_self_attn', 'encoder_ffn',
+                             'decoder_self_attn', 'decoder_cross_attn',
+                             'decoder_ffn', 'fc_encoder', 'fc_decoder'],
+                    help='freeze components during training (space-separated list)')
+parser.add_argument('--show_parameters', action='store_true',
+                    help='print all parameters trainable status and shapes')
 args = parser.parse_args()
