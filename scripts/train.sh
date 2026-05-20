@@ -1,17 +1,17 @@
 python ./main.py \
-  --exp_name exp1 \
-  --train_path /storage/hujiacong/zxd/datasets/WAIRD/data/scenario_2/01878/train.pt \
-  --val_path /storage/hujiacong/zxd/datasets/WAIRD/data/scenario_2/01878/test.pt \
-  --test_path /storage/hujiacong/zxd/datasets/WAIRD/data/scenario_2/01878/test.pt \
+  --exp_name 01878_seed3447_400ep_5e-4 \
+  --train_path /storage/hujiacong/zxd/datasets/WAIRD/data/base/01878/train.pt \
+  --val_path /storage/hujiacong/zxd/datasets/WAIRD/data/base/01878/val.pt \
+  --test_path /storage/hujiacong/zxd/datasets/WAIRD/data/base/01878/test.pt \
   --epochs 400 \
   --d_model 64 \
   --nt 64 \
   --nc 64 \
   --dim_feedforward 2048 \
-  --batch_size 512 \
+  --batch_size 1024 \
   --workers 4 \
   --cr 4 \
   --scheduler cosine \
   --lr_init 5e-4 \
   --gpu 0 \
-  --seed 42
+  --seed 3447

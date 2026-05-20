@@ -10,6 +10,7 @@ __all__ = ["seed_everything", "init_device", "init_model"]
 
 
 def seed_everything(seed):
+    logger.info(f"Random seed set to {seed}")
     random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
@@ -34,7 +35,7 @@ def init_device(seed=None, cpu=None, gpu=None, affinity=None):
     if not cpu and torch.cuda.is_available():
         device = torch.device('cuda')
         pin_memory = True
-        logger.info("Running on GPU %d" % (gpu if gpu else -1))
+        logger.info("Running on GPU %d" % (gpu if gpu else 0))
     else:
         pin_memory = False
         device = torch.device('cpu')
