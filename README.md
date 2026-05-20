@@ -31,6 +31,7 @@ to get a useable environment. Or manually install and build your own environment
 - [1.2 =< PyTorch <= 1.6](https://pytorch.org/get-started/locally/)
 - [thop==0.0.31-2005241907](https://github.com/Lyken17/pytorch-OpCounter) Note that the latest version leads to bug.
 - [TensorBoard](https://www.tensorflow.org/tensorboard)
+- peft (for LoRA experiments; requires PyTorch >= 1.12 and transformers >= 4.31)
 
 ## Project Preparation
 
@@ -86,6 +87,29 @@ python /home/TransNet/main.py \
   --cr 4 \
   --nt 32 \
   --nc 32 \
+  --scheduler const \
+  --gpu 0
+```
+
+## LoRA Experiments (fc_encoder/fc_decoder)
+
+Use `--lora_component` to enable LoRA on `fc_encoder`, `fc_decoder`, or both.
+
+``` bash
+python /home/TransNet/main.py \
+  --exp_name 'lora_fc' \
+  --train_path '/home/COST2100/in_train.pt' \
+  --val_path '/home/COST2100/in_val.pt' \
+  --test_path '/home/COST2100/in_test.pt' \
+  --epochs 400 \
+  --batch_size 200 \
+  --workers 0 \
+  --cr 4 \
+  --nt 32 \
+  --nc 32 \
+  --lora_component fc_encoder fc_decoder \
+  --lora_rank 8 \
+  --lora_alpha 16 \
   --scheduler const \
   --gpu 0
 ```
@@ -152,4 +176,3 @@ Thank Chao-Kai Wen and Shi Jin group again for providing the pre-processed COST2
 Thanks two open source works, CRNet and CLNet, that build on work above and advance the CSI feedback problem in DL, you can find their related work in [Github-Python-PyTorch CRNet](https://github.com/Kylin9511/CRNet) and [Github-Python-PyTorch CLNet](https://github.com/SIJIEJI/CLNet)
 
 Thanks  the Github project members for the open source [Transformer tutorial](https://github.com/datawhalechina/Learn-NLP-with-Transformers), our base model for TransNet is based on their work.
-

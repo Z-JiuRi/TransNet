@@ -7,7 +7,7 @@ from models import transnet
 from utils import logger, line_seg
 
 __all__ = ["seed_everything", "init_device", "init_model",
-           "freeze_component", "show_parameter"]
+           "freeze_component", "lora_component", "show_parameter"]
 
 
 def seed_everything(seed):
@@ -50,6 +50,57 @@ def freeze_component(model, components):
         f"=> Frozen components: {', '.join(components)} "
         f"({frozen_count}/{total_count} params frozen)"
     )
+
+
+def lora_component(model, components, rank, alpha):
+    if not components:
+        return model
+
+    try:
+        from peft import LoraConfig, TaskType, get_peft_model
+    except ImportError as exc:
+        raise ImportError(
+            "peft is required for LoRA. "
+            "Install peft (and compatible torch/transformers) to use --lora_component."
+        ) from exc
+
+    component_map = {
+        "fc_encoder": "fc_encoder",
+        "fc_decoder": "fc_decoder",
+    }
+    target_modules = []
+    for component in components:
+        if component not in component_map:
+            raise ValueError(
+                f"Unknown LoRA component '{component}'. "
+                f"Valid choices: {list(component_map.keys())}"
+            )
+        target_modules.append(component_map[component])
+
+    for param in model.parameters():
+        param.requires_grad = False
+
+    lora_config = LoraConfig(
+        r=rank,
+        lora_alpha=alpha,
+        lora_dropout=0.0,
+        bias="none",
+        target_modules=target_modules,
+        task_type=TaskType.FEATURE_EXTRACTION,
+    )
+    model = get_peft_model(model, lora_config)
+
+    for name, param in model.named_parameters():
+        param.requires_grad = "lora_" in name
+
+    trainable_count = sum(1 for p in model.parameters() if p.requires_grad)
+    total_count = sum(1 for p in model.parameters())
+    logger.info(
+        f"=> LoRA enabled on {', '.join(target_modules)} "
+        f"(rank={rank}, alpha={alpha}); "
+        f"{trainable_count}/{total_count} params trainable"
+    )
+    return model
 
 
 def show_parameter(model):
@@ -116,7 +167,14 @@ def init_model(args):
     logger.info(f'=> Model Params Num: {params}\n')
     logger.info(f'\n{line_seg}\n{model}\n{line_seg}\n')
 
-    if args.freeze_components:
+    if args.lora_component:
+        if args.freeze_components:
+            logger.warning(
+                "freeze_components is ignored because LoRA is enabled."
+            )
+        model = lora_component(model, args.lora_component,
+                               args.lora_rank, args.lora_alpha)
+    elif args.freeze_components:
         freeze_component(model, args.freeze_components)
     
     show_parameter(model)
