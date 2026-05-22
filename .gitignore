@@ -46,4 +46,4 @@ checkpoints/
 
 exps/*.pth
 
-justest/*
+.vscode/

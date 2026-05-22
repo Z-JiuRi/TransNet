@@ -86,7 +86,6 @@ def lora_component(model, components, rank, alpha):
         lora_dropout=0.0,
         bias="none",
         target_modules=target_modules,
-        task_type=TaskType.FEATURE_EXTRACTION,
     )
     model = get_peft_model(model, lora_config)
 
@@ -104,13 +103,18 @@ def lora_component(model, components, rank, alpha):
 
 
 def show_parameter(model):
-    logger.info(f'\n{line_seg}\n=> Parameter trainable status\n{line_seg}')
+    fmt_str = "{:<65} {:<8} {}"
+    lines = []
     
-    fmt_str = "{:<47} {:<8} {}"
+    # 收集所有参数信息
     for name, param in model.named_parameters():
-        logger.info(fmt_str.format(name, str(param.requires_grad), str(tuple(param.shape))))
-        
-    logger.info(line_seg)
+        lines.append(fmt_str.format(name, str(param.requires_grad), str(tuple(param.shape))))
+    
+    # 加上结尾的分隔线
+    lines.append(line_seg)
+    
+    # 用换行符拼接成一个完整的字符串，只调用一次 logger.info
+    logger.info("\n" + "\n".join(lines))
 
 
 def init_device(seed=None, cpu=None, gpu=None, affinity=None):
@@ -150,15 +154,14 @@ def init_model(args):
 
     if args.pretrained is not None:
         assert os.path.isfile(args.pretrained)
-        state_dict = torch.load(args.pretrained,
-                                map_location=torch.device('cpu'))['state_dict']
+        state_dict = torch.load(args.pretrained, weights_only=False, map_location=torch.device('cpu'))['state_dict']
         model.load_state_dict(state_dict,strict=False)
         logger.info("pretrained model loaded from {}".format(args.pretrained))
 
     # Model flops and params counting
     H_a = torch.randn([1, args.channel, args.nt, args.nc])
     flops, params = thop.profile(model, inputs=(H_a,), verbose=False)
-    flops, params = thop.clever_format([flops, params], "%.3f")
+    flops, params = thop.clever_format([flops, params], "%.4e")
 
     # Model info logging
     logger.info(f'=> Model Name: TransNet [pretrained: {args.pretrained}]')

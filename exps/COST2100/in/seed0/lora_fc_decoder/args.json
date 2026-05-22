@@ -1,0 +1,31 @@
+{
+  "batch_size": 32,
+  "channel": 2,
+  "cpu": false,
+  "cpu_affinity": null,
+  "cr": 4,
+  "d_model": 64,
+  "dim_feedforward": 2048,
+  "epochs": 200,
+  "evaluate": false,
+  "exp_name": "COST2100/in/seed0/lora_fc_decoder",
+  "freeze_components": [],
+  "gpu": 3,
+  "lora_alpha": 8,
+  "lora_component": [
+    "fc_decoder"
+  ],
+  "lora_rank": 4,
+  "lr_init": 0.0002,
+  "nc": 32,
+  "nt": 32,
+  "pretrained": "/storage/hujiacong/zxd/Huawei/TransNet/exps/COST2100/in/seed42/base/checkpoints/best_nmse.pth",
+  "resume": null,
+  "scheduler": "cosine",
+  "seed": 0,
+  "test_path": "/storage/hujiacong/zxd/datasets/cost2100/in_test.pt",
+  "train_path": "/storage/hujiacong/zxd/datasets/cost2100/in_test.pt",
+  "val_path": "/storage/hujiacong/zxd/datasets/cost2100/in_val.pt",
+  "weight_decay": 0.001,
+  "workers": 4
+}

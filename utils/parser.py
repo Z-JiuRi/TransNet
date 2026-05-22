@@ -71,6 +71,4 @@ parser.add_argument('--lora_rank', type=int, default=8,
                     help='LoRA rank for fc_encoder/fc_decoder')
 parser.add_argument('--lora_alpha', type=int, default=16,
                     help='LoRA alpha for fc_encoder/fc_decoder')
-parser.add_argument('--show_parameters', action='store_true',
-                    help='print all parameters trainable status and shapes')
 args = parser.parse_args()
