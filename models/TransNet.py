@@ -113,7 +113,8 @@ def multi_head_attention_forward(
     
     if not training:
         dropout_p = 0.0
-    attn_output, attn_output_weights = scale_dot_attention(q, k, v, attn_mask, dropout_p)
+    attn_output, attn_output_weights = scale_dot_attention(
+        q, k, v, dropout_p=dropout_p, attn_mask=attn_mask)
     attn_output = attn_output.transpose(0, 1).contiguous().view(tgt_len, bsz, embed_dim)
     attn_output = nn.functional.linear(attn_output, out_proj_weight, out_proj_bias)
     if need_weights:
@@ -350,7 +351,7 @@ class Transformer(nn.Module):
     def __init__(self, d_model: int = 64, nhead: int = 8, num_encoder_layers: int = 6,
                  num_decoder_layers: int = 6, dim_feedforward: Optional[int] = None, dropout: float = 0.1,
                  activation = F.relu, custom_encoder: Optional[Any] = None, custom_decoder: Optional[Any] = None,
-                 layer_norm_eps: float = 1e-5, batch_first: bool = False,  reduction=64,
+                 layer_norm_eps: float = 1e-5, batch_first: bool = True,  reduction=64,
                  channel: int = 2, nt: int = 32, nc: int = 32) -> None:
         super(Transformer, self).__init__()
         if custom_encoder is not None:
