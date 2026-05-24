@@ -23,12 +23,16 @@ def freeze_component(model, components):
     if not components:
         return
 
+    encoder_layers = list(model.encoder.layers)
+    decoder_layers = list(model.decoder.layers)
     component_map = {
-        "encoder_self_attn": [model.encoder.layer.self_attn],
-        "encoder_ffn": [model.encoder.layer.linear1, model.encoder.layer.linear2],
-        "decoder_self_attn": [model.decoder.layer.self_attn],
-        "decoder_cross_attn": [model.decoder.layer.multihead_attn],
-        "decoder_ffn": [model.decoder.layer.linear1, model.decoder.layer.linear2],
+        "encoder_self_attn": [layer.self_attn for layer in encoder_layers],
+        "encoder_ffn": [module for layer in encoder_layers
+                        for module in (layer.linear1, layer.linear2)],
+        "decoder_self_attn": [layer.self_attn for layer in decoder_layers],
+        "decoder_cross_attn": [layer.multihead_attn for layer in decoder_layers],
+        "decoder_ffn": [module for layer in decoder_layers
+                        for module in (layer.linear1, layer.linear2)],
         "fc_encoder": [model.fc_encoder],
         "fc_decoder": [model.fc_decoder],
     }
