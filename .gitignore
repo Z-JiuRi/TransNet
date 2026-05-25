@@ -46,4 +46,7 @@ checkpoints/
 
 exps/*.pth
 
+exps_old/*.pth
+
+
 .vscode/

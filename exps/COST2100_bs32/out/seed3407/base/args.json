@@ -8,7 +8,7 @@
   "dim_feedforward": 2048,
   "epochs": 400,
   "evaluate": false,
-  "exp_name": "COST2100/out/seed3407/base",
+  "exp_name": "COST2100_bs32/out/seed3407/base",
   "freeze_components": [],
   "gpu": 0,
   "lora_alpha": 16,

@@ -57,7 +57,7 @@ def lora_component(model, components, rank, alpha):
         return model
 
     try:
-        from peft import LoraConfig, TaskType, get_peft_model
+        from peft import LoraConfig, get_peft_model
     except ImportError as exc:
         raise ImportError(
             "peft is required for LoRA. "
@@ -65,17 +65,48 @@ def lora_component(model, components, rank, alpha):
         ) from exc
 
     component_map = {
-        "fc_encoder": "fc_encoder",
-        "fc_decoder": "fc_decoder",
+        "encoder_self_attn": {
+            "modules": ["encoder.layer.self_attn.out_proj"],
+            "parameters": ["encoder.layer.self_attn.in_proj_weight"],
+        },
+        "encoder_ffn": {
+            "modules": ["encoder.layer.linear1", "encoder.layer.linear2"],
+            "parameters": [],
+        },
+        "decoder_self_attn": {
+            "modules": ["decoder.layer.self_attn.out_proj"],
+            "parameters": ["decoder.layer.self_attn.in_proj_weight"],
+        },
+        "decoder_cross_attn": {
+            "modules": ["decoder.layer.multihead_attn.out_proj"],
+            "parameters": ["decoder.layer.multihead_attn.in_proj_weight"],
+        },
+        "decoder_ffn": {
+            "modules": ["decoder.layer.linear1", "decoder.layer.linear2"],
+            "parameters": [],
+        },
+        "fc_encoder": {
+            "modules": ["fc_encoder"],
+            "parameters": [],
+        },
+        "fc_decoder": {
+            "modules": ["fc_decoder"],
+            "parameters": [],
+        },
     }
     target_modules = []
+    target_parameters = []
     for component in components:
         if component not in component_map:
             raise ValueError(
                 f"Unknown LoRA component '{component}'. "
                 f"Valid choices: {list(component_map.keys())}"
             )
-        target_modules.append(component_map[component])
+        target_modules.extend(component_map[component]["modules"])
+        target_parameters.extend(component_map[component]["parameters"])
+
+    target_modules = list(dict.fromkeys(target_modules))
+    target_parameters = list(dict.fromkeys(target_parameters))
 
     for param in model.parameters():
         param.requires_grad = False
@@ -86,6 +117,7 @@ def lora_component(model, components, rank, alpha):
         lora_dropout=0.0,
         bias="none",
         target_modules=target_modules,
+        target_parameters=target_parameters,
     )
     model = get_peft_model(model, lora_config)
 
@@ -95,7 +127,9 @@ def lora_component(model, components, rank, alpha):
     trainable_count = sum(1 for p in model.parameters() if p.requires_grad)
     total_count = sum(1 for p in model.parameters())
     logger.info(
-        f"=> LoRA enabled on {', '.join(target_modules)} "
+        f"=> LoRA enabled on components: {', '.join(components)}; "
+        f"target_modules={target_modules}; "
+        f"target_parameters={target_parameters} "
         f"(rank={rank}, alpha={alpha}); "
         f"{trainable_count}/{total_count} params trainable"
     )

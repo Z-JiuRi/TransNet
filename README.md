@@ -17,6 +17,178 @@ or
 ```
 Y. Cui, A. Guo and C. Song, "TransNet: Full Attention Network for CSI Feedback in FDD Massive MIMO System," in IEEE Wireless Communications Letters, vol. 11, no. 5, pp. 903-907, May 2022, doi: 10.1109/LWC.2022.3149416.
 ```
+## TransNet Architecture
+
+TransNet is a Transformer autoencoder implemented in `models/TransNet.py`. The factory
+`transnet(reduction=args.cr, d_model=args.d_model, channel=args.channel, nt=args.nt, nc=args.nc)`
+builds a Transformer with **2 encoder layers**, **2 decoder layers**, **2 attention heads**,
+and **dropout=0.0** by default. The compression ratio is controlled by `--cr` (passed as
+`reduction`), and the CSI dimensions are controlled by `--channel`, `--nt`, and `--nc`.
+
+Detailed data flow (default settings: `channel=2`, `nt=32`, `nc=32`, `d_model=64`, `cr=4`):
+```
+Input sparse CSI: (B, 2, 32, 32)
+  |
+  | flatten -> (B, 2048)
+  v
+Reshape to tokens: (B, 32, 64)   # seq_len = 2048 / 64, d_model = 64
+  |
+  v
+Transformer Encoder x2
+  - Multihead self-attn: nhead=2 (head_dim=32)
+  - FFN: Linear(64 -> 256) + ReLU + Linear(256 -> 64)
+  - Residual + LayerNorm (x2)
+  |
+  v
+Flatten: (B, 2048)
+  |
+  v
+fc_encoder: Linear(2048 -> 512)  # codeword size = input_dim / reduction
+  |
+  v
+fc_decoder: Linear(512 -> 2048)
+  |
+  v
+Reshape to tokens: (B, 32, 64)
+  |
+  v
+Transformer Decoder x2
+  - Multihead self-attn: nhead=2
+  - Multihead cross-attn: tgt attends to memory
+  - FFN: Linear(64 -> 256) + ReLU + Linear(256 -> 64)
+  - Residual + LayerNorm (x3)
+  |
+  v
+Output sparse CSI: (B, 2, 32, 32)
+```
+
+```
+**********
+Transformer(
+  (encoder): TransformerEncoder(
+    (layers): ModuleList(
+      (0-1): 2 x TransformerEncoderLayer(
+        (self_attn): MultiheadAttention(
+          (out_proj): NonDynamicallyQuantizableLinear(in_features=64, out_features=64, bias=True)
+        )
+        (linear1): Linear(in_features=64, out_features=2048, bias=True)
+        (dropout): Dropout(p=0.0, inplace=False)
+        (linear2): Linear(in_features=2048, out_features=64, bias=True)
+        (norm1): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (dropout1): Dropout(p=0.0, inplace=False)
+        (dropout2): Dropout(p=0.0, inplace=False)
+      )
+    )
+    (norm): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+  )
+  (decoder): TransformerDecoder(
+    (layers): ModuleList(
+      (0-1): 2 x TransformerDecoderLayer(
+        (self_attn): MultiheadAttention(
+          (out_proj): NonDynamicallyQuantizableLinear(in_features=64, out_features=64, bias=True)
+        )
+        (multihead_attn): MultiheadAttention(
+          (out_proj): NonDynamicallyQuantizableLinear(in_features=64, out_features=64, bias=True)
+        )
+        (linear1): Linear(in_features=64, out_features=2048, bias=True)
+        (dropout): Dropout(p=0.0, inplace=False)
+        (linear2): Linear(in_features=2048, out_features=64, bias=True)
+        (norm1): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (norm3): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (dropout1): Dropout(p=0.0, inplace=False)
+        (dropout2): Dropout(p=0.0, inplace=False)
+        (dropout3): Dropout(p=0.0, inplace=False)
+      )
+    )
+    (norm): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+  )
+  (fc_encoder): Linear(in_features=2048, out_features=512, bias=True)
+  (fc_decoder): Linear(in_features=512, out_features=2048, bias=True)
+)
+**********
+```
+
+```
+encoder.layers.0.self_attn.in_proj_weight                         True     (192, 64)
+encoder.layers.0.self_attn.in_proj_bias                           True     (192,)
+encoder.layers.0.self_attn.out_proj.weight                        True     (64, 64)
+encoder.layers.0.self_attn.out_proj.bias                          True     (64,)
+encoder.layers.0.linear1.weight                                   True     (2048, 64)
+encoder.layers.0.linear1.bias                                     True     (2048,)
+encoder.layers.0.linear2.weight                                   True     (64, 2048)
+encoder.layers.0.linear2.bias                                     True     (64,)
+encoder.layers.0.norm1.weight                                     True     (64,)
+encoder.layers.0.norm1.bias                                       True     (64,)
+encoder.layers.0.norm2.weight                                     True     (64,)
+encoder.layers.0.norm2.bias                                       True     (64,)
+encoder.layers.1.self_attn.in_proj_weight                         True     (192, 64)
+encoder.layers.1.self_attn.in_proj_bias                           True     (192,)
+encoder.layers.1.self_attn.out_proj.weight                        True     (64, 64)
+encoder.layers.1.self_attn.out_proj.bias                          True     (64,)
+encoder.layers.1.linear1.weight                                   True     (2048, 64)
+encoder.layers.1.linear1.bias                                     True     (2048,)
+encoder.layers.1.linear2.weight                                   True     (64, 2048)
+encoder.layers.1.linear2.bias                                     True     (64,)
+encoder.layers.1.norm1.weight                                     True     (64,)
+encoder.layers.1.norm1.bias                                       True     (64,)
+encoder.layers.1.norm2.weight                                     True     (64,)
+encoder.layers.1.norm2.bias                                       True     (64,)
+encoder.norm.weight                                               True     (64,)
+encoder.norm.bias                                                 True     (64,)
+decoder.layers.0.self_attn.in_proj_weight                         True     (192, 64)
+decoder.layers.0.self_attn.in_proj_bias                           True     (192,)
+decoder.layers.0.self_attn.out_proj.weight                        True     (64, 64)
+decoder.layers.0.self_attn.out_proj.bias                          True     (64,)
+decoder.layers.0.multihead_attn.in_proj_weight                    True     (192, 64)
+decoder.layers.0.multihead_attn.in_proj_bias                      True     (192,)
+decoder.layers.0.multihead_attn.out_proj.weight                   True     (64, 64)
+decoder.layers.0.multihead_attn.out_proj.bias                     True     (64,)
+decoder.layers.0.linear1.weight                                   True     (2048, 64)
+decoder.layers.0.linear1.bias                                     True     (2048,)
+decoder.layers.0.linear2.weight                                   True     (64, 2048)
+decoder.layers.0.linear2.bias                                     True     (64,)
+decoder.layers.0.norm1.weight                                     True     (64,)
+decoder.layers.0.norm1.bias                                       True     (64,)
+decoder.layers.0.norm2.weight                                     True     (64,)
+decoder.layers.0.norm2.bias                                       True     (64,)
+decoder.layers.0.norm3.weight                                     True     (64,)
+decoder.layers.0.norm3.bias                                       True     (64,)
+decoder.layers.1.self_attn.in_proj_weight                         True     (192, 64)
+decoder.layers.1.self_attn.in_proj_bias                           True     (192,)
+decoder.layers.1.self_attn.out_proj.weight                        True     (64, 64)
+decoder.layers.1.self_attn.out_proj.bias                          True     (64,)
+decoder.layers.1.multihead_attn.in_proj_weight                    True     (192, 64)
+decoder.layers.1.multihead_attn.in_proj_bias                      True     (192,)
+decoder.layers.1.multihead_attn.out_proj.weight                   True     (64, 64)
+decoder.layers.1.multihead_attn.out_proj.bias                     True     (64,)
+decoder.layers.1.linear1.weight                                   True     (2048, 64)
+decoder.layers.1.linear1.bias                                     True     (2048,)
+decoder.layers.1.linear2.weight                                   True     (64, 2048)
+decoder.layers.1.linear2.bias                                     True     (64,)
+decoder.layers.1.norm1.weight                                     True     (64,)
+decoder.layers.1.norm1.bias                                       True     (64,)
+decoder.layers.1.norm2.weight                                     True     (64,)
+decoder.layers.1.norm2.bias                                       True     (64,)
+decoder.layers.1.norm3.weight                                     True     (64,)
+decoder.layers.1.norm3.bias                                       True     (64,)
+decoder.norm.weight                                               True     (64,)
+decoder.norm.bias                                                 True     (64,)
+fc_encoder.weight                                                 True     (512, 2048)
+fc_encoder.bias                                                   True     (512,)
+fc_decoder.weight                                                 True     (2048, 512)
+fc_decoder.bias                                                   True     (2048,)
+**********
+```
+
+Notes:
+1. `dim_feedforward` defaults to `4 * d_model` when not specified.
+2. `model.encode(src)` returns the compressed codeword from `fc_encoder`.
+3. LoRA can be enabled on `encoder_self_attn`, `encoder_ffn`, `decoder_self_attn`,
+   `decoder_cross_attn`, `decoder_ffn`, `fc_encoder`, and `fc_decoder` via
+   `--lora_component`.
+
 ## Requirements
 
 We support a env.yaml in our project, so you can simply run
@@ -91,9 +263,11 @@ python /home/TransNet/main.py \
   --gpu 0
 ```
 
-## LoRA Experiments (fc_encoder/fc_decoder)
+## LoRA Experiments
 
-Use `--lora_component` to enable LoRA on `fc_encoder`, `fc_decoder`, or both.
+Use `--lora_component` to enable LoRA on any of these components:
+`encoder_self_attn`, `encoder_ffn`, `decoder_self_attn`, `decoder_cross_attn`,
+`decoder_ffn`, `fc_encoder`, and `fc_decoder`.
 
 ``` bash
 python /home/TransNet/main.py \
@@ -107,7 +281,7 @@ python /home/TransNet/main.py \
   --cr 4 \
   --nt 32 \
   --nc 32 \
-  --lora_component fc_encoder fc_decoder \
+  --lora_component encoder_self_attn encoder_ffn decoder_self_attn decoder_cross_attn decoder_ffn \
   --lora_rank 8 \
   --lora_alpha 16 \
   --scheduler const \

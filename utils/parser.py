@@ -64,11 +64,13 @@ parser.add_argument('--freeze_components', type=str, nargs='+', default=[],
                              'decoder_ffn', 'fc_encoder', 'fc_decoder'],
                     help='freeze components during training (space-separated list)')
 parser.add_argument('--lora_component', type=str, nargs='+', default=[],
-                    choices=['fc_encoder', 'fc_decoder'],
+                    choices=['encoder_self_attn', 'encoder_ffn',
+                             'decoder_self_attn', 'decoder_cross_attn',
+                             'decoder_ffn', 'fc_encoder', 'fc_decoder'],
                     help='apply LoRA to components (space-separated list); '
                          'leave empty to disable LoRA')
 parser.add_argument('--lora_rank', type=int, default=8,
-                    help='LoRA rank for fc_encoder/fc_decoder')
+                    help='LoRA rank')
 parser.add_argument('--lora_alpha', type=int, default=16,
-                    help='LoRA alpha for fc_encoder/fc_decoder')
+                    help='LoRA alpha')
 args = parser.parse_args()
