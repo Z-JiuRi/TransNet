@@ -42,11 +42,13 @@ __pycache__/
 data/*
 snapshots/
 checkpoints/
+
+justest/
+
 *.pth
 
-exps/*.pth
 
-exps_old/*.pth
+exps/*.pth
 
 
 .vscode/
