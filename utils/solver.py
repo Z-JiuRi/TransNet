@@ -199,7 +199,7 @@ class Trainer:
                 state['best_nmse'] = self.best_nmse
                 self._save(state, name=f"best_nmse.pth")
 
-        self._save(state, name='last.pth')
+        # self._save(state, name='last.pth')
 
         # print current best results
         if self.best_nmse.nmse is not None:
