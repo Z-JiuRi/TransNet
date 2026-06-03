@@ -1,5 +1,6 @@
 import os
 import random
+import numpy as np
 import thop
 import torch
 
@@ -12,11 +13,22 @@ __all__ = ["seed_everything", "init_device", "init_model",
 
 def seed_everything(seed):
     logger.info(f"Random seed set to {seed}")
+    os.environ["PYTHONHASHSEED"] = str(seed)
+    os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
     random.seed(seed)
+    np.random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
+    if hasattr(torch.backends, "cuda") and hasattr(torch.backends.cuda, "matmul"):
+        torch.backends.cuda.matmul.allow_tf32 = False
+    if hasattr(torch.backends, "cudnn"):
+        torch.backends.cudnn.allow_tf32 = False
+    if hasattr(torch, "use_deterministic_algorithms"):
+        torch.use_deterministic_algorithms(True)
+    elif hasattr(torch, "set_deterministic"):
+        torch.set_deterministic(True)
 
 
 def freeze_component(model, components):
