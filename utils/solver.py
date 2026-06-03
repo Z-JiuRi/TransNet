@@ -120,7 +120,7 @@ class Trainer:
         time_tmp = time.time()
 
         for batch_idx, (sparse_gt, ) in enumerate(data_loader):
-            sparse_gt = sparse_gt.to(self.device)
+            sparse_gt = sparse_gt.to(self.device, dtype=torch.float32)
             sparse_pred = self.model(sparse_gt)
             loss = self.criterion(sparse_pred, sparse_gt)
 
@@ -220,7 +220,7 @@ class Trainer:
         encoder_outputs = []
         with torch.no_grad():
             for batch_idx, (sparse_gt, ) in enumerate(data_loader):
-                sparse_gt = sparse_gt.to(self.device)
+                sparse_gt = sparse_gt.to(self.device, dtype=torch.float32)
                 encoder_output = self.model.encode(sparse_gt)
                 encoder_outputs.append(encoder_output.cpu())
 
@@ -265,7 +265,7 @@ class Tester:
         time_tmp = time.time()
 
         for batch_idx, (sparse_gt, ) in enumerate(data_loader):
-            sparse_gt = sparse_gt.to(self.device)
+            sparse_gt = sparse_gt.to(self.device, dtype=torch.float32)
             sparse_pred = self.model(sparse_gt)
             loss = self.criterion(sparse_pred, sparse_gt)
             nmse = evaluator(sparse_pred, sparse_gt)
