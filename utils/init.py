@@ -80,25 +80,53 @@ def lora_component(model, components, rank, alpha):
             "Install peft (and compatible torch/transformers) to use --lora_component."
         ) from exc
 
+    def modules_with(prefix, suffixes):
+        return [
+            name for name, _ in model.named_modules()
+            if name.startswith(prefix) and name.endswith(suffixes)
+        ]
+
+    def parameters_with(prefix, suffixes):
+        return [
+            name for name, _ in model.named_parameters()
+            if name.startswith(prefix) and name.endswith(suffixes)
+        ]
+
     component_map = {
         "encoder_self_attn": {
-            "modules": ["encoder.layer.self_attn.out_proj"],
-            "parameters": ["encoder.layer.self_attn.in_proj_weight"],
+            "modules": modules_with(
+                "encoder.layers.", (".self_attn.out_proj",)
+            ),
+            "parameters": parameters_with(
+                "encoder.layers.", (".self_attn.in_proj_weight",)
+            ),
         },
         "encoder_ffn": {
-            "modules": ["encoder.layer.linear1", "encoder.layer.linear2"],
+            "modules": modules_with(
+                "encoder.layers.", (".linear1", ".linear2")
+            ),
             "parameters": [],
         },
         "decoder_self_attn": {
-            "modules": ["decoder.layer.self_attn.out_proj"],
-            "parameters": ["decoder.layer.self_attn.in_proj_weight"],
+            "modules": modules_with(
+                "decoder.layers.", (".self_attn.out_proj",)
+            ),
+            "parameters": parameters_with(
+                "decoder.layers.", (".self_attn.in_proj_weight",)
+            ),
         },
         "decoder_cross_attn": {
-            "modules": ["decoder.layer.multihead_attn.out_proj"],
-            "parameters": ["decoder.layer.multihead_attn.in_proj_weight"],
+            "modules": modules_with(
+                "decoder.layers.", (".multihead_attn.out_proj",)
+            ),
+            "parameters": parameters_with(
+                "decoder.layers.", (".multihead_attn.in_proj_weight",)
+            ),
         },
         "decoder_ffn": {
-            "modules": ["decoder.layer.linear1", "decoder.layer.linear2"],
+            "modules": modules_with(
+                "decoder.layers.", (".linear1", ".linear2")
+            ),
             "parameters": [],
         },
         "fc_encoder": {

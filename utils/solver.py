@@ -13,7 +13,7 @@ field = ('nmse', 'epoch')
 Result = namedtuple('Result', field, defaults=(None,) * len(field))
 
 class Trainer:
-    r""" The training pipeline for encoder-decoder architecture
+    """ The training pipeline for encoder-decoder architecture
     """
 
     def __init__(self, model, device, optimizer, criterion, scheduler, resume=None,
@@ -50,7 +50,7 @@ class Trainer:
         self.vision = SummaryWriter(log_dir=self.tensorboard_dir)
 
     def loop(self, epochs, train_loader, val_loader, test_loader):
-        r""" The main loop function which runs training and validation iteratively.
+        """ The main loop function which runs training and validation iteratively.
 
         Args:
             epochs (int): The total epoch for training
@@ -82,7 +82,7 @@ class Trainer:
             self._loop_postprocessing(nmse)
 
     def train(self, train_loader):
-        r""" train the model on the given data loader for one epoch.
+        """ train the model on the given data loader for one epoch.
 
         Args:
             train_loader (DataLoader): the training data loader
@@ -93,7 +93,7 @@ class Trainer:
             return self._iteration(train_loader)
 
     def val(self, val_loader):
-        r""" exam the model with validation set.
+        """ exam the model with validation set.
 
         Args:
             val_loader: (DataLoader): the validation data loader
@@ -104,7 +104,7 @@ class Trainer:
             return self._iteration(val_loader)
 
     def test(self, test_loader):
-        r""" Truly test the model on the test dataset for one epoch.
+        """ Truly test the model on the test dataset for one epoch.
 
         Args:
             test_loader (DataLoader): the test data loader
@@ -161,7 +161,7 @@ class Trainer:
         torch.save(state, os.path.join(self.save_path, name))
 
     def _resume(self):
-        r""" protected function which resume from checkpoint at the beginning of training.
+        """ protected function which resume from checkpoint at the beginning of training.
         """
 
         if self.resume_file is None:
@@ -180,7 +180,7 @@ class Trainer:
                     f'from epoch {checkpoint["epoch"]}.\n')
 
     def _loop_postprocessing(self, nmse):
-        r""" private function which makes loop() function neater.
+        """ private function which makes loop() function neater.
         """
 
         # save state generate
@@ -199,7 +199,7 @@ class Trainer:
                 state['best_nmse'] = self.best_nmse
                 self._save(state, name=f"best_nmse.pth")
 
-        self._save(state, name='last.pth')
+        # self._save(state, name='last.pth')
 
         # print current best results
         if self.best_nmse.nmse is not None:
@@ -231,7 +231,7 @@ class Trainer:
 
 
 class Tester:
-    r""" The testing interface for classification
+    """ The testing interface for classification
     """
 
     def __init__(self, model, device, criterion, print_freq=20):
@@ -241,7 +241,7 @@ class Tester:
         self.print_freq = print_freq
 
     def __call__(self, test_data, verbose=True):
-        r""" Runs the testing procedure.
+        """ Runs the testing procedure.
 
         Args:
             test_data (DataLoader): Data loader for validation data.
@@ -256,7 +256,7 @@ class Tester:
         return loss, nmse
 
     def _iteration(self, data_loader):
-        r""" protected function which test the model on given data loader for one epoch.
+        """ protected function which test the model on given data loader for one epoch.
         """
 
         iter_nmse = AverageMeter('Iter nmse')

@@ -3,6 +3,7 @@ import os
 import torch
 from torch.utils.data import DataLoader, TensorDataset
 from pathlib import Path
+from utils import logger
 
 __all__ = ['MyDataLoader', 'PreFetcher']
 
@@ -65,14 +66,17 @@ class MyDataLoader(object):
         # Training data loading
         data_train = torch.load(train_path, weights_only=False, map_location=torch.device('cpu'))
         self.train_dataset = TensorDataset(data_train)
+        logger.info(f'{train_path} loaded.')
 
         # Validation data loading
         data_val = torch.load(val_path, weights_only=False, map_location=torch.device('cpu'))
         self.val_dataset = TensorDataset(data_val)
+        logger.info(f'{val_path} loaded.')
 
         # Test data loading
         data_test = torch.load(test_path, weights_only=False, map_location=torch.device('cpu'))
         self.test_dataset = TensorDataset(data_test)
+        logger.info(f'{test_path} loaded.')
         
 
         # import scipy.io as sio

@@ -1,0 +1,11 @@
+python scripts/extract_codewords.py \
+    --data /storage/hujiacong/zxd/datasets/WAIRD/data/scenario_2/00032/train.npy \
+    --checkpoint /storage/hujiacong/zxd/Huawei/TransNet/exps/WAIRD/seed42/base/checkpoints/best_nmse.pth \
+    --output ./codewords.pt \
+    --b 200 \
+    --gpu 0 \
+    --d_model 64 \
+    --dim_feedforward 2048 \
+    --cr 4 \
+    --nt 64 \
+    --nc 64

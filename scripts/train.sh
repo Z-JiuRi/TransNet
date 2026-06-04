@@ -1,19 +1,18 @@
 #!/bin/bash
 
 # ==============================================================================
-# 1. 基础路径与实验名称（环境变量传参，带默认值）
+# 1. 基础路径
 # ==============================================================================
-exp_name=${exp_name:-COST2100/out/seed3407/base}
-train_path=${train_path:-/storage/hujiacong/zxd/datasets/cost2100/out_train.pt}
-val_path=${val_path:-/storage/hujiacong/zxd/datasets/cost2100/out_val.pt}
-test_path=${test_path:-/storage/hujiacong/zxd/datasets/cost2100/out_test.pt}
+train_path=${train_path:-/storage/hujiacong/zxd/datasets/WAIRD/data/base/train.pt}
+val_path=${val_path:-/storage/hujiacong/zxd/datasets/WAIRD/data/base/val.pt}
+test_path=${test_path:-/storage/hujiacong/zxd/datasets/WAIRD/data/base/test.pt}
 
 # ==============================================================================
 # 2. 模型结构与数据维度参数
 # ==============================================================================
 d_model=${d_model:-64}
-nt=${nt:-32}
-nc=${nc:-32}
+nt=${nt:-64}
+nc=${nc:-64}
 dim_feedforward=${dim_feedforward:-2048}
 cr=${cr:-4}
 
@@ -21,13 +20,15 @@ cr=${cr:-4}
 # 3. 训练超参数与硬件设置
 # ==============================================================================
 epochs=${epochs:-400}
-batch_size=${batch_size:-1024}
-workers=${workers:-4}
+batch_size=${batch_size:-200}
+workers=${workers:-0}
 scheduler=${scheduler:-cosine}
 lr_init=${lr_init:-2e-4}
 weight_decay=${weight_decay:-1e-3}
-gpu=${gpu:-0}
-seed=${seed:-3407}
+gpu=${gpu:-2}
+seed=${seed:-42}
+exp_name=${exp_name:-WAIRD/seed${seed}/base}
+
 
 # ==============================================================================
 # 4. 运行 Python 脚本

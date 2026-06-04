@@ -1,0 +1,81 @@
+I 06.04/02:20:31 main.py:23  ] => Experiment directory: /storage/hujiacong/zxd/Huawei/TransNet/exps/WAIRD/seed42/base
+I 06.04/02:20:31 main.py:24  ] => PyTorch Version: 2.5.1
+I 06.04/02:20:31 init.py:15  ] Random seed set to 42
+I 06.04/02:20:31 init.py:187 ] Running on GPU 2
+I 06.04/02:20:34 init.py:209 ] pretrained model loaded from /storage/hujiacong/zxd/Huawei/TransNet/exps/WAIRD/seed42/base/checkpoints/best_nmse.pth
+I 06.04/02:20:34 init.py:217 ] => Model Name: TransNet [pretrained: /storage/hujiacong/zxd/Huawei/TransNet/exps/WAIRD/seed42/base/checkpoints/best_nmse.pth]
+I 06.04/02:20:34 init.py:218 ] => Model Config: compression ratio=1/4; input shape=(2, 64, 64); input dim=8192
+I 06.04/02:20:34 init.py:221 ] => Model Flops: 1.6817e+02M
+I 06.04/02:20:34 init.py:222 ] => Model Params Num: 3.4623e+01M
+
+I 06.04/02:20:34 init.py:223 ] 
+**********
+Transformer(
+  (encoder): TransformerEncoder(
+    (layers): ModuleList(
+      (0-1): 2 x TransformerEncoderLayer(
+        (self_attn): MultiheadAttention(
+          (out_proj): NonDynamicallyQuantizableLinear(in_features=64, out_features=64, bias=True)
+        )
+        (linear1): Linear(in_features=64, out_features=2048, bias=True)
+        (dropout): Dropout(p=0.0, inplace=False)
+        (linear2): Linear(in_features=2048, out_features=64, bias=True)
+        (norm1): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (dropout1): Dropout(p=0.0, inplace=False)
+        (dropout2): Dropout(p=0.0, inplace=False)
+      )
+    )
+    (norm): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+  )
+  (decoder): TransformerDecoder(
+    (layers): ModuleList(
+      (0-1): 2 x TransformerDecoderLayer(
+        (self_attn): MultiheadAttention(
+          (out_proj): NonDynamicallyQuantizableLinear(in_features=64, out_features=64, bias=True)
+        )
+        (multihead_attn): MultiheadAttention(
+          (out_proj): NonDynamicallyQuantizableLinear(in_features=64, out_features=64, bias=True)
+        )
+        (linear1): Linear(in_features=64, out_features=2048, bias=True)
+        (dropout): Dropout(p=0.0, inplace=False)
+        (linear2): Linear(in_features=2048, out_features=64, bias=True)
+        (norm1): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (norm3): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (dropout1): Dropout(p=0.0, inplace=False)
+        (dropout2): Dropout(p=0.0, inplace=False)
+        (dropout3): Dropout(p=0.0, inplace=False)
+      )
+    )
+    (norm): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+  )
+  (fc_encoder): Linear(in_features=8192, out_features=2048, bias=True)
+  (fc_decoder): Linear(in_features=2048, out_features=8192, bias=True)
+)
+**********
+
+E 06.04/02:20:38 logger.py:15  ] Uncaught exception
+Traceback (most recent call last):
+  File "/storage/hujiacong/zxd/Huawei/TransNet/./main.py", line 111, in <module>
+    main()
+  File "/storage/hujiacong/zxd/Huawei/TransNet/./main.py", line 44, in main
+    model = init_model(args)
+            ^^^^^^^^^^^^^^^^
+  File "/storage/hujiacong/zxd/Huawei/TransNet/utils/init.py", line 230, in init_model
+    model = lora_component(model, args.lora_component,
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/storage/hujiacong/zxd/Huawei/TransNet/utils/init.py", line 138, in lora_component
+    model = get_peft_model(model, lora_config)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hujiacong/zxd/.envs/miniconda3/envs/torch/lib/python3.11/site-packages/peft/mapping_func.py", line 114, in get_peft_model
+    return PeftModel(
+           ^^^^^^^^^^
+  File "/home/hujiacong/zxd/.envs/miniconda3/envs/torch/lib/python3.11/site-packages/peft/peft_model.py", line 129, in __init__
+    self.base_model = cls(model, {adapter_name: peft_config}, adapter_name)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hujiacong/zxd/.envs/miniconda3/envs/torch/lib/python3.11/site-packages/peft/tuners/tuners_utils.py", line 298, in __init__
+    self.inject_adapter(self.model, adapter_name, low_cpu_mem_usage=low_cpu_mem_usage, state_dict=state_dict)
+  File "/home/hujiacong/zxd/.envs/miniconda3/envs/torch/lib/python3.11/site-packages/peft/tuners/tuners_utils.py", line 880, in inject_adapter
+    raise ValueError(error_msg)
+ValueError: Target modules {'encoder.layer.linear1', 'encoder.layer.linear2'} not found in the base model. Please check the target modules and try again.
