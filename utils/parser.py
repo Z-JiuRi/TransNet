@@ -52,6 +52,12 @@ parser.add_argument('-d', '--d_model', type=int, default=64, metavar='N',
                     help='number of Transformer feature dimension')
 parser.add_argument('--dim_feedforward', type=int, default=2048,
                     help='hidden dimension of Transformer feed-forward layers')
+parser.add_argument('--layer_sharing', type=str, default='shared',
+                    choices=['shared', 'independent'],
+                    help='reuse one Transformer layer or use independent layers')
+parser.add_argument('--transformer_backend', type=str, default='torch',
+                    choices=['torch', 'original'],
+                    help='use PyTorch Transformer layers or original TransNet layers')
 parser.add_argument('--scheduler', type=str, default='const', choices=['const', 'cosine'],
                     help='learning rate scheduler')
 parser.add_argument('--lr_init', type=float, default=5e-4,

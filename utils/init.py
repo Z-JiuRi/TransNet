@@ -86,46 +86,66 @@ def lora_component(model, components, rank, alpha):
             if name.startswith(prefix) and name.endswith(suffixes)
         ]
 
+    def modules_with_any(prefixes, suffixes):
+        return [
+            name for prefix in prefixes
+            for name in modules_with(prefix, suffixes)
+        ]
+
     def parameters_with(prefix, suffixes):
         return [
             name for name, _ in model.named_parameters()
             if name.startswith(prefix) and name.endswith(suffixes)
         ]
 
+    def parameters_with_any(prefixes, suffixes):
+        return [
+            name for prefix in prefixes
+            for name in parameters_with(prefix, suffixes)
+        ]
+
     component_map = {
         "encoder_self_attn": {
-            "modules": modules_with(
-                "encoder.layers.", (".self_attn.out_proj",)
+            "modules": modules_with_any(
+                ("encoder.layers.", "encoder.layer."),
+                (".self_attn.out_proj",)
             ),
-            "parameters": parameters_with(
-                "encoder.layers.", (".self_attn.in_proj_weight",)
+            "parameters": parameters_with_any(
+                ("encoder.layers.", "encoder.layer."),
+                (".self_attn.in_proj_weight",)
             ),
         },
         "encoder_ffn": {
-            "modules": modules_with(
-                "encoder.layers.", (".linear1", ".linear2")
+            "modules": modules_with_any(
+                ("encoder.layers.", "encoder.layer."),
+                (".linear1", ".linear2")
             ),
             "parameters": [],
         },
         "decoder_self_attn": {
-            "modules": modules_with(
-                "decoder.layers.", (".self_attn.out_proj",)
+            "modules": modules_with_any(
+                ("decoder.layers.", "decoder.layer."),
+                (".self_attn.out_proj",)
             ),
-            "parameters": parameters_with(
-                "decoder.layers.", (".self_attn.in_proj_weight",)
+            "parameters": parameters_with_any(
+                ("decoder.layers.", "decoder.layer."),
+                (".self_attn.in_proj_weight",)
             ),
         },
         "decoder_cross_attn": {
-            "modules": modules_with(
-                "decoder.layers.", (".multihead_attn.out_proj",)
+            "modules": modules_with_any(
+                ("decoder.layers.", "decoder.layer."),
+                (".multihead_attn.out_proj",)
             ),
-            "parameters": parameters_with(
-                "decoder.layers.", (".multihead_attn.in_proj_weight",)
+            "parameters": parameters_with_any(
+                ("decoder.layers.", "decoder.layer."),
+                (".multihead_attn.in_proj_weight",)
             ),
         },
         "decoder_ffn": {
-            "modules": modules_with(
-                "decoder.layers.", (".linear1", ".linear2")
+            "modules": modules_with_any(
+                ("decoder.layers.", "decoder.layer."),
+                (".linear1", ".linear2")
             ),
             "parameters": [],
         },
@@ -228,7 +248,9 @@ def init_model(args):
                      channel=args.channel,
                      nt=args.nt,
                      nc=args.nc,
-                     dim_feedforward=args.dim_feedforward)
+                     dim_feedforward=args.dim_feedforward,
+                     shared_layers=args.layer_sharing == 'shared',
+                     transformer_backend=args.transformer_backend)
 
     if args.pretrained is not None:
         assert os.path.isfile(args.pretrained)
@@ -245,7 +267,9 @@ def init_model(args):
     logger.info(f'=> Model Name: TransNet [pretrained: {args.pretrained}]')
     logger.info(f'=> Model Config: compression ratio=1/{args.cr}; '
                 f'input shape=({args.channel}, {args.nt}, {args.nc}); '
-                f'input dim={args.channel * args.nt * args.nc}')
+                f'input dim={args.channel * args.nt * args.nc}; '
+                f'layer sharing={args.layer_sharing}; '
+                f'transformer backend={args.transformer_backend}')
     logger.info(f'=> Model Flops: {flops}')
     logger.info(f'=> Model Params Num: {params}\n')
     logger.info(f'\n{line_seg}\n{model}\n{line_seg}\n')
