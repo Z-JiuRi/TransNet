@@ -3,10 +3,10 @@
 # ==============================================================================
 # 1. 基础路径
 # ==============================================================================
-scen_name=${scen_name:-"scenario_2/00032"}
-train_path=${train_path:-/storage/hujiacong/zxd/datasets/WAIRD/data/${scen_name}/train.pt}
-val_path=${val_path:-/storage/hujiacong/zxd/datasets/WAIRD/data/${scen_name}/test.pt}
-test_path=${test_path:-/storage/hujiacong/zxd/datasets/WAIRD/data/${scen_name}/test.pt}
+scen_name=${scen_name:-"scenario_2/00247"}
+train_path=${train_path:-data/${scen_name}/train.pt}
+val_path=${val_path:-data/${scen_name}/test.pt}
+test_path=${test_path:-data/${scen_name}/test.pt}
 
 
 # ==============================================================================
@@ -21,23 +21,23 @@ cr=${cr:-4}
 # ==============================================================================
 # 3. LoRA 参数
 # ==============================================================================
-lora_component=${lora_component:-encoder_ffn}
+lora_component=${lora_component:-decoder_ffn}
 lora_rank=${lora_rank:-8}
 lora_alpha=${lora_alpha:-16}
 
 # ==============================================================================
 # 4. 训练超参数与硬件设置
 # ==============================================================================
-epochs=${epochs:-400}
-batch_size=${batch_size:-200}
+epochs=${epochs:-200}
+batch_size=${batch_size:-64}
 workers=${workers:-0}
 scheduler=${scheduler:-cosine}
 lr_init=${lr_init:-2e-4}
 weight_decay=${weight_decay:-0}
 gpu=${gpu:-2}
-seed=${seed:-42}
+seed=${seed:-0}
 exp_name=${exp_name:-WAIRD/seed${seed}/${scen_name}}
-pretrained=${pretrained:-/storage/hujiacong/zxd/Huawei/TransNet/exps/WAIRD/seed${seed}/base/checkpoints/best_nmse.pth}
+pretrained=${pretrained:-exps/WAIRD/seed0/arch_no_lora/original_shared/checkpoints/best_nmse.pth}
 
 # ==============================================================================
 # 5. 运行 Python 脚本

@@ -254,10 +254,35 @@ def init_model(args):
 
     if args.pretrained is not None:
         assert os.path.isfile(args.pretrained)
-        state_dict = torch.load(args.pretrained, weights_only=False, map_location=torch.device('cpu'))['state_dict']
-        model.load_state_dict(state_dict,strict=False)
+        state_dict = torch.load(args.pretrained, weights_only=False, map_location=torch.device('cpu'))['state_dict']        
+        load_result = model.load_state_dict(state_dict, strict=False)
+
+        if load_result.missing_keys:
+            logger.warning(
+                "Missing keys when loading pretrained weights ({}): {}".format(
+                    len(load_result.missing_keys),
+                    load_result.missing_keys
+                )
+            )
+        if load_result.unexpected_keys:
+            logger.warning(
+                "Unexpected keys in pretrained weights ({}): {}".format(
+                    len(load_result.unexpected_keys),
+                    load_result.unexpected_keys
+                )
+            )
         logger.info("pretrained model loaded from {}".format(args.pretrained))
 
+    if args.lora_component:
+        if args.freeze_components:
+            logger.warning(
+                "freeze_components is ignored because LoRA is enabled."
+            )
+        model = lora_component(model, args.lora_component,
+                               args.lora_rank, args.lora_alpha)
+    elif args.freeze_components:
+        freeze_component(model, args.freeze_components)
+    
     # Model flops and params counting
     H_a = torch.randn([1, args.channel, args.nt, args.nc])
     flops, params = thop.profile(model, inputs=(H_a,), verbose=False)
@@ -273,16 +298,6 @@ def init_model(args):
     logger.info(f'=> Model Flops: {flops}')
     logger.info(f'=> Model Params Num: {params}\n')
     logger.info(f'\n{line_seg}\n{model}\n{line_seg}\n')
-
-    if args.lora_component:
-        if args.freeze_components:
-            logger.warning(
-                "freeze_components is ignored because LoRA is enabled."
-            )
-        model = lora_component(model, args.lora_component,
-                               args.lora_rank, args.lora_alpha)
-    elif args.freeze_components:
-        freeze_component(model, args.freeze_components)
     
     show_parameter(model)
 

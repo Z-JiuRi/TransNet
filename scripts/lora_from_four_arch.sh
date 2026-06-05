@@ -5,8 +5,8 @@ set -euo pipefail
 # ==============================================================================
 # 1. Base checkpoints and target data
 # ==============================================================================
-base_root=${base_root:-exps/WAIRD/seed0/arch_no_lora_gpu}
-scen_name=${scen_name:-scenario_2/00247}
+base_root=${base_root:-exps/WAIRD/seed0/arch_no_lora}
+scen_name=${scen_name:-scenario_2/00032}
 train_path=${train_path:-data/${scen_name}/train.pt}
 val_path=${val_path:-data/${scen_name}/test.pt}
 test_path=${test_path:-data/${scen_name}/test.pt}
@@ -25,18 +25,18 @@ cr=${cr:-4}
 # ==============================================================================
 lora_rank=${lora_rank:-8}
 lora_alpha=${lora_alpha:-16}
-lora_components=${lora_components:-"encoder_ffn decoder_ffn"}
+lora_components=${lora_components:-"decoder_ffn"}
 
 # ==============================================================================
 # 4. Training and runtime settings
 # ==============================================================================
-epochs=${epochs:-15}
-batch_size=${batch_size:-200}
+epochs=${epochs:-200}
+batch_size=${batch_size:-64}
 workers=${workers:-0}
 scheduler=${scheduler:-cosine}
 lr_init=${lr_init:-5e-4}
 weight_decay=${weight_decay:-0}
-gpu=${gpu:-0}
+gpu=${gpu:-1}
 seed=${seed:-0}
 exp_root=${exp_root:-WAIRD/seed${seed}/${scen_name}/lora_from_four_arch}
 
@@ -44,6 +44,7 @@ run_one() {
   local transformer_backend=$1
   local layer_sharing=$2
   local lora_component=$3
+  local gpu=$4
   local arch_name="${transformer_backend}_${layer_sharing}"
   local pretrained="${base_root}/${arch_name}/checkpoints/best_nmse.pth"
   local exp_name="${exp_root}/${arch_name}/${lora_component}"
@@ -82,12 +83,14 @@ run_one() {
     --layer_sharing "${layer_sharing}" \
     --lora_component "${lora_component}" \
     --lora_rank "${lora_rank}" \
-    --lora_alpha "${lora_alpha}"
+    --lora_alpha "${lora_alpha}" \
+    > logs/${arch_name}_${lora_component}.log 2>&1 &
 }
 
 for lora_component in ${lora_components}; do
-  run_one torch shared "${lora_component}"
-  run_one torch independent "${lora_component}"
-  run_one original shared "${lora_component}"
-  run_one original independent "${lora_component}"
+  run_one torch shared "${lora_component}" 1
+  run_one torch independent "${lora_component}" 1
+  run_one original shared "${lora_component}" 2
+  run_one original independent "${lora_component}" 2
+
 done

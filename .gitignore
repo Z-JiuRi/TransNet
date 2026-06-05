@@ -45,6 +45,8 @@ checkpoints/
 
 justest/
 
+logs/
+
 *.pth
 
 
