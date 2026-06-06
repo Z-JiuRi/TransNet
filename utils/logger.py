@@ -4,7 +4,7 @@ import sys
 import warnings
 import traceback
 
-line_seg = ''.join(['*'] * 10)
+line_seg = ''.join(['='] * 50)
 logger = logging.getLogger("transnet")
 
 

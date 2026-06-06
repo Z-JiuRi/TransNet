@@ -4,7 +4,7 @@ import os
 import torch
 import torch.nn as nn
 from utils.parser import args
-from utils import logger, setup_logging, Trainer, Tester
+from utils import logger, line_seg, setup_logging, Trainer, Tester
 from utils import init_device, init_model, FakeLR, WarmUpCosineAnnealingLR
 from dataloader import MyDataLoader
 
@@ -22,6 +22,13 @@ def main():
 
     logger.info(f'=> Experiment directory: {exp_dir}')
     logger.info('=> PyTorch Version: {}'.format(torch.__version__))
+    
+    logger.info(line_seg)
+    lines = ['=> Arguments:']
+    for key, value in args.__dict__.items():
+        lines.append(f'\t{key}: {value}')
+    logger.info('\n'.join(lines))
+    logger.info(line_seg)
 
     # Environment initialization
     device, pin_memory = init_device(args.seed, args.cpu, args.gpu, args.cpu_affinity)

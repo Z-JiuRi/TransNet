@@ -487,11 +487,11 @@ class Transformer(nn.Module):
                 src_key_padding_mask: Optional[Tensor] = None,
                 tgt_key_padding_mask: Optional[Tensor] = None,
                 memory_key_padding_mask: Optional[Tensor] = None) -> Tensor:
-        batch_size = src.size(0)
-        src = src.view(src.size(0), self.feature_shape[0], self.feature_shape[1])
+        src_shape = src.shape
+        src = src.view(-1, self.feature_shape[0], self.feature_shape[1])
         memory = self.encoder(src, mask=src_mask, src_key_padding_mask=src_key_padding_mask)
-        memory_encoder = self.fc_encoder(memory.reshape(batch_size, -1))
-        memory_decoder = self.fc_decoder(memory_encoder).view(batch_size, self.feature_shape[0], self.feature_shape[1])
+        memory_encoder = self.fc_encoder(memory.view(memory.shape[0], -1))
+        memory_decoder = self.fc_decoder(memory_encoder).view(-1, self.feature_shape[0], self.feature_shape[1])
         output = self.decoder(
             memory_decoder,
             memory_decoder,
@@ -500,14 +500,20 @@ class Transformer(nn.Module):
             tgt_key_padding_mask=tgt_key_padding_mask,
             memory_key_padding_mask=memory_key_padding_mask,
         )
-        output = output.reshape(batch_size, self.channel, self.nt, self.nc)
+        output = output.reshape(src_shape)
         return output
 
+    # def encode(self, src: Tensor, src_mask: Optional[Tensor] = None, src_key_padding_mask: Optional[Tensor] = None) -> Tensor:
+    #     batch_size = src.size(0)
+    #     src = src.view(src.size(0), self.feature_shape[0], self.feature_shape[1])
+    #     memory = self.encoder(src, mask=src_mask, src_key_padding_mask=src_key_padding_mask)
+    #     memory_encoder = self.fc_encoder(memory.reshape(batch_size, -1))
+    #     return memory_encoder
+
     def encode(self, src: Tensor, src_mask: Optional[Tensor] = None, src_key_padding_mask: Optional[Tensor] = None) -> Tensor:
-        batch_size = src.size(0)
-        src = src.view(src.size(0), self.feature_shape[0], self.feature_shape[1])
+        src = src.view(-1, self.feature_shape[0], self.feature_shape[1])
         memory = self.encoder(src, mask=src_mask, src_key_padding_mask=src_key_padding_mask)
-        memory_encoder = self.fc_encoder(memory.reshape(batch_size, -1))
+        memory_encoder = self.fc_encoder(memory.view(memory.shape[0], -1))
         return memory_encoder
 
     def generate_square_subsequent_mask(self, sz: int) -> Tensor:
