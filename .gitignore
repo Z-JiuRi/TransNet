@@ -49,6 +49,7 @@ logs/
 
 *.pth
 
+exps_peft/
 
 exps/*.pth
 

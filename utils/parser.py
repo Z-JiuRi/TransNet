@@ -70,11 +70,12 @@ parser.add_argument('--freeze_components', type=str, nargs='+', default=[],
                              'decoder_ffn', 'fc_encoder', 'fc_decoder'],
                     help='freeze components during training (space-separated list)')
 parser.add_argument('--lora_component', type=str, nargs='+', default=[],
-                    choices=['encoder_self_attn', 'encoder_ffn',
-                             'decoder_self_attn', 'decoder_cross_attn',
-                             'decoder_ffn', 'fc_encoder', 'fc_decoder'],
-                    help='apply LoRA to components (space-separated list); '
+                    choices=['encoder_ffn', 'decoder_ffn'],
+                    help='apply LoRA to FFN components (space-separated list); '
                          'leave empty to disable LoRA')
+parser.add_argument('--lora_pretrained', type=str, default=None,
+                    help='path to checkpoint with handwritten LoRA weights; '
+                         'requires --lora_component and is loaded after base --pretrained')
 parser.add_argument('--lora_rank', type=int, default=8,
                     help='LoRA rank')
 parser.add_argument('--lora_alpha', type=int, default=16,

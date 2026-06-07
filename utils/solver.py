@@ -4,7 +4,7 @@ import torch
 from collections import namedtuple
 from torch.utils.tensorboard.writer import SummaryWriter
 from utils import logger
-from utils.statics import AverageMeter, evaluator
+from utils.statics import AverageMeter, evaluator_ratio
 
 __all__ = ['Trainer', 'Tester']
 
@@ -262,16 +262,24 @@ class Tester:
         iter_nmse = AverageMeter('Iter nmse')
         iter_loss = AverageMeter('Iter loss')
         iter_time = AverageMeter('Iter time')
+        nmse_ratio_sum = 0.0
+        nmse_ratio_count = 0
         time_tmp = time.time()
 
         for batch_idx, (sparse_gt, ) in enumerate(data_loader):
             sparse_gt = sparse_gt.to(self.device, dtype=torch.float32)
             sparse_pred = self.model(sparse_gt)
             loss = self.criterion(sparse_pred, sparse_gt)
-            nmse = evaluator(sparse_pred, sparse_gt)
+            nmse_ratio = evaluator_ratio(sparse_pred, sparse_gt)
+            nmse_ratio_sum += nmse_ratio.sum().item()
+            nmse_ratio_count += nmse_ratio.numel()
+            nmse = 10 * torch.log10(
+                torch.tensor(nmse_ratio_sum / nmse_ratio_count,
+                             device=self.device)
+            )
 
             # Log and visdom update
-            iter_loss.update(loss)
+            iter_loss.update(loss, sparse_gt.size(0))
             iter_nmse.update(nmse)
             iter_time.update(time.time() - time_tmp)
             time_tmp = time.time()
@@ -282,7 +290,11 @@ class Tester:
                             f'loss: {iter_loss.avg:.4e} | '
                             f'NMSE: {iter_nmse.avg:.4e} | time: {iter_time.avg:.3f}')
 
-        logger.info(f'=> Test NMSE: {iter_nmse.avg:.4e}\n')
+        final_nmse = 10 * torch.log10(
+            torch.tensor(nmse_ratio_sum / nmse_ratio_count,
+                         device=self.device)
+        )
+        logger.info(f'=> Test NMSE: {final_nmse:.4e}\n')
 
 
-        return iter_loss.avg, iter_nmse.avg
+        return iter_loss.avg, final_nmse

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-lora_components=(encoder_ffn fc_encoder decoder_ffn)
+lora_components=(encoder_ffn decoder_ffn)
 
 for lora_component in ${lora_components[@]}; do
     scen_name=scenario_2/01109 \

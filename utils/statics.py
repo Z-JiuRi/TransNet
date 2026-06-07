@@ -1,6 +1,6 @@
 import torch
 
-__all__ = ['AverageMeter', 'evaluator']
+__all__ = ['AverageMeter', 'evaluator', 'evaluator_ratio']
 
 
 class AverageMeter(object):
@@ -31,9 +31,9 @@ class AverageMeter(object):
         return f"==> For {self.name}: sum={self.sum}; avg={self.avg}"
 
 
-def evaluator(sparse_pred, sparse_gt):
+def evaluator_ratio(sparse_pred, sparse_gt):
     r""" Evaluation of decoding implemented in PyTorch Tensor
-         Computes normalized mean square error (NMSE).
+         Computes per-sample normalized mean square error ratios.
     """
 
     with torch.no_grad():
@@ -45,6 +45,15 @@ def evaluator(sparse_pred, sparse_gt):
         power_gt = sparse_gt[:, 0, :, :] ** 2 + sparse_gt[:, 1, :, :] ** 2
         difference = sparse_gt - sparse_pred
         mse = difference[:, 0, :, :] ** 2 + difference[:, 1, :, :] ** 2
-        nmse = 10 * torch.log10((mse.sum(dim=[1, 2]) / power_gt.sum(dim=[1, 2])).mean())
+        ratio = mse.sum(dim=[1, 2]) / power_gt.sum(dim=[1, 2])
 
-        return nmse
+        return ratio
+
+
+def evaluator(sparse_pred, sparse_gt):
+    r""" Evaluation of decoding implemented in PyTorch Tensor
+         Computes batch normalized mean square error (NMSE).
+    """
+
+    with torch.no_grad():
+        return 10 * torch.log10(evaluator_ratio(sparse_pred, sparse_gt).mean())
