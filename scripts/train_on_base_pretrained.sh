@@ -1,16 +1,20 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-# transformer_backend=torch layer_sharing=shared gpu=2 bash scripts/train_on_base_pretrained.sh
+# Base TransNet training.
+#
+# Example:
+#   scen_name=scenario_2/01105 seed=42 nt=64 nc=64 transformer_backend=original layer_sharing=shared bash scripts/train_on_base_pretrained.sh
 
-# 配置参数
-scen_name=${scen_name:-"scenario_2/00032"}  # 要微调的场景
-train_path=${train_path:-/storage/hujiacong/zxd/datasets/WAIRD/data/${scen_name}/train.pt}
-val_path=${val_path:-/storage/hujiacong/zxd/datasets/WAIRD/data/${scen_name}/test.pt}
-test_path=${test_path:-/storage/hujiacong/zxd/datasets/WAIRD/data/${scen_name}/test.pt}
+scen_name=${scen_name:-scenario_2/01105}
+data_root=${data_root:-data}
+train_path=${train_path:-${data_root}/${scen_name}/train.pt}
+val_path=${val_path:-${data_root}/${scen_name}/test.pt}
+test_path=${test_path:-${data_root}/${scen_name}/test.pt}
 
 d_model=${d_model:-64}
-nt=${nt:-32}
-nc=${nc:-32}
+nt=${nt:-64}
+nc=${nc:-64}
 dim_feedforward=${dim_feedforward:-2048}
 cr=${cr:-4}
 
@@ -18,34 +22,29 @@ epochs=${epochs:-200}
 batch_size=${batch_size:-256}
 workers=${workers:-0}
 scheduler=${scheduler:-cosine}
-lr_init=${lr_init:-2e-4}  # 微调的学习率可以稍小一些
+lr_init=${lr_init:-2e-4}
 weight_decay=${weight_decay:-1e-3}
-gpu=${gpu:-5}
-seed=${seed:-3232}
-transformer_backend=${transformer_backend:-original}
+seed=${seed:-797}
+gpu=${gpu:-0}
+transformer_backend=${transformer_backend:-torch}
 layer_sharing=${layer_sharing:-independent}
-
-# 预训练模型路径
-pretrained=${pretrained:-/storage/hujiacong/zxd/Huawei/TransNet/exps/WAIRD/seed${seed}/base/${transformer_backend}_${layer_sharing}/checkpoints/best_nmse.pth}
-
-# 实验名称
-exp_name=${exp_name:-WAIRD/seed${seed}/${scen_name}_${transformer_backend}_${layer_sharing}_finetune_full}
-
-mktouch() {
-    mkdir -p "$(dirname "$1")" && touch "$1"
-}
+fc_lora=${fc_lora:-false}
+fc_lora_rank=${fc_lora_rank:-}
+pretrained=${pretrained:-exps/WAIRD/seed${seed}/base/${transformer_backend}_${layer_sharing}/checkpoints/best_nmse.pth}
+exp_name=${exp_name:-WAIRD/seed${seed}/${scen_name}_${transformer_backend}_${layer_sharing}_only_encoder}
+freeze_components=${freeze_components:-"decoder_self_attn decoder_cross_attn decoder_ffn fc_encoder fc_decoder"}
+read -r -a freeze_components_array <<< "$freeze_components"
 
 log_file="exps/${exp_name}/train.out"
-mktouch "${log_file}"
+mkdir -p "$(dirname "$log_file")"
 
-echo "============================================================"
-echo "Fine-tuning PRETRAINED base model on ${scen_name}"
-echo "NO LoRA - full fine-tuning"
-echo "Pretrained from: ${pretrained}"
-echo "Backend=${transformer_backend}, layer_sharing=${layer_sharing}"
-echo "Seed: ${seed}, GPU: ${gpu}"
-echo "Experiment: ${exp_name}"
-echo "============================================================"
+extra_args=()
+if [[ "${fc_lora}" == "true" || "${fc_lora}" == "1" ]]; then
+  extra_args+=(--fc_lora)
+fi
+if [[ -n "${fc_lora_rank}" ]]; then
+  extra_args+=(--fc_lora_rank "${fc_lora_rank}")
+fi
 
 python ./main.py \
   --exp_name "${exp_name}" \
@@ -65,9 +64,9 @@ python ./main.py \
   --weight_decay "${weight_decay}" \
   --gpu "${gpu}" \
   --seed "${seed}" \
-  --pretrained "${pretrained}" \
   --transformer_backend "${transformer_backend}" \
   --layer_sharing "${layer_sharing}" \
+  --pretrained "${pretrained}" \
+  --freeze_components "${freeze_components_array[@]}" \
+  "${extra_args[@]}" \
   > "${log_file}" 2>&1 &
-
-echo "Full fine-tuning started in background. Log: ${log_file}"

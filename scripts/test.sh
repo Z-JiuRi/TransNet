@@ -8,7 +8,7 @@ set -euo pipefail
 
 scen_name=${scen_name:-scenario_2/01109}
 scen_tag=${scen_name//\//_}
-data_root=${data_root:-data}
+data_root=${data_root:-/storage/hujiacong/zxd/datasets/WAIRD/data}
 train_path=${train_path:-${data_root}/${scen_name}/train.pt}
 val_path=${val_path:-${data_root}/${scen_name}/test.pt}
 test_path=${test_path:-${data_root}/${scen_name}/test.pt}
@@ -34,31 +34,25 @@ exp_name=${exp_name:-WAIRD/seed${seed}/test/${scen_tag}_${transformer_backend}_$
 log_file="exps/${exp_name}/test.out"
 mkdir -p "$(dirname "$log_file")"
 
-cmd=(
-  python ./main.py
-  --exp_name "$exp_name"
-  --train_path "$train_path"
-  --val_path "$val_path"
-  --test_path "$test_path"
-  --d_model "$d_model"
-  --nt "$nt"
-  --nc "$nc"
-  --dim_feedforward "$dim_feedforward"
-  --batch_size "$batch_size"
-  --workers "$workers"
-  --cr "$cr"
-  --scheduler "$scheduler"
-  --lr_init "$lr_init"
-  --weight_decay "$weight_decay"
-  --seed "$seed"
-  --pretrained "$pretrained"
-  --transformer_backend "$transformer_backend"
-  --layer_sharing "$layer_sharing"
-  --evaluate
-  --gpu "$gpu"
-)
-
-printf 'Running base eval: %s\n' "$exp_name"
-printf 'Checkpoint: %s\n' "$pretrained"
-printf 'Log: %s\n' "$log_file"
-"${cmd[@]}" 2>&1 & | tee "$log_file"
+python ./main.py \
+  --exp_name "${exp_name}" \
+  --train_path "${train_path}" \
+  --val_path "${val_path}" \
+  --test_path "${test_path}" \
+  --d_model "${d_model}" \
+  --nt "${nt}" \
+  --nc "${nc}" \
+  --dim_feedforward "${dim_feedforward}" \
+  --batch_size "${batch_size}" \
+  --workers "${workers}" \
+  --cr "${cr}" \
+  --scheduler "${scheduler}" \
+  --lr_init "${lr_init}" \
+  --weight_decay "${weight_decay}" \
+  --seed "${seed}" \
+  --pretrained "${pretrained}" \
+  --transformer_backend "${transformer_backend}" \
+  --layer_sharing "${layer_sharing}" \
+  --evaluate \
+  --gpu "${gpu}" \
+  > "${log_file}" 2>&1

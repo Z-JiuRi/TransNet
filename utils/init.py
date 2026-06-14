@@ -13,6 +13,10 @@ __all__ = ["seed_everything", "init_device", "init_model",
            "show_parameter"]
 
 
+def _is_adapter_param(name):
+    return "lora_" in name or "adapter_" in name
+
+
 def seed_everything(seed):
     logger.info(f"Random seed set to {seed}")
     os.environ["PYTHONHASHSEED"] = str(seed)
@@ -120,6 +124,16 @@ def lora_component(model, components, rank, alpha):
     if not components:
         return model
 
+    def linear_targets(module_name):
+        modules = dict(model.named_modules())
+        module = modules[module_name]
+        if isinstance(module, nn.Linear):
+            return [module_name]
+        return [
+            name for name, child in model.named_modules()
+            if name.startswith(module_name + ".") and isinstance(child, nn.Linear)
+        ]
+
     def modules_with(prefix, suffixes):
         return [
             name for name, _ in model.named_modules()
@@ -133,6 +147,9 @@ def lora_component(model, components, rank, alpha):
         ]
 
     component_map = {
+        "adapter": {
+            "modules": [],
+        },
         "encoder_ffn": {
             "modules": modules_with_any(
                 ("encoder.layers.", "encoder.layer."),
@@ -145,6 +162,12 @@ def lora_component(model, components, rank, alpha):
                 (".linear1", ".linear2")
             ),
         },
+        "fc_encoder": {
+            "modules": linear_targets("fc_encoder"),
+        },
+        "fc_decoder": {
+            "modules": linear_targets("fc_decoder"),
+        },
     }
     target_modules = []
     for component in components:
@@ -153,10 +176,14 @@ def lora_component(model, components, rank, alpha):
                 f"Unknown LoRA component '{component}'. "
                 f"Valid choices: {list(component_map.keys())}"
             )
+        if component == "adapter":
+            if not hasattr(model, "add_latent_adapter"):
+                raise TypeError("Model does not support latent adapter")
+            model.add_latent_adapter(rank)
         target_modules.extend(component_map[component]["modules"])
 
     target_modules = list(dict.fromkeys(target_modules))
-    if not target_modules:
+    if not target_modules and components != ["adapter"]:
         raise ValueError(
             f"No FFN Linear modules matched for LoRA components: {components}"
         )
@@ -172,7 +199,7 @@ def lora_component(model, components, rank, alpha):
         torch.backends.mha.set_fastpath_enabled(False)
 
     for name, param in model.named_parameters():
-        param.requires_grad = "lora_" in name
+        param.requires_grad = _is_adapter_param(name)
 
     trainable_count = sum(p.numel() for p in model.parameters() if p.requires_grad)
     total_count = sum(p.numel() for p in model.parameters())
@@ -235,7 +262,9 @@ def init_model(args):
                      nc=args.nc,
                      dim_feedforward=args.dim_feedforward,
                      shared_layers=args.layer_sharing == 'shared',
-                     transformer_backend=args.transformer_backend)
+                     transformer_backend=args.transformer_backend,
+                     fc_lora=args.fc_lora,
+                     fc_lora_rank=args.fc_lora_rank)
 
     if args.pretrained is not None:
         assert os.path.isfile(args.pretrained)
@@ -279,10 +308,10 @@ def init_model(args):
     elif args.freeze_components:
         freeze_component(model, args.freeze_components)
     
-    # Model flops and params counting
-    H_a = torch.randn([1, args.channel, args.nt, args.nc])
-    flops, params = thop.profile(model, inputs=(H_a,), verbose=False)
-    flops, params = thop.clever_format([flops, params], "%.4e")
+    # # Model flops and params counting
+    # H_a = torch.randn([1, args.channel, args.nt, args.nc])
+    # flops, params = thop.profile(model, inputs=(H_a,), verbose=False)
+    # flops, params = thop.clever_format([flops, params], "%.4e")
 
     # Model info logging
     logger.info(f'=> Model Name: TransNet [pretrained: {args.pretrained}]')
@@ -290,9 +319,11 @@ def init_model(args):
                 f'input shape=({args.channel}, {args.nt}, {args.nc}); '
                 f'input dim={args.channel * args.nt * args.nc}; '
                 f'layer sharing={args.layer_sharing}; '
-                f'transformer backend={args.transformer_backend}')
-    logger.info(f'=> Model Flops: {flops}')
-    logger.info(f'=> Model Params Num: {params}\n')
+                f'transformer backend={args.transformer_backend}; '
+                f'fc_lora={args.fc_lora}; '
+                f'fc_lora_rank={model.fc_lora_rank}')
+    # logger.info(f'=> Model Flops: {flops}')
+    # logger.info(f'=> Model Params Num: {params}\n')
     logger.info(f'\n{line_seg}\n{model}\n{line_seg}\n')
     
     show_parameter(model)

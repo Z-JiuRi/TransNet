@@ -1,0 +1,235 @@
+I 06.08/19:20:13 main.py:23  ] => Experiment directory: /home/hujiacong/zxd/Huawei/TransNet/exps/WAIRD/seed797/scenario_2/01105_adapter_64_16_torch_independent_5ep
+I 06.08/19:20:13 main.py:24  ] => PyTorch Version: 2.5.1
+I 06.08/19:20:13 main.py:26  ] ==================================================
+I 06.08/19:20:13 main.py:30  ] => Arguments:
+	train_path: data/WAIRD/scenario_2/01105/train.pt
+	val_path: data/WAIRD/scenario_2/01105/test.pt
+	test_path: data/WAIRD/scenario_2/01105/test.pt
+	batch_size: 256
+	workers: 0
+	evaluate: False
+	pretrained: exps/WAIRD/seed797/base/torch_independent/checkpoints/best_nmse.pth
+	resume: None
+	seed: 797
+	gpu: None
+	cpu: True
+	cpu_affinity: None
+	epochs: 5
+	cr: 4
+	exp_name: WAIRD/seed797/scenario_2/01105_adapter_64_16_torch_independent_5ep
+	channel: 2
+	nt: 64
+	nc: 64
+	d_model: 64
+	dim_feedforward: 2048
+	fc_lora: False
+	fc_lora_rank: None
+	layer_sharing: independent
+	transformer_backend: torch
+	scheduler: cosine
+	lr_init: 0.0005
+	weight_decay: 0.0
+	freeze_components: []
+	lora_component: ['adapter']
+	lora_pretrained: None
+	lora_rank: 64
+	lora_alpha: 16
+I 06.08/19:20:13 main.py:31  ] ==================================================
+I 06.08/19:20:13 init.py:21  ] Random seed set to 797
+I 06.08/19:20:13 init.py:251 ] Running on CPU
+I 06.08/19:20:13 dataloader.py:99  ] data/WAIRD/scenario_2/01105/train.pt loaded.
+I 06.08/19:20:13 dataloader.py:101 ] data/WAIRD/scenario_2/01105/test.pt loaded.
+I 06.08/19:20:13 dataloader.py:103 ] data/WAIRD/scenario_2/01105/test.pt loaded.
+I 06.08/19:20:14 init.py:288 ] pretrained model loaded from exps/WAIRD/seed797/base/torch_independent/checkpoints/best_nmse.pth
+I 06.08/19:20:14 init.py:206 ] => LoRA enabled on components: adapter; target_modules=[]; (rank=64, alpha=16); 270400/34993472 scalar params trainable
+I 06.08/19:20:14 init.py:317 ] => Model Name: TransNet [pretrained: exps/WAIRD/seed797/base/torch_independent/checkpoints/best_nmse.pth]
+I 06.08/19:20:14 init.py:318 ] => Model Config: compression ratio=1/4; input shape=(2, 64, 64); input dim=8192; layer sharing=independent; transformer backend=torch; fc_lora=False; fc_lora_rank=None
+I 06.08/19:20:14 init.py:327 ] 
+==================================================
+Transformer(
+  (encoder): TransformerEncoder(
+    (layers): ModuleList(
+      (0-1): 2 x TransformerEncoderLayer(
+        (self_attn): MultiheadAttention(
+          (out_proj): NonDynamicallyQuantizableLinear(in_features=64, out_features=64, bias=True)
+        )
+        (linear1): Linear(in_features=64, out_features=2048, bias=True)
+        (dropout): Dropout(p=0.0, inplace=False)
+        (linear2): Linear(in_features=2048, out_features=64, bias=True)
+        (norm1): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (dropout1): Dropout(p=0.0, inplace=False)
+        (dropout2): Dropout(p=0.0, inplace=False)
+      )
+    )
+    (norm): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+  )
+  (decoder): TransformerDecoder(
+    (layers): ModuleList(
+      (0-1): 2 x TransformerDecoderLayer(
+        (self_attn): MultiheadAttention(
+          (out_proj): NonDynamicallyQuantizableLinear(in_features=64, out_features=64, bias=True)
+        )
+        (multihead_attn): MultiheadAttention(
+          (out_proj): NonDynamicallyQuantizableLinear(in_features=64, out_features=64, bias=True)
+        )
+        (linear1): Linear(in_features=64, out_features=2048, bias=True)
+        (dropout): Dropout(p=0.0, inplace=False)
+        (linear2): Linear(in_features=2048, out_features=64, bias=True)
+        (norm1): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (norm3): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (dropout1): Dropout(p=0.0, inplace=False)
+        (dropout2): Dropout(p=0.0, inplace=False)
+        (dropout3): Dropout(p=0.0, inplace=False)
+      )
+    )
+    (norm): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+  )
+  (fc_encoder): Linear(in_features=8192, out_features=2048, bias=True)
+  (fc_decoder): Linear(in_features=2048, out_features=8192, bias=True)
+  (latent_adapter): LatentResidualAdapter(
+    (adapter_norm): LayerNorm((2048,), eps=1e-05, elementwise_affine=True)
+    (adapter_down): Linear(in_features=2048, out_features=64, bias=False)
+    (adapter_mid): Linear(in_features=64, out_features=64, bias=True)
+    (adapter_up): Linear(in_features=64, out_features=2048, bias=False)
+    (adapter_act): GELU(approximate='none')
+  )
+)
+==================================================
+
+I 06.08/19:20:14 init.py:227 ] 
+encoder.layers.0.self_attn.in_proj_weight                         False    (192, 64)
+encoder.layers.0.self_attn.in_proj_bias                           False    (192,)
+encoder.layers.0.self_attn.out_proj.weight                        False    (64, 64)
+encoder.layers.0.self_attn.out_proj.bias                          False    (64,)
+encoder.layers.0.linear1.weight                                   False    (2048, 64)
+encoder.layers.0.linear1.bias                                     False    (2048,)
+encoder.layers.0.linear2.weight                                   False    (64, 2048)
+encoder.layers.0.linear2.bias                                     False    (64,)
+encoder.layers.0.norm1.weight                                     False    (64,)
+encoder.layers.0.norm1.bias                                       False    (64,)
+encoder.layers.0.norm2.weight                                     False    (64,)
+encoder.layers.0.norm2.bias                                       False    (64,)
+encoder.layers.1.self_attn.in_proj_weight                         False    (192, 64)
+encoder.layers.1.self_attn.in_proj_bias                           False    (192,)
+encoder.layers.1.self_attn.out_proj.weight                        False    (64, 64)
+encoder.layers.1.self_attn.out_proj.bias                          False    (64,)
+encoder.layers.1.linear1.weight                                   False    (2048, 64)
+encoder.layers.1.linear1.bias                                     False    (2048,)
+encoder.layers.1.linear2.weight                                   False    (64, 2048)
+encoder.layers.1.linear2.bias                                     False    (64,)
+encoder.layers.1.norm1.weight                                     False    (64,)
+encoder.layers.1.norm1.bias                                       False    (64,)
+encoder.layers.1.norm2.weight                                     False    (64,)
+encoder.layers.1.norm2.bias                                       False    (64,)
+encoder.norm.weight                                               False    (64,)
+encoder.norm.bias                                                 False    (64,)
+decoder.layers.0.self_attn.in_proj_weight                         False    (192, 64)
+decoder.layers.0.self_attn.in_proj_bias                           False    (192,)
+decoder.layers.0.self_attn.out_proj.weight                        False    (64, 64)
+decoder.layers.0.self_attn.out_proj.bias                          False    (64,)
+decoder.layers.0.multihead_attn.in_proj_weight                    False    (192, 64)
+decoder.layers.0.multihead_attn.in_proj_bias                      False    (192,)
+decoder.layers.0.multihead_attn.out_proj.weight                   False    (64, 64)
+decoder.layers.0.multihead_attn.out_proj.bias                     False    (64,)
+decoder.layers.0.linear1.weight                                   False    (2048, 64)
+decoder.layers.0.linear1.bias                                     False    (2048,)
+decoder.layers.0.linear2.weight                                   False    (64, 2048)
+decoder.layers.0.linear2.bias                                     False    (64,)
+decoder.layers.0.norm1.weight                                     False    (64,)
+decoder.layers.0.norm1.bias                                       False    (64,)
+decoder.layers.0.norm2.weight                                     False    (64,)
+decoder.layers.0.norm2.bias                                       False    (64,)
+decoder.layers.0.norm3.weight                                     False    (64,)
+decoder.layers.0.norm3.bias                                       False    (64,)
+decoder.layers.1.self_attn.in_proj_weight                         False    (192, 64)
+decoder.layers.1.self_attn.in_proj_bias                           False    (192,)
+decoder.layers.1.self_attn.out_proj.weight                        False    (64, 64)
+decoder.layers.1.self_attn.out_proj.bias                          False    (64,)
+decoder.layers.1.multihead_attn.in_proj_weight                    False    (192, 64)
+decoder.layers.1.multihead_attn.in_proj_bias                      False    (192,)
+decoder.layers.1.multihead_attn.out_proj.weight                   False    (64, 64)
+decoder.layers.1.multihead_attn.out_proj.bias                     False    (64,)
+decoder.layers.1.linear1.weight                                   False    (2048, 64)
+decoder.layers.1.linear1.bias                                     False    (2048,)
+decoder.layers.1.linear2.weight                                   False    (64, 2048)
+decoder.layers.1.linear2.bias                                     False    (64,)
+decoder.layers.1.norm1.weight                                     False    (64,)
+decoder.layers.1.norm1.bias                                       False    (64,)
+decoder.layers.1.norm2.weight                                     False    (64,)
+decoder.layers.1.norm2.bias                                       False    (64,)
+decoder.layers.1.norm3.weight                                     False    (64,)
+decoder.layers.1.norm3.bias                                       False    (64,)
+decoder.norm.weight                                               False    (64,)
+decoder.norm.bias                                                 False    (64,)
+fc_encoder.weight                                                 False    (2048, 8192)
+fc_encoder.bias                                                   False    (2048,)
+fc_decoder.weight                                                 False    (8192, 2048)
+fc_decoder.bias                                                   False    (8192,)
+latent_adapter.adapter_norm.weight                                True     (2048,)
+latent_adapter.adapter_norm.bias                                  True     (2048,)
+latent_adapter.adapter_down.weight                                True     (64, 2048)
+latent_adapter.adapter_mid.weight                                 True     (64, 64)
+latent_adapter.adapter_mid.bias                                   True     (64,)
+latent_adapter.adapter_up.weight                                  True     (2048, 64)
+==================================================
+I 06.08/19:20:17 solver.py:426 ] => Test NMSE: -1.8604e+01
+
+I 06.08/19:20:17 solver.py:358 ] => Adapter monitor [before_train] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.572281e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:0.000000e+00,weight:4.572281e+01 | component_l2=latent_adapter:4.572281e+01 | adapter_abs_max=1.000000e+00 | delta_l2=0.000000e+00 | delta_rel=0.000000e+00 | test_loss=6.894979e-03 | nmse=-1.860437e+01
+I 06.08/19:20:35 solver.py:159 ] Epoch: [1/5][20/36] lr: 5.00e-04 | MSE loss: 6.8883e-03 | time: 0.892
+I 06.08/19:20:55 solver.py:169 ] => Train  Loss: 6.5861e-03
+
+I 06.08/19:20:58 solver.py:426 ] => Test NMSE: -1.8793e+01
+
+I 06.08/19:20:58 solver.py:358 ] => Adapter monitor [epoch=1] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.590145e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.952039e-01,weight:4.590104e+01 | component_l2=latent_adapter:4.590145e+01 | adapter_abs_max=1.012015e+00 | delta_l2=2.393146e+00 | delta_rel=5.234032e-02 | train_loss=6.586121e-03 | test_loss=6.601187e-03 | nmse=-1.879348e+01
+I 06.08/19:20:58 solver.py:224 ] 
+=! Best NMSE: -1.8793e+01 (epoch=1)
+
+I 06.08/19:21:31 solver.py:159 ] Epoch: [2/5][20/36] lr: 4.42e-04 | MSE loss: 6.3086e-03 | time: 1.642
+I 06.08/19:21:46 solver.py:169 ] => Train  Loss: 6.3664e-03
+
+I 06.08/19:21:46 solver.py:426 ] => Test NMSE: -1.8893e+01
+
+I 06.08/19:21:46 solver.py:358 ] => Adapter monitor [epoch=2] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.606169e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:2.058058e-01,weight:4.606123e+01 | component_l2=latent_adapter:4.606169e+01 | adapter_abs_max=1.024500e+00 | delta_l2=3.676928e+00 | delta_rel=8.041780e-02 | train_loss=6.366448e-03 | test_loss=6.450997e-03 | nmse=-1.889343e+01
+I 06.08/19:21:47 solver.py:224 ] 
+=! Best NMSE: -1.8893e+01 (epoch=2)
+
+I 06.08/19:21:57 solver.py:159 ] Epoch: [3/5][20/36] lr: 3.05e-04 | MSE loss: 6.2320e-03 | time: 0.521
+I 06.08/19:22:13 solver.py:169 ] => Train  Loss: 6.1162e-03
+
+I 06.08/19:22:13 solver.py:426 ] => Test NMSE: -1.8951e+01
+
+I 06.08/19:22:13 solver.py:358 ] => Adapter monitor [epoch=3] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.621178e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:2.620745e-01,weight:4.621103e+01 | component_l2=latent_adapter:4.621178e+01 | adapter_abs_max=1.031756e+00 | delta_l2=4.374920e+00 | delta_rel=9.568353e-02 | train_loss=6.116168e-03 | test_loss=6.366343e-03 | nmse=-1.895080e+01
+I 06.08/19:22:13 solver.py:224 ] 
+=! Best NMSE: -1.8951e+01 (epoch=3)
+
+I 06.08/19:22:24 solver.py:159 ] Epoch: [4/5][20/36] lr: 1.55e-04 | MSE loss: 6.0775e-03 | time: 0.532
+I 06.08/19:22:40 solver.py:169 ] => Train  Loss: 6.0809e-03
+
+I 06.08/19:22:41 solver.py:426 ] => Test NMSE: -1.8974e+01
+
+I 06.08/19:22:41 solver.py:358 ] => Adapter monitor [epoch=4] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.629493e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:2.779424e-01,weight:4.629410e+01 | component_l2=latent_adapter:4.629493e+01 | adapter_abs_max=1.035107e+00 | delta_l2=4.665695e+00 | delta_rel=1.020430e-01 | train_loss=6.080942e-03 | test_loss=6.331965e-03 | nmse=-1.897432e+01
+I 06.08/19:22:41 solver.py:224 ] 
+=! Best NMSE: -1.8974e+01 (epoch=4)
+
+I 06.08/19:22:59 solver.py:159 ] Epoch: [5/5][20/36] lr: 6.07e-05 | MSE loss: 5.8668e-03 | time: 0.923
+I 06.08/19:23:26 solver.py:169 ] => Train  Loss: 5.8958e-03
+
+I 06.08/19:23:27 solver.py:426 ] => Test NMSE: -1.8983e+01
+
+I 06.08/19:23:27 solver.py:358 ] => Adapter monitor [epoch=5] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.633233e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:2.863065e-01,weight:4.633144e+01 | component_l2=latent_adapter:4.633233e+01 | adapter_abs_max=1.037030e+00 | delta_l2=4.779522e+00 | delta_rel=1.045326e-01 | train_loss=5.895797e-03 | test_loss=6.319963e-03 | nmse=-1.898256e+01
+I 06.08/19:23:27 solver.py:224 ] 
+=! Best NMSE: -1.8983e+01 (epoch=5)
+
+I 06.08/19:23:30 solver.py:247 ] => Saved encoder outputs to /home/hujiacong/zxd/Huawei/TransNet/exps/WAIRD/seed797/scenario_2/01105_adapter_64_16_torch_independent_5ep/encoder_output.pth
+I 06.08/19:23:30 solver.py:426 ] => Test NMSE: -1.8983e+01
+
+I 06.08/19:23:30 solver.py:383 ] 
+=> Test result: 
+loss: 6.3200e-03    NMSE: -1.8983e+01
+
+I 06.08/19:23:30 main.py:110 ] 
+=! Final test loss: 6.3200e-03
+         test NMSE: -1.8983e+01
+

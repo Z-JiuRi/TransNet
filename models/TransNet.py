@@ -399,6 +399,54 @@ class IndependentTransformerDecoder(nn.Module):
         return output
 
 
+class LowRankLinear(nn.Module):
+
+    def __init__(self, in_features, out_features, rank, bias=True):
+        super(LowRankLinear, self).__init__()
+        if rank <= 0:
+            raise ValueError(f"rank must be positive, got {rank}")
+        if rank > min(in_features, out_features):
+            raise ValueError(
+                f"rank ({rank}) must not exceed min(in_features, out_features) "
+                f"({min(in_features, out_features)})"
+            )
+        self.in_features = in_features
+        self.out_features = out_features
+        self.rank = rank
+        self.factor_in = nn.Linear(in_features, rank, bias=False)
+        self.factor_out = nn.Linear(rank, out_features, bias=bias)
+
+    def forward(self, input):
+        return self.factor_out(self.factor_in(input))
+
+
+class LatentResidualAdapter(nn.Module):
+
+    def __init__(self, dim, rank):
+        super(LatentResidualAdapter, self).__init__()
+        if rank <= 0:
+            raise ValueError(f"adapter rank must be positive, got {rank}")
+        self.adapter_norm = nn.LayerNorm(dim)
+        self.adapter_down = nn.Linear(dim, rank, bias=False)
+        self.adapter_mid = nn.Linear(rank, rank, bias=True)
+        self.adapter_up = nn.Linear(rank, dim, bias=False)
+        self.adapter_act = nn.GELU()
+        self.reset_parameters()
+
+    def reset_parameters(self):
+        nn.init.kaiming_uniform_(self.adapter_down.weight, a=math.sqrt(5))
+        nn.init.kaiming_uniform_(self.adapter_mid.weight, a=math.sqrt(5))
+        nn.init.zeros_(self.adapter_mid.bias)
+        nn.init.zeros_(self.adapter_up.weight)
+
+    def forward(self, input):
+        residual = self.adapter_norm(input)
+        residual = self.adapter_act(self.adapter_down(residual))
+        residual = self.adapter_act(self.adapter_mid(residual))
+        residual = self.adapter_up(residual)
+        return input + residual
+
+
 def build_transformer_stack(d_model, nhead, num_encoder_layers, num_decoder_layers,
                             dim_feedforward, dropout, activation, layer_norm_eps,
                             batch_first, shared_layers, transformer_backend):
@@ -455,7 +503,8 @@ class Transformer(nn.Module):
                  custom_decoder: Optional[Any] = None,
                  reduction=64, channel: int = 2, nt: int = 32,
                  nc: int = 32, shared_layers: bool = True,
-                 transformer_backend: str = "torch") -> None:
+                 transformer_backend: str = "torch", fc_lora: bool = False,
+                 fc_lora_rank: Optional[int] = None) -> None:
         super(Transformer, self).__init__()
         if custom_encoder is None or custom_decoder is None:
             raise ValueError("custom_encoder and custom_decoder must be provided")
@@ -476,9 +525,30 @@ class Transformer(nn.Module):
 
         self.shared_layers = shared_layers
         self.transformer_backend = transformer_backend
-        self.fc_encoder = nn.Linear(self.input_dim, self.input_dim // reduction)
-        self.fc_decoder = nn.Linear(self.input_dim // reduction, self.input_dim)
+        self.fc_lora = fc_lora
+        self.code_dim = self.input_dim // reduction
+        if fc_lora:
+            if fc_lora_rank is None:
+                fc_lora_rank = max(1, self.code_dim // 4)
+            if fc_lora_rank > min(self.input_dim, self.code_dim):
+                raise ValueError(
+                    f"fc_lora_rank ({fc_lora_rank}) must not exceed "
+                    f"code_dim ({self.code_dim})"
+                )
+            self.fc_lora_rank = fc_lora_rank
+            self.fc_encoder = LowRankLinear(self.input_dim, self.code_dim,
+                                            fc_lora_rank)
+            self.fc_decoder = LowRankLinear(self.code_dim, self.input_dim,
+                                            fc_lora_rank)
+        else:
+            self.fc_lora_rank = None
+            self.fc_encoder = nn.Linear(self.input_dim, self.code_dim)
+            self.fc_decoder = nn.Linear(self.code_dim, self.input_dim)
+        self.latent_adapter = nn.Identity()
         self._reset_parameters()
+
+    def add_latent_adapter(self, rank):
+        self.latent_adapter = LatentResidualAdapter(self.code_dim, rank)
 
     def forward(self, src: Tensor, tgt: Optional[Tensor] = None,
                 src_mask: Optional[Tensor] = None,
@@ -491,6 +561,7 @@ class Transformer(nn.Module):
         src = src.view(-1, self.feature_shape[0], self.feature_shape[1])
         memory = self.encoder(src, mask=src_mask, src_key_padding_mask=src_key_padding_mask)
         memory_encoder = self.fc_encoder(memory.view(memory.shape[0], -1))
+        memory_encoder = self.latent_adapter(memory_encoder)
         memory_decoder = self.fc_decoder(memory_encoder).view(-1, self.feature_shape[0], self.feature_shape[1])
         output = self.decoder(
             memory_decoder,
@@ -514,6 +585,7 @@ class Transformer(nn.Module):
         src = src.view(-1, self.feature_shape[0], self.feature_shape[1])
         memory = self.encoder(src, mask=src_mask, src_key_padding_mask=src_key_padding_mask)
         memory_encoder = self.fc_encoder(memory.view(memory.shape[0], -1))
+        memory_encoder = self.latent_adapter(memory_encoder)
         return memory_encoder
 
     def generate_square_subsequent_mask(self, sz: int) -> Tensor:
@@ -527,7 +599,10 @@ class Transformer(nn.Module):
                 xavier_uniform_(p)
 
 
-def transnet(reduction=64, d_model=64, channel=2, nt=32, nc=32, dim_feedforward=None, shared_layers=True, transformer_backend="torch"):
+def transnet(reduction=64, d_model=64, channel=2, nt=32, nc=32,
+             dim_feedforward=None, shared_layers=True,
+             transformer_backend="torch", fc_lora=False,
+             fc_lora_rank=None):
     r""" Create a proposed TransNet.
 
         :param reduction: the reciprocal of compression ratio
@@ -556,5 +631,7 @@ def transnet(reduction=64, d_model=64, channel=2, nt=32, nc=32, dim_feedforward=
                         nt=nt,
                         nc=nc,
                         shared_layers=shared_layers,
-                        transformer_backend=transformer_backend)
+                        transformer_backend=transformer_backend,
+                        fc_lora=fc_lora,
+                        fc_lora_rank=fc_lora_rank)
     return model

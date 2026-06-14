@@ -1,0 +1,171 @@
+I 06.08/06:21:18 main.py:23  ] => Experiment directory: /home/hujiacong/zxd/Huawei/TransNet/exps/WAIRD/seed797/direct_test/scenario_2_06401_torch_independent
+I 06.08/06:21:18 main.py:24  ] => PyTorch Version: 2.5.1
+I 06.08/06:21:18 main.py:26  ] ==================================================
+I 06.08/06:21:18 main.py:30  ] => Arguments:
+	train_path: data/scenario_2/06401/train.pt
+	val_path: data/scenario_2/06401/test.pt
+	test_path: data/scenario_2/06401/test.pt
+	batch_size: 256
+	workers: 0
+	evaluate: True
+	pretrained: exps/WAIRD/seed797/base/torch_independent/checkpoints/best_nmse.pth
+	resume: None
+	seed: 797
+	gpu: 0
+	cpu: False
+	cpu_affinity: None
+	epochs: None
+	cr: 4
+	exp_name: WAIRD/seed797/direct_test/scenario_2_06401_torch_independent
+	channel: 2
+	nt: 64
+	nc: 64
+	d_model: 64
+	dim_feedforward: 2048
+	fc_lora: False
+	fc_lora_rank: None
+	layer_sharing: independent
+	transformer_backend: torch
+	scheduler: cosine
+	lr_init: 0.0002
+	weight_decay: 0.001
+	freeze_components: []
+	lora_component: []
+	lora_pretrained: None
+	lora_rank: 8
+	lora_alpha: 16
+I 06.08/06:21:18 main.py:31  ] ==================================================
+I 06.08/06:21:18 init.py:17  ] Random seed set to 797
+I 06.08/06:21:19 init.py:236 ] Running on GPU 0
+I 06.08/06:21:19 dataloader.py:69  ] data/scenario_2/06401/train.pt loaded.
+I 06.08/06:21:19 dataloader.py:74  ] data/scenario_2/06401/test.pt loaded.
+I 06.08/06:21:19 dataloader.py:79  ] data/scenario_2/06401/test.pt loaded.
+I 06.08/06:21:20 init.py:277 ] pretrained model loaded from exps/WAIRD/seed797/base/torch_independent/checkpoints/best_nmse.pth
+I 06.08/06:21:20 init.py:306 ] => Model Name: TransNet [pretrained: exps/WAIRD/seed797/base/torch_independent/checkpoints/best_nmse.pth]
+I 06.08/06:21:20 init.py:307 ] => Model Config: compression ratio=1/4; input shape=(2, 64, 64); input dim=8192; layer sharing=independent; transformer backend=torch; fc_lora=False; fc_lora_rank=None
+I 06.08/06:21:20 init.py:314 ] => Model Flops: 1.6817e+02M
+I 06.08/06:21:20 init.py:315 ] => Model Params Num: 3.4623e+01M
+
+I 06.08/06:21:20 init.py:316 ] 
+==================================================
+Transformer(
+  (encoder): TransformerEncoder(
+    (layers): ModuleList(
+      (0-1): 2 x TransformerEncoderLayer(
+        (self_attn): MultiheadAttention(
+          (out_proj): NonDynamicallyQuantizableLinear(in_features=64, out_features=64, bias=True)
+        )
+        (linear1): Linear(in_features=64, out_features=2048, bias=True)
+        (dropout): Dropout(p=0.0, inplace=False)
+        (linear2): Linear(in_features=2048, out_features=64, bias=True)
+        (norm1): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (dropout1): Dropout(p=0.0, inplace=False)
+        (dropout2): Dropout(p=0.0, inplace=False)
+      )
+    )
+    (norm): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+  )
+  (decoder): TransformerDecoder(
+    (layers): ModuleList(
+      (0-1): 2 x TransformerDecoderLayer(
+        (self_attn): MultiheadAttention(
+          (out_proj): NonDynamicallyQuantizableLinear(in_features=64, out_features=64, bias=True)
+        )
+        (multihead_attn): MultiheadAttention(
+          (out_proj): NonDynamicallyQuantizableLinear(in_features=64, out_features=64, bias=True)
+        )
+        (linear1): Linear(in_features=64, out_features=2048, bias=True)
+        (dropout): Dropout(p=0.0, inplace=False)
+        (linear2): Linear(in_features=2048, out_features=64, bias=True)
+        (norm1): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (norm3): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (dropout1): Dropout(p=0.0, inplace=False)
+        (dropout2): Dropout(p=0.0, inplace=False)
+        (dropout3): Dropout(p=0.0, inplace=False)
+      )
+    )
+    (norm): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+  )
+  (fc_encoder): Linear(in_features=8192, out_features=2048, bias=True)
+  (fc_decoder): Linear(in_features=2048, out_features=8192, bias=True)
+)
+==================================================
+
+I 06.08/06:21:20 init.py:216 ] 
+encoder.layers.0.self_attn.in_proj_weight                         True     (192, 64)
+encoder.layers.0.self_attn.in_proj_bias                           True     (192,)
+encoder.layers.0.self_attn.out_proj.weight                        True     (64, 64)
+encoder.layers.0.self_attn.out_proj.bias                          True     (64,)
+encoder.layers.0.linear1.weight                                   True     (2048, 64)
+encoder.layers.0.linear1.bias                                     True     (2048,)
+encoder.layers.0.linear2.weight                                   True     (64, 2048)
+encoder.layers.0.linear2.bias                                     True     (64,)
+encoder.layers.0.norm1.weight                                     True     (64,)
+encoder.layers.0.norm1.bias                                       True     (64,)
+encoder.layers.0.norm2.weight                                     True     (64,)
+encoder.layers.0.norm2.bias                                       True     (64,)
+encoder.layers.1.self_attn.in_proj_weight                         True     (192, 64)
+encoder.layers.1.self_attn.in_proj_bias                           True     (192,)
+encoder.layers.1.self_attn.out_proj.weight                        True     (64, 64)
+encoder.layers.1.self_attn.out_proj.bias                          True     (64,)
+encoder.layers.1.linear1.weight                                   True     (2048, 64)
+encoder.layers.1.linear1.bias                                     True     (2048,)
+encoder.layers.1.linear2.weight                                   True     (64, 2048)
+encoder.layers.1.linear2.bias                                     True     (64,)
+encoder.layers.1.norm1.weight                                     True     (64,)
+encoder.layers.1.norm1.bias                                       True     (64,)
+encoder.layers.1.norm2.weight                                     True     (64,)
+encoder.layers.1.norm2.bias                                       True     (64,)
+encoder.norm.weight                                               True     (64,)
+encoder.norm.bias                                                 True     (64,)
+decoder.layers.0.self_attn.in_proj_weight                         True     (192, 64)
+decoder.layers.0.self_attn.in_proj_bias                           True     (192,)
+decoder.layers.0.self_attn.out_proj.weight                        True     (64, 64)
+decoder.layers.0.self_attn.out_proj.bias                          True     (64,)
+decoder.layers.0.multihead_attn.in_proj_weight                    True     (192, 64)
+decoder.layers.0.multihead_attn.in_proj_bias                      True     (192,)
+decoder.layers.0.multihead_attn.out_proj.weight                   True     (64, 64)
+decoder.layers.0.multihead_attn.out_proj.bias                     True     (64,)
+decoder.layers.0.linear1.weight                                   True     (2048, 64)
+decoder.layers.0.linear1.bias                                     True     (2048,)
+decoder.layers.0.linear2.weight                                   True     (64, 2048)
+decoder.layers.0.linear2.bias                                     True     (64,)
+decoder.layers.0.norm1.weight                                     True     (64,)
+decoder.layers.0.norm1.bias                                       True     (64,)
+decoder.layers.0.norm2.weight                                     True     (64,)
+decoder.layers.0.norm2.bias                                       True     (64,)
+decoder.layers.0.norm3.weight                                     True     (64,)
+decoder.layers.0.norm3.bias                                       True     (64,)
+decoder.layers.1.self_attn.in_proj_weight                         True     (192, 64)
+decoder.layers.1.self_attn.in_proj_bias                           True     (192,)
+decoder.layers.1.self_attn.out_proj.weight                        True     (64, 64)
+decoder.layers.1.self_attn.out_proj.bias                          True     (64,)
+decoder.layers.1.multihead_attn.in_proj_weight                    True     (192, 64)
+decoder.layers.1.multihead_attn.in_proj_bias                      True     (192,)
+decoder.layers.1.multihead_attn.out_proj.weight                   True     (64, 64)
+decoder.layers.1.multihead_attn.out_proj.bias                     True     (64,)
+decoder.layers.1.linear1.weight                                   True     (2048, 64)
+decoder.layers.1.linear1.bias                                     True     (2048,)
+decoder.layers.1.linear2.weight                                   True     (64, 2048)
+decoder.layers.1.linear2.bias                                     True     (64,)
+decoder.layers.1.norm1.weight                                     True     (64,)
+decoder.layers.1.norm1.bias                                       True     (64,)
+decoder.layers.1.norm2.weight                                     True     (64,)
+decoder.layers.1.norm2.bias                                       True     (64,)
+decoder.layers.1.norm3.weight                                     True     (64,)
+decoder.layers.1.norm3.bias                                       True     (64,)
+decoder.norm.weight                                               True     (64,)
+decoder.norm.bias                                                 True     (64,)
+fc_encoder.weight                                                 True     (2048, 8192)
+fc_encoder.bias                                                   True     (2048,)
+fc_decoder.weight                                                 True     (8192, 2048)
+fc_decoder.bias                                                   True     (8192,)
+==================================================
+I 06.08/06:21:20 solver.py:413 ] => Test NMSE: -1.7823e+01
+
+I 06.08/06:21:20 solver.py:370 ] 
+=> Test result: 
+loss: 8.2542e-03    NMSE: -1.7823e+01
+

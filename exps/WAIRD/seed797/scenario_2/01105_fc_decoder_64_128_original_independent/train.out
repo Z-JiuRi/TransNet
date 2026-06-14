@@ -1,0 +1,1294 @@
+I 06.07/23:32:44 main.py:23  ] => Experiment directory: /home/hujiacong/zxd/Huawei/TransNet/exps/WAIRD/seed797/scenario_2/01105_fc_decoder_64_128_original_independent
+I 06.07/23:32:44 main.py:24  ] => PyTorch Version: 2.5.1
+I 06.07/23:32:44 main.py:26  ] ==================================================
+I 06.07/23:32:44 main.py:30  ] => Arguments:
+	train_path: data/scenario_2/01105/train.pt
+	val_path: data/scenario_2/01105/test.pt
+	test_path: data/scenario_2/01105/test.pt
+	batch_size: 32
+	workers: 0
+	evaluate: False
+	pretrained: exps/WAIRD/seed797/base/original_independent/checkpoints/best_nmse.pth
+	resume: None
+	seed: 797
+	gpu: 5
+	cpu: False
+	cpu_affinity: None
+	epochs: 200
+	cr: 4
+	exp_name: WAIRD/seed797/scenario_2/01105_fc_decoder_64_128_original_independent
+	channel: 2
+	nt: 64
+	nc: 64
+	d_model: 64
+	dim_feedforward: 2048
+	layer_sharing: independent
+	transformer_backend: original
+	scheduler: cosine
+	lr_init: 0.0005
+	weight_decay: 0.0
+	freeze_components: []
+	lora_component: ['fc_decoder']
+	lora_pretrained: None
+	lora_rank: 64
+	lora_alpha: 128
+I 06.07/23:32:44 main.py:31  ] ==================================================
+I 06.07/23:32:44 init.py:17  ] Random seed set to 797
+I 06.07/23:32:45 init.py:226 ] Running on GPU 5
+I 06.07/23:32:45 dataloader.py:69  ] data/scenario_2/01105/train.pt loaded.
+I 06.07/23:32:46 dataloader.py:74  ] data/scenario_2/01105/test.pt loaded.
+I 06.07/23:32:46 dataloader.py:79  ] data/scenario_2/01105/test.pt loaded.
+I 06.07/23:32:50 init.py:265 ] pretrained model loaded from exps/WAIRD/seed797/base/original_independent/checkpoints/best_nmse.pth
+I 06.07/23:32:51 init.py:185 ] => LoRA enabled on components: fc_decoder; target_modules=['fc_decoder']; (rank=64, alpha=128); 655360/35378432 scalar params trainable
+I 06.07/23:33:00 init.py:294 ] => Model Name: TransNet [pretrained: exps/WAIRD/seed797/base/original_independent/checkpoints/best_nmse.pth]
+I 06.07/23:33:00 init.py:295 ] => Model Config: compression ratio=1/4; input shape=(2, 64, 64); input dim=8192; layer sharing=independent; transformer backend=original
+I 06.07/23:33:00 init.py:300 ] => Model Flops: 1.6882e+02M
+I 06.07/23:33:00 init.py:301 ] => Model Params Num: 3.5279e+01M
+
+I 06.07/23:33:00 init.py:302 ] 
+==================================================
+Transformer(
+  (encoder): IndependentTransformerEncoder(
+    (layers): ModuleList(
+      (0-1): 2 x OriginalTransformerEncoderLayer(
+        (self_attn): OriginalMultiheadAttention(
+          (out_proj): Linear(in_features=64, out_features=64, bias=True)
+        )
+        (linear1): Linear(in_features=64, out_features=2048, bias=True)
+        (dropout): Dropout(p=0.0, inplace=False)
+        (linear2): Linear(in_features=2048, out_features=64, bias=True)
+        (norm1): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (dropout1): Dropout(p=0.0, inplace=False)
+        (dropout2): Dropout(p=0.0, inplace=False)
+      )
+    )
+    (norm): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+  )
+  (decoder): IndependentTransformerDecoder(
+    (layers): ModuleList(
+      (0-1): 2 x OriginalTransformerDecoderLayer(
+        (self_attn): OriginalMultiheadAttention(
+          (out_proj): Linear(in_features=64, out_features=64, bias=True)
+        )
+        (multihead_attn): OriginalMultiheadAttention(
+          (out_proj): Linear(in_features=64, out_features=64, bias=True)
+        )
+        (linear1): Linear(in_features=64, out_features=2048, bias=True)
+        (dropout): Dropout(p=0.0, inplace=False)
+        (linear2): Linear(in_features=2048, out_features=64, bias=True)
+        (norm1): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (norm3): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (dropout1): Dropout(p=0.0, inplace=False)
+        (dropout2): Dropout(p=0.0, inplace=False)
+        (dropout3): Dropout(p=0.0, inplace=False)
+      )
+    )
+    (norm): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+  )
+  (fc_encoder): Linear(in_features=8192, out_features=2048, bias=True)
+  (fc_decoder): LoRALinear(
+    (base_layer): Linear(in_features=2048, out_features=8192, bias=True)
+    (lora_A): Linear(in_features=2048, out_features=64, bias=False)
+    (lora_B): Linear(in_features=64, out_features=8192, bias=False)
+  )
+)
+==================================================
+
+I 06.07/23:33:00 init.py:206 ] 
+encoder.layers.0.self_attn.in_proj_weight                         False    (192, 64)
+encoder.layers.0.self_attn.in_proj_bias                           False    (192,)
+encoder.layers.0.self_attn.out_proj.weight                        False    (64, 64)
+encoder.layers.0.self_attn.out_proj.bias                          False    (64,)
+encoder.layers.0.linear1.weight                                   False    (2048, 64)
+encoder.layers.0.linear1.bias                                     False    (2048,)
+encoder.layers.0.linear2.weight                                   False    (64, 2048)
+encoder.layers.0.linear2.bias                                     False    (64,)
+encoder.layers.0.norm1.weight                                     False    (64,)
+encoder.layers.0.norm1.bias                                       False    (64,)
+encoder.layers.0.norm2.weight                                     False    (64,)
+encoder.layers.0.norm2.bias                                       False    (64,)
+encoder.layers.1.self_attn.in_proj_weight                         False    (192, 64)
+encoder.layers.1.self_attn.in_proj_bias                           False    (192,)
+encoder.layers.1.self_attn.out_proj.weight                        False    (64, 64)
+encoder.layers.1.self_attn.out_proj.bias                          False    (64,)
+encoder.layers.1.linear1.weight                                   False    (2048, 64)
+encoder.layers.1.linear1.bias                                     False    (2048,)
+encoder.layers.1.linear2.weight                                   False    (64, 2048)
+encoder.layers.1.linear2.bias                                     False    (64,)
+encoder.layers.1.norm1.weight                                     False    (64,)
+encoder.layers.1.norm1.bias                                       False    (64,)
+encoder.layers.1.norm2.weight                                     False    (64,)
+encoder.layers.1.norm2.bias                                       False    (64,)
+encoder.norm.weight                                               False    (64,)
+encoder.norm.bias                                                 False    (64,)
+decoder.layers.0.self_attn.in_proj_weight                         False    (192, 64)
+decoder.layers.0.self_attn.in_proj_bias                           False    (192,)
+decoder.layers.0.self_attn.out_proj.weight                        False    (64, 64)
+decoder.layers.0.self_attn.out_proj.bias                          False    (64,)
+decoder.layers.0.multihead_attn.in_proj_weight                    False    (192, 64)
+decoder.layers.0.multihead_attn.in_proj_bias                      False    (192,)
+decoder.layers.0.multihead_attn.out_proj.weight                   False    (64, 64)
+decoder.layers.0.multihead_attn.out_proj.bias                     False    (64,)
+decoder.layers.0.linear1.weight                                   False    (2048, 64)
+decoder.layers.0.linear1.bias                                     False    (2048,)
+decoder.layers.0.linear2.weight                                   False    (64, 2048)
+decoder.layers.0.linear2.bias                                     False    (64,)
+decoder.layers.0.norm1.weight                                     False    (64,)
+decoder.layers.0.norm1.bias                                       False    (64,)
+decoder.layers.0.norm2.weight                                     False    (64,)
+decoder.layers.0.norm2.bias                                       False    (64,)
+decoder.layers.0.norm3.weight                                     False    (64,)
+decoder.layers.0.norm3.bias                                       False    (64,)
+decoder.layers.1.self_attn.in_proj_weight                         False    (192, 64)
+decoder.layers.1.self_attn.in_proj_bias                           False    (192,)
+decoder.layers.1.self_attn.out_proj.weight                        False    (64, 64)
+decoder.layers.1.self_attn.out_proj.bias                          False    (64,)
+decoder.layers.1.multihead_attn.in_proj_weight                    False    (192, 64)
+decoder.layers.1.multihead_attn.in_proj_bias                      False    (192,)
+decoder.layers.1.multihead_attn.out_proj.weight                   False    (64, 64)
+decoder.layers.1.multihead_attn.out_proj.bias                     False    (64,)
+decoder.layers.1.linear1.weight                                   False    (2048, 64)
+decoder.layers.1.linear1.bias                                     False    (2048,)
+decoder.layers.1.linear2.weight                                   False    (64, 2048)
+decoder.layers.1.linear2.bias                                     False    (64,)
+decoder.layers.1.norm1.weight                                     False    (64,)
+decoder.layers.1.norm1.bias                                       False    (64,)
+decoder.layers.1.norm2.weight                                     False    (64,)
+decoder.layers.1.norm2.bias                                       False    (64,)
+decoder.layers.1.norm3.weight                                     False    (64,)
+decoder.layers.1.norm3.bias                                       False    (64,)
+decoder.norm.weight                                               False    (64,)
+decoder.norm.bias                                                 False    (64,)
+fc_encoder.weight                                                 False    (2048, 8192)
+fc_encoder.bias                                                   False    (2048,)
+fc_decoder.base_layer.weight                                      False    (8192, 2048)
+fc_decoder.base_layer.bias                                        False    (8192,)
+fc_decoder.lora_A.weight                                          True     (64, 2048)
+fc_decoder.lora_B.weight                                          True     (8192, 64)
+==================================================
+I 06.07/23:33:07 solver.py:405 ] [20/32] loss: 7.7216e-03 | NMSE: -1.7864e+01 | time: 0.201
+I 06.07/23:33:08 solver.py:413 ] => Test NMSE: -1.8622e+01
+
+I 06.07/23:33:08 solver.py:345 ] => LoRA monitor [before_train] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=4.612396e+00 | lora_A_l2=4.612396e+00 | lora_B_l2=0.000000e+00 | component_l2=fc_decoder:4.612396e+00 | lora_abs_max=2.209706e-02 | delta_l2=0.000000e+00 | delta_rel=0.000000e+00 | test_loss=6.867450e-03 | nmse=-1.862175e+01
+I 06.07/23:33:12 solver.py:159 ] Epoch: [1/200][20/282] lr: 1.77e-06 | MSE loss: 7.2363e-03 | time: 0.161
+I 06.07/23:33:15 solver.py:159 ] Epoch: [1/200][40/282] lr: 3.55e-06 | MSE loss: 6.6927e-03 | time: 0.155
+I 06.07/23:33:18 solver.py:159 ] Epoch: [1/200][60/282] lr: 5.32e-06 | MSE loss: 6.8201e-03 | time: 0.158
+I 06.07/23:33:21 solver.py:159 ] Epoch: [1/200][80/282] lr: 7.09e-06 | MSE loss: 6.6390e-03 | time: 0.162
+I 06.07/23:33:25 solver.py:159 ] Epoch: [1/200][100/282] lr: 8.87e-06 | MSE loss: 6.4767e-03 | time: 0.163
+I 06.07/23:33:28 solver.py:159 ] Epoch: [1/200][120/282] lr: 1.06e-05 | MSE loss: 6.1780e-03 | time: 0.165
+I 06.07/23:33:31 solver.py:159 ] Epoch: [1/200][140/282] lr: 1.24e-05 | MSE loss: 6.3065e-03 | time: 0.165
+I 06.07/23:33:35 solver.py:159 ] Epoch: [1/200][160/282] lr: 1.42e-05 | MSE loss: 6.4033e-03 | time: 0.168
+I 06.07/23:33:39 solver.py:159 ] Epoch: [1/200][180/282] lr: 1.60e-05 | MSE loss: 6.4524e-03 | time: 0.169
+I 06.07/23:33:42 solver.py:159 ] Epoch: [1/200][200/282] lr: 1.77e-05 | MSE loss: 6.6263e-03 | time: 0.168
+I 06.07/23:33:45 solver.py:159 ] Epoch: [1/200][220/282] lr: 1.95e-05 | MSE loss: 6.5281e-03 | time: 0.168
+I 06.07/23:33:49 solver.py:159 ] Epoch: [1/200][240/282] lr: 2.13e-05 | MSE loss: 6.4881e-03 | time: 0.167
+I 06.07/23:33:52 solver.py:159 ] Epoch: [1/200][260/282] lr: 2.30e-05 | MSE loss: 6.5282e-03 | time: 0.167
+I 06.07/23:33:55 solver.py:159 ] Epoch: [1/200][280/282] lr: 2.48e-05 | MSE loss: 6.6163e-03 | time: 0.166
+I 06.07/23:33:55 solver.py:169 ] => Train  Loss: 6.6606e-03
+
+I 06.07/23:33:58 solver.py:405 ] [20/32] loss: 7.5850e-03 | NMSE: -1.7957e+01 | time: 0.153
+I 06.07/23:34:00 solver.py:413 ] => Test NMSE: -1.8708e+01
+
+I 06.07/23:34:00 solver.py:345 ] => LoRA monitor [epoch=1] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=4.718380e+00 | lora_A_l2=4.688508e+00 | lora_B_l2=5.300965e-01 | component_l2=fc_decoder:4.718380e+00 | lora_abs_max=2.657675e-02 | delta_l2=7.783775e-01 | delta_rel=1.687578e-01 | train_loss=6.660604e-03 | test_loss=6.731973e-03 | nmse=-1.870828e+01
+I 06.07/23:34:00 solver.py:224 ] 
+=! Best NMSE: -1.8708e+01 (epoch=1)
+
+I 06.07/23:34:05 solver.py:159 ] Epoch: [2/200][20/282] lr: 2.68e-05 | MSE loss: 6.4263e-03 | time: 0.242
+I 06.07/23:34:08 solver.py:159 ] Epoch: [2/200][40/282] lr: 2.85e-05 | MSE loss: 6.4346e-03 | time: 0.197
+I 06.07/23:34:12 solver.py:159 ] Epoch: [2/200][60/282] lr: 3.03e-05 | MSE loss: 6.3522e-03 | time: 0.190
+I 06.07/23:34:15 solver.py:159 ] Epoch: [2/200][80/282] lr: 3.21e-05 | MSE loss: 6.5629e-03 | time: 0.182
+I 06.07/23:34:18 solver.py:159 ] Epoch: [2/200][100/282] lr: 3.39e-05 | MSE loss: 6.6974e-03 | time: 0.175
+I 06.07/23:34:21 solver.py:159 ] Epoch: [2/200][120/282] lr: 3.56e-05 | MSE loss: 6.6509e-03 | time: 0.172
+I 06.07/23:34:24 solver.py:159 ] Epoch: [2/200][140/282] lr: 3.74e-05 | MSE loss: 6.5206e-03 | time: 0.169
+I 06.07/23:34:27 solver.py:159 ] Epoch: [2/200][160/282] lr: 3.92e-05 | MSE loss: 6.4640e-03 | time: 0.164
+I 06.07/23:34:29 solver.py:159 ] Epoch: [2/200][180/282] lr: 4.10e-05 | MSE loss: 6.4382e-03 | time: 0.160
+I 06.07/23:34:32 solver.py:159 ] Epoch: [2/200][200/282] lr: 4.27e-05 | MSE loss: 6.2201e-03 | time: 0.158
+I 06.07/23:34:35 solver.py:159 ] Epoch: [2/200][220/282] lr: 4.45e-05 | MSE loss: 6.1444e-03 | time: 0.155
+I 06.07/23:34:38 solver.py:159 ] Epoch: [2/200][240/282] lr: 4.63e-05 | MSE loss: 6.2269e-03 | time: 0.156
+I 06.07/23:34:41 solver.py:159 ] Epoch: [2/200][260/282] lr: 4.80e-05 | MSE loss: 6.3247e-03 | time: 0.154
+I 06.07/23:34:43 solver.py:159 ] Epoch: [2/200][280/282] lr: 4.98e-05 | MSE loss: 6.3180e-03 | time: 0.152
+I 06.07/23:34:43 solver.py:169 ] => Train  Loss: 6.2983e-03
+
+I 06.07/23:34:46 solver.py:405 ] [20/32] loss: 7.3074e-03 | NMSE: -1.8133e+01 | time: 0.135
+I 06.07/23:34:48 solver.py:413 ] => Test NMSE: -1.8882e+01
+
+I 06.07/23:34:48 solver.py:345 ] => LoRA monitor [epoch=2] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=5.168009e+00 | lora_A_l2=4.908538e+00 | lora_B_l2=1.616961e+00 | component_l2=fc_decoder:5.168009e+00 | lora_abs_max=3.656037e-02 | delta_l2=2.098330e+00 | delta_rel=4.549328e-01 | train_loss=6.298327e-03 | test_loss=6.467413e-03 | nmse=-1.888239e+01
+I 06.07/23:34:49 solver.py:224 ] 
+=! Best NMSE: -1.8882e+01 (epoch=2)
+
+I 06.07/23:34:52 solver.py:159 ] Epoch: [3/200][20/282] lr: 5.18e-05 | MSE loss: 6.6243e-03 | time: 0.145
+I 06.07/23:34:55 solver.py:159 ] Epoch: [3/200][40/282] lr: 5.35e-05 | MSE loss: 5.9052e-03 | time: 0.146
+I 06.07/23:34:57 solver.py:159 ] Epoch: [3/200][60/282] lr: 5.53e-05 | MSE loss: 6.1206e-03 | time: 0.144
+I 06.07/23:35:01 solver.py:159 ] Epoch: [3/200][80/282] lr: 5.71e-05 | MSE loss: 6.3124e-03 | time: 0.149
+I 06.07/23:35:06 solver.py:159 ] Epoch: [3/200][100/282] lr: 5.89e-05 | MSE loss: 6.1871e-03 | time: 0.167
+I 06.07/23:35:08 solver.py:159 ] Epoch: [3/200][120/282] lr: 6.06e-05 | MSE loss: 6.0335e-03 | time: 0.163
+I 06.07/23:35:11 solver.py:159 ] Epoch: [3/200][140/282] lr: 6.24e-05 | MSE loss: 6.1192e-03 | time: 0.159
+I 06.07/23:35:14 solver.py:159 ] Epoch: [3/200][160/282] lr: 6.42e-05 | MSE loss: 6.1355e-03 | time: 0.156
+I 06.07/23:35:17 solver.py:159 ] Epoch: [3/200][180/282] lr: 6.60e-05 | MSE loss: 6.2266e-03 | time: 0.155
+I 06.07/23:35:19 solver.py:159 ] Epoch: [3/200][200/282] lr: 6.77e-05 | MSE loss: 6.1491e-03 | time: 0.153
+I 06.07/23:35:22 solver.py:159 ] Epoch: [3/200][220/282] lr: 6.95e-05 | MSE loss: 6.0215e-03 | time: 0.153
+I 06.07/23:35:25 solver.py:159 ] Epoch: [3/200][240/282] lr: 7.13e-05 | MSE loss: 6.0004e-03 | time: 0.151
+I 06.07/23:35:27 solver.py:159 ] Epoch: [3/200][260/282] lr: 7.30e-05 | MSE loss: 5.9167e-03 | time: 0.148
+I 06.07/23:35:30 solver.py:159 ] Epoch: [3/200][280/282] lr: 7.48e-05 | MSE loss: 6.0069e-03 | time: 0.148
+I 06.07/23:35:30 solver.py:169 ] => Train  Loss: 5.9821e-03
+
+I 06.07/23:35:33 solver.py:405 ] [20/32] loss: 7.1006e-03 | NMSE: -1.8243e+01 | time: 0.134
+I 06.07/23:35:35 solver.py:413 ] => Test NMSE: -1.9009e+01
+
+I 06.07/23:35:35 solver.py:345 ] => LoRA monitor [epoch=3] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=5.771236e+00 | lora_A_l2=5.148461e+00 | lora_B_l2=2.607781e+00 | component_l2=fc_decoder:5.771236e+00 | lora_abs_max=4.513706e-02 | delta_l2=3.245727e+00 | delta_rel=7.036966e-01 | train_loss=5.982137e-03 | test_loss=6.281240e-03 | nmse=-1.900925e+01
+I 06.07/23:35:36 solver.py:224 ] 
+=! Best NMSE: -1.9009e+01 (epoch=3)
+
+I 06.07/23:35:39 solver.py:159 ] Epoch: [4/200][20/282] lr: 7.68e-05 | MSE loss: 5.3743e-03 | time: 0.139
+I 06.07/23:35:41 solver.py:159 ] Epoch: [4/200][40/282] lr: 7.85e-05 | MSE loss: 5.0739e-03 | time: 0.136
+I 06.07/23:35:44 solver.py:159 ] Epoch: [4/200][60/282] lr: 8.03e-05 | MSE loss: 5.5130e-03 | time: 0.141
+I 06.07/23:35:47 solver.py:159 ] Epoch: [4/200][80/282] lr: 8.21e-05 | MSE loss: 5.7483e-03 | time: 0.144
+I 06.07/23:35:50 solver.py:159 ] Epoch: [4/200][100/282] lr: 8.39e-05 | MSE loss: 5.8162e-03 | time: 0.146
+I 06.07/23:35:53 solver.py:159 ] Epoch: [4/200][120/282] lr: 8.56e-05 | MSE loss: 5.6582e-03 | time: 0.146
+I 06.07/23:35:56 solver.py:159 ] Epoch: [4/200][140/282] lr: 8.74e-05 | MSE loss: 5.5796e-03 | time: 0.144
+I 06.07/23:35:59 solver.py:159 ] Epoch: [4/200][160/282] lr: 8.92e-05 | MSE loss: 5.5996e-03 | time: 0.144
+I 06.07/23:36:03 solver.py:159 ] Epoch: [4/200][180/282] lr: 9.10e-05 | MSE loss: 5.7303e-03 | time: 0.152
+I 06.07/23:36:07 solver.py:159 ] Epoch: [4/200][200/282] lr: 9.27e-05 | MSE loss: 5.8655e-03 | time: 0.154
+I 06.07/23:36:09 solver.py:159 ] Epoch: [4/200][220/282] lr: 9.45e-05 | MSE loss: 5.8107e-03 | time: 0.152
+I 06.07/23:36:12 solver.py:159 ] Epoch: [4/200][240/282] lr: 9.63e-05 | MSE loss: 5.7377e-03 | time: 0.152
+I 06.07/23:36:15 solver.py:159 ] Epoch: [4/200][260/282] lr: 9.80e-05 | MSE loss: 5.7610e-03 | time: 0.151
+I 06.07/23:36:18 solver.py:159 ] Epoch: [4/200][280/282] lr: 9.98e-05 | MSE loss: 5.6856e-03 | time: 0.150
+I 06.07/23:36:18 solver.py:169 ] => Train  Loss: 5.6541e-03
+
+I 06.07/23:36:21 solver.py:405 ] [20/32] loss: 6.9070e-03 | NMSE: -1.8347e+01 | time: 0.133
+I 06.07/23:36:22 solver.py:413 ] => Test NMSE: -1.9136e+01
+
+I 06.07/23:36:22 solver.py:345 ] => LoRA monitor [epoch=4] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=6.636329e+00 | lora_A_l2=5.480792e+00 | lora_B_l2=3.741896e+00 | component_l2=fc_decoder:6.636329e+00 | lora_abs_max=5.005826e-02 | delta_l2=4.578336e+00 | delta_rel=9.926155e-01 | train_loss=5.654121e-03 | test_loss=6.101228e-03 | nmse=-1.913553e+01
+I 06.07/23:36:23 solver.py:224 ] 
+=! Best NMSE: -1.9136e+01 (epoch=4)
+
+I 06.07/23:36:26 solver.py:159 ] Epoch: [5/200][20/282] lr: 1.02e-04 | MSE loss: 4.6823e-03 | time: 0.140
+I 06.07/23:36:28 solver.py:159 ] Epoch: [5/200][40/282] lr: 1.04e-04 | MSE loss: 5.6596e-03 | time: 0.137
+I 06.07/23:36:32 solver.py:159 ] Epoch: [5/200][60/282] lr: 1.05e-04 | MSE loss: 5.5215e-03 | time: 0.144
+I 06.07/23:36:34 solver.py:159 ] Epoch: [5/200][80/282] lr: 1.07e-04 | MSE loss: 5.4163e-03 | time: 0.141
+I 06.07/23:36:37 solver.py:159 ] Epoch: [5/200][100/282] lr: 1.09e-04 | MSE loss: 5.5472e-03 | time: 0.141
+I 06.07/23:36:40 solver.py:159 ] Epoch: [5/200][120/282] lr: 1.11e-04 | MSE loss: 5.6143e-03 | time: 0.141
+I 06.07/23:36:43 solver.py:159 ] Epoch: [5/200][140/282] lr: 1.12e-04 | MSE loss: 5.4854e-03 | time: 0.142
+I 06.07/23:36:46 solver.py:159 ] Epoch: [5/200][160/282] lr: 1.14e-04 | MSE loss: 5.4382e-03 | time: 0.142
+I 06.07/23:36:48 solver.py:159 ] Epoch: [5/200][180/282] lr: 1.16e-04 | MSE loss: 5.4128e-03 | time: 0.142
+I 06.07/23:36:51 solver.py:159 ] Epoch: [5/200][200/282] lr: 1.18e-04 | MSE loss: 5.3438e-03 | time: 0.142
+I 06.07/23:36:54 solver.py:159 ] Epoch: [5/200][220/282] lr: 1.20e-04 | MSE loss: 5.3661e-03 | time: 0.140
+I 06.07/23:36:56 solver.py:159 ] Epoch: [5/200][240/282] lr: 1.21e-04 | MSE loss: 5.3585e-03 | time: 0.140
+I 06.07/23:36:59 solver.py:159 ] Epoch: [5/200][260/282] lr: 1.23e-04 | MSE loss: 5.3732e-03 | time: 0.139
+I 06.07/23:37:04 solver.py:159 ] Epoch: [5/200][280/282] lr: 1.25e-04 | MSE loss: 5.3593e-03 | time: 0.145
+I 06.07/23:37:04 solver.py:169 ] => Train  Loss: 5.3286e-03
+
+I 06.07/23:37:07 solver.py:405 ] [20/32] loss: 6.7235e-03 | NMSE: -1.8454e+01 | time: 0.146
+I 06.07/23:37:08 solver.py:413 ] => Test NMSE: -1.9267e+01
+
+I 06.07/23:37:08 solver.py:345 ] => LoRA monitor [epoch=5] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=7.608037e+00 | lora_A_l2=5.847643e+00 | lora_B_l2=4.866961e+00 | component_l2=fc_decoder:7.608037e+00 | lora_abs_max=5.590738e-02 | delta_l2=5.886955e+00 | delta_rel=1.276333e+00 | train_loss=5.328644e-03 | test_loss=5.919285e-03 | nmse=-1.926701e+01
+I 06.07/23:37:09 solver.py:224 ] 
+=! Best NMSE: -1.9267e+01 (epoch=5)
+
+I 06.07/23:37:12 solver.py:159 ] Epoch: [6/200][20/282] lr: 1.27e-04 | MSE loss: 5.3405e-03 | time: 0.141
+I 06.07/23:37:15 solver.py:159 ] Epoch: [6/200][40/282] lr: 1.29e-04 | MSE loss: 5.4429e-03 | time: 0.145
+I 06.07/23:37:18 solver.py:159 ] Epoch: [6/200][60/282] lr: 1.30e-04 | MSE loss: 5.2526e-03 | time: 0.149
+I 06.07/23:37:21 solver.py:159 ] Epoch: [6/200][80/282] lr: 1.32e-04 | MSE loss: 5.2443e-03 | time: 0.148
+I 06.07/23:37:24 solver.py:159 ] Epoch: [6/200][100/282] lr: 1.34e-04 | MSE loss: 5.2973e-03 | time: 0.148
+I 06.07/23:37:27 solver.py:159 ] Epoch: [6/200][120/282] lr: 1.36e-04 | MSE loss: 5.2489e-03 | time: 0.147
+I 06.07/23:37:30 solver.py:159 ] Epoch: [6/200][140/282] lr: 1.37e-04 | MSE loss: 5.2770e-03 | time: 0.148
+I 06.07/23:37:33 solver.py:159 ] Epoch: [6/200][160/282] lr: 1.39e-04 | MSE loss: 5.2218e-03 | time: 0.148
+I 06.07/23:37:35 solver.py:159 ] Epoch: [6/200][180/282] lr: 1.41e-04 | MSE loss: 5.2438e-03 | time: 0.147
+I 06.07/23:37:38 solver.py:159 ] Epoch: [6/200][200/282] lr: 1.43e-04 | MSE loss: 5.1652e-03 | time: 0.144
+I 06.07/23:37:41 solver.py:159 ] Epoch: [6/200][220/282] lr: 1.45e-04 | MSE loss: 5.1545e-03 | time: 0.144
+I 06.07/23:37:43 solver.py:159 ] Epoch: [6/200][240/282] lr: 1.46e-04 | MSE loss: 5.1027e-03 | time: 0.143
+I 06.07/23:37:46 solver.py:159 ] Epoch: [6/200][260/282] lr: 1.48e-04 | MSE loss: 5.0780e-03 | time: 0.143
+I 06.07/23:37:49 solver.py:159 ] Epoch: [6/200][280/282] lr: 1.50e-04 | MSE loss: 5.0739e-03 | time: 0.142
+I 06.07/23:37:49 solver.py:169 ] => Train  Loss: 5.0987e-03
+
+I 06.07/23:37:52 solver.py:405 ] [20/32] loss: 6.5634e-03 | NMSE: -1.8560e+01 | time: 0.132
+I 06.07/23:37:53 solver.py:413 ] => Test NMSE: -1.9373e+01
+
+I 06.07/23:37:53 solver.py:345 ] => LoRA monitor [epoch=6] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=8.555488e+00 | lora_A_l2=6.203509e+00 | lora_B_l2=5.891762e+00 | component_l2=fc_decoder:8.555488e+00 | lora_abs_max=6.629318e-02 | delta_l2=7.072490e+00 | delta_rel=1.533366e+00 | train_loss=5.098739e-03 | test_loss=5.776868e-03 | nmse=-1.937278e+01
+I 06.07/23:37:54 solver.py:224 ] 
+=! Best NMSE: -1.9373e+01 (epoch=6)
+
+I 06.07/23:37:57 solver.py:159 ] Epoch: [7/200][20/282] lr: 1.52e-04 | MSE loss: 4.4874e-03 | time: 0.159
+I 06.07/23:38:00 solver.py:159 ] Epoch: [7/200][40/282] lr: 1.54e-04 | MSE loss: 4.4966e-03 | time: 0.151
+I 06.07/23:38:04 solver.py:159 ] Epoch: [7/200][60/282] lr: 1.55e-04 | MSE loss: 4.2132e-03 | time: 0.181
+I 06.07/23:38:08 solver.py:159 ] Epoch: [7/200][80/282] lr: 1.57e-04 | MSE loss: 4.2848e-03 | time: 0.175
+I 06.07/23:38:10 solver.py:159 ] Epoch: [7/200][100/282] lr: 1.59e-04 | MSE loss: 4.3063e-03 | time: 0.164
+I 06.07/23:38:13 solver.py:159 ] Epoch: [7/200][120/282] lr: 1.61e-04 | MSE loss: 4.1630e-03 | time: 0.159
+I 06.07/23:38:16 solver.py:159 ] Epoch: [7/200][140/282] lr: 1.62e-04 | MSE loss: 4.4329e-03 | time: 0.156
+I 06.07/23:38:18 solver.py:159 ] Epoch: [7/200][160/282] lr: 1.64e-04 | MSE loss: 4.6779e-03 | time: 0.154
+I 06.07/23:38:21 solver.py:159 ] Epoch: [7/200][180/282] lr: 1.66e-04 | MSE loss: 4.7410e-03 | time: 0.152
+I 06.07/23:38:23 solver.py:159 ] Epoch: [7/200][200/282] lr: 1.68e-04 | MSE loss: 4.7848e-03 | time: 0.149
+I 06.07/23:38:26 solver.py:159 ] Epoch: [7/200][220/282] lr: 1.70e-04 | MSE loss: 4.7272e-03 | time: 0.147
+I 06.07/23:38:29 solver.py:159 ] Epoch: [7/200][240/282] lr: 1.71e-04 | MSE loss: 4.7324e-03 | time: 0.146
+I 06.07/23:38:31 solver.py:159 ] Epoch: [7/200][260/282] lr: 1.73e-04 | MSE loss: 4.7495e-03 | time: 0.144
+I 06.07/23:38:34 solver.py:159 ] Epoch: [7/200][280/282] lr: 1.75e-04 | MSE loss: 4.8232e-03 | time: 0.144
+I 06.07/23:38:34 solver.py:169 ] => Train  Loss: 4.9298e-03
+
+I 06.07/23:38:37 solver.py:405 ] [20/32] loss: 6.4579e-03 | NMSE: -1.8634e+01 | time: 0.142
+I 06.07/23:38:38 solver.py:413 ] => Test NMSE: -1.9450e+01
+
+I 06.07/23:38:38 solver.py:345 ] => LoRA monitor [epoch=7] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=9.424787e+00 | lora_A_l2=6.527653e+00 | lora_B_l2=6.798261e+00 | component_l2=fc_decoder:9.424787e+00 | lora_abs_max=7.625753e-02 | delta_l2=8.114856e+00 | delta_rel=1.759358e+00 | train_loss=4.929783e-03 | test_loss=5.674519e-03 | nmse=-1.945041e+01
+I 06.07/23:38:40 solver.py:224 ] 
+=! Best NMSE: -1.9450e+01 (epoch=7)
+
+I 06.07/23:38:42 solver.py:159 ] Epoch: [8/200][20/282] lr: 1.77e-04 | MSE loss: 4.7519e-03 | time: 0.137
+I 06.07/23:38:45 solver.py:159 ] Epoch: [8/200][40/282] lr: 1.79e-04 | MSE loss: 4.9119e-03 | time: 0.137
+I 06.07/23:38:48 solver.py:159 ] Epoch: [8/200][60/282] lr: 1.80e-04 | MSE loss: 4.6968e-03 | time: 0.136
+I 06.07/23:38:50 solver.py:159 ] Epoch: [8/200][80/282] lr: 1.82e-04 | MSE loss: 4.8129e-03 | time: 0.137
+I 06.07/23:38:53 solver.py:159 ] Epoch: [8/200][100/282] lr: 1.84e-04 | MSE loss: 4.6548e-03 | time: 0.138
+I 06.07/23:38:56 solver.py:159 ] Epoch: [8/200][120/282] lr: 1.86e-04 | MSE loss: 4.6337e-03 | time: 0.135
+I 06.07/23:38:58 solver.py:159 ] Epoch: [8/200][140/282] lr: 1.87e-04 | MSE loss: 4.5781e-03 | time: 0.134
+I 06.07/23:39:01 solver.py:159 ] Epoch: [8/200][160/282] lr: 1.89e-04 | MSE loss: 4.5421e-03 | time: 0.135
+I 06.07/23:39:05 solver.py:159 ] Epoch: [8/200][180/282] lr: 1.91e-04 | MSE loss: 4.5406e-03 | time: 0.142
+I 06.07/23:39:08 solver.py:159 ] Epoch: [8/200][200/282] lr: 1.93e-04 | MSE loss: 4.5852e-03 | time: 0.140
+I 06.07/23:39:10 solver.py:159 ] Epoch: [8/200][220/282] lr: 1.95e-04 | MSE loss: 4.5213e-03 | time: 0.138
+I 06.07/23:39:13 solver.py:159 ] Epoch: [8/200][240/282] lr: 1.96e-04 | MSE loss: 4.5447e-03 | time: 0.139
+I 06.07/23:39:16 solver.py:159 ] Epoch: [8/200][260/282] lr: 1.98e-04 | MSE loss: 4.5870e-03 | time: 0.139
+I 06.07/23:39:18 solver.py:159 ] Epoch: [8/200][280/282] lr: 2.00e-04 | MSE loss: 4.7128e-03 | time: 0.138
+I 06.07/23:39:18 solver.py:169 ] => Train  Loss: 4.6956e-03
+
+I 06.07/23:39:21 solver.py:405 ] [20/32] loss: 6.3544e-03 | NMSE: -1.8707e+01 | time: 0.123
+I 06.07/23:39:22 solver.py:413 ] => Test NMSE: -1.9523e+01
+
+I 06.07/23:39:22 solver.py:345 ] => LoRA monitor [epoch=8] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=1.031888e+01 | lora_A_l2=6.859869e+00 | lora_B_l2=7.708533e+00 | component_l2=fc_decoder:1.031888e+01 | lora_abs_max=8.184819e-02 | delta_l2=9.154170e+00 | delta_rel=1.984689e+00 | train_loss=4.695649e-03 | test_loss=5.580512e-03 | nmse=-1.952296e+01
+I 06.07/23:39:23 solver.py:224 ] 
+=! Best NMSE: -1.9523e+01 (epoch=8)
+
+I 06.07/23:39:26 solver.py:159 ] Epoch: [9/200][20/282] lr: 2.02e-04 | MSE loss: 3.7335e-03 | time: 0.133
+I 06.07/23:39:29 solver.py:159 ] Epoch: [9/200][40/282] lr: 2.04e-04 | MSE loss: 4.2624e-03 | time: 0.143
+I 06.07/23:39:32 solver.py:159 ] Epoch: [9/200][60/282] lr: 2.05e-04 | MSE loss: 4.4316e-03 | time: 0.142
+I 06.07/23:39:35 solver.py:159 ] Epoch: [9/200][80/282] lr: 2.07e-04 | MSE loss: 4.2753e-03 | time: 0.142
+I 06.07/23:39:38 solver.py:159 ] Epoch: [9/200][100/282] lr: 2.09e-04 | MSE loss: 4.2125e-03 | time: 0.144
+I 06.07/23:39:41 solver.py:159 ] Epoch: [9/200][120/282] lr: 2.11e-04 | MSE loss: 4.5504e-03 | time: 0.145
+I 06.07/23:39:43 solver.py:159 ] Epoch: [9/200][140/282] lr: 2.12e-04 | MSE loss: 4.5483e-03 | time: 0.142
+I 06.07/23:39:46 solver.py:159 ] Epoch: [9/200][160/282] lr: 2.14e-04 | MSE loss: 4.4392e-03 | time: 0.144
+I 06.07/23:39:49 solver.py:159 ] Epoch: [9/200][180/282] lr: 2.16e-04 | MSE loss: 4.4061e-03 | time: 0.143
+I 06.07/23:39:52 solver.py:159 ] Epoch: [9/200][200/282] lr: 2.18e-04 | MSE loss: 4.3496e-03 | time: 0.143
+I 06.07/23:39:55 solver.py:159 ] Epoch: [9/200][220/282] lr: 2.20e-04 | MSE loss: 4.4097e-03 | time: 0.143
+I 06.07/23:39:58 solver.py:159 ] Epoch: [9/200][240/282] lr: 2.21e-04 | MSE loss: 4.4574e-03 | time: 0.143
+I 06.07/23:40:01 solver.py:159 ] Epoch: [9/200][260/282] lr: 2.23e-04 | MSE loss: 4.4759e-03 | time: 0.145
+I 06.07/23:40:06 solver.py:159 ] Epoch: [9/200][280/282] lr: 2.25e-04 | MSE loss: 4.5500e-03 | time: 0.151
+I 06.07/23:40:06 solver.py:169 ] => Train  Loss: 4.5534e-03
+
+I 06.07/23:40:09 solver.py:405 ] [20/32] loss: 6.2783e-03 | NMSE: -1.8770e+01 | time: 0.136
+I 06.07/23:40:10 solver.py:413 ] => Test NMSE: -1.9593e+01
+
+I 06.07/23:40:10 solver.py:345 ] => LoRA monitor [epoch=9] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=1.107850e+01 | lora_A_l2=7.145468e+00 | lora_B_l2=8.466135e+00 | component_l2=fc_decoder:1.107850e+01 | lora_abs_max=8.656926e-02 | delta_l2=1.002497e+01 | delta_rel=2.173485e+00 | train_loss=4.553443e-03 | test_loss=5.491530e-03 | nmse=-1.959277e+01
+I 06.07/23:40:11 solver.py:224 ] 
+=! Best NMSE: -1.9593e+01 (epoch=9)
+
+I 06.07/23:40:14 solver.py:159 ] Epoch: [10/200][20/282] lr: 2.27e-04 | MSE loss: 4.7793e-03 | time: 0.150
+I 06.07/23:40:17 solver.py:159 ] Epoch: [10/200][40/282] lr: 2.29e-04 | MSE loss: 4.7674e-03 | time: 0.145
+I 06.07/23:40:20 solver.py:159 ] Epoch: [10/200][60/282] lr: 2.30e-04 | MSE loss: 4.7101e-03 | time: 0.146
+I 06.07/23:40:23 solver.py:159 ] Epoch: [10/200][80/282] lr: 2.32e-04 | MSE loss: 4.5191e-03 | time: 0.147
+I 06.07/23:40:26 solver.py:159 ] Epoch: [10/200][100/282] lr: 2.34e-04 | MSE loss: 4.6068e-03 | time: 0.145
+I 06.07/23:40:29 solver.py:159 ] Epoch: [10/200][120/282] lr: 2.36e-04 | MSE loss: 4.6107e-03 | time: 0.146
+I 06.07/23:40:32 solver.py:159 ] Epoch: [10/200][140/282] lr: 2.37e-04 | MSE loss: 4.4217e-03 | time: 0.145
+I 06.07/23:40:34 solver.py:159 ] Epoch: [10/200][160/282] lr: 2.39e-04 | MSE loss: 4.4731e-03 | time: 0.143
+I 06.07/23:40:37 solver.py:159 ] Epoch: [10/200][180/282] lr: 2.41e-04 | MSE loss: 4.4835e-03 | time: 0.142
+I 06.07/23:40:39 solver.py:159 ] Epoch: [10/200][200/282] lr: 2.43e-04 | MSE loss: 4.5328e-03 | time: 0.141
+I 06.07/23:40:42 solver.py:159 ] Epoch: [10/200][220/282] lr: 2.45e-04 | MSE loss: 4.4455e-03 | time: 0.140
+I 06.07/23:40:45 solver.py:159 ] Epoch: [10/200][240/282] lr: 2.46e-04 | MSE loss: 4.5240e-03 | time: 0.139
+I 06.07/23:40:48 solver.py:159 ] Epoch: [10/200][260/282] lr: 2.48e-04 | MSE loss: 4.4548e-03 | time: 0.140
+I 06.07/23:40:50 solver.py:159 ] Epoch: [10/200][280/282] lr: 2.50e-04 | MSE loss: 4.4578e-03 | time: 0.140
+I 06.07/23:40:51 solver.py:169 ] => Train  Loss: 4.4364e-03
+
+I 06.07/23:40:53 solver.py:159 ] Epoch: [10/200][20/32] lr: 2.50e-04 | MSE loss: 6.1794e-03 | time: 0.137
+I 06.07/23:40:55 solver.py:169 ] => Val  Loss: 5.3231e-03
+
+I 06.07/23:40:58 solver.py:405 ] [20/32] loss: 6.1794e-03 | NMSE: -1.8824e+01 | time: 0.144
+I 06.07/23:40:59 solver.py:413 ] => Test NMSE: -1.9668e+01
+
+I 06.07/23:40:59 solver.py:345 ] => LoRA monitor [epoch=10] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=1.182413e+01 | lora_A_l2=7.439775e+00 | lora_B_l2=9.190201e+00 | component_l2=fc_decoder:1.182413e+01 | lora_abs_max=8.776081e-02 | delta_l2=1.086981e+01 | delta_rel=2.356652e+00 | train_loss=4.436417e-03 | val_loss=5.323107e-03 | test_loss=5.396891e-03 | nmse=-1.966826e+01
+I 06.07/23:41:00 solver.py:224 ] 
+=! Best NMSE: -1.9668e+01 (epoch=10)
+
+I 06.07/23:41:05 solver.py:159 ] Epoch: [11/200][20/282] lr: 2.52e-04 | MSE loss: 5.3423e-03 | time: 0.243
+I 06.07/23:41:08 solver.py:159 ] Epoch: [11/200][40/282] lr: 2.54e-04 | MSE loss: 4.8115e-03 | time: 0.196
+I 06.07/23:41:11 solver.py:159 ] Epoch: [11/200][60/282] lr: 2.55e-04 | MSE loss: 4.8923e-03 | time: 0.181
+I 06.07/23:41:14 solver.py:159 ] Epoch: [11/200][80/282] lr: 2.57e-04 | MSE loss: 4.6401e-03 | time: 0.170
+I 06.07/23:41:17 solver.py:159 ] Epoch: [11/200][100/282] lr: 2.59e-04 | MSE loss: 4.7784e-03 | time: 0.167
+I 06.07/23:41:20 solver.py:159 ] Epoch: [11/200][120/282] lr: 2.61e-04 | MSE loss: 4.5331e-03 | time: 0.161
+I 06.07/23:41:22 solver.py:159 ] Epoch: [11/200][140/282] lr: 2.62e-04 | MSE loss: 4.5276e-03 | time: 0.158
+I 06.07/23:41:25 solver.py:159 ] Epoch: [11/200][160/282] lr: 2.64e-04 | MSE loss: 4.4336e-03 | time: 0.157
+I 06.07/23:41:28 solver.py:159 ] Epoch: [11/200][180/282] lr: 2.66e-04 | MSE loss: 4.2756e-03 | time: 0.156
+I 06.07/23:41:31 solver.py:159 ] Epoch: [11/200][200/282] lr: 2.68e-04 | MSE loss: 4.3273e-03 | time: 0.156
+I 06.07/23:41:34 solver.py:159 ] Epoch: [11/200][220/282] lr: 2.70e-04 | MSE loss: 4.2869e-03 | time: 0.154
+I 06.07/23:41:37 solver.py:159 ] Epoch: [11/200][240/282] lr: 2.71e-04 | MSE loss: 4.2890e-03 | time: 0.153
+I 06.07/23:41:40 solver.py:159 ] Epoch: [11/200][260/282] lr: 2.73e-04 | MSE loss: 4.3050e-03 | time: 0.152
+I 06.07/23:41:43 solver.py:159 ] Epoch: [11/200][280/282] lr: 2.75e-04 | MSE loss: 4.3448e-03 | time: 0.152
+I 06.07/23:41:43 solver.py:169 ] => Train  Loss: 4.3321e-03
+
+I 06.07/23:41:46 solver.py:405 ] [20/32] loss: 6.0678e-03 | NMSE: -1.8950e+01 | time: 0.130
+I 06.07/23:41:47 solver.py:413 ] => Test NMSE: -1.9735e+01
+
+I 06.07/23:41:47 solver.py:345 ] => LoRA monitor [epoch=11] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=1.263632e+01 | lora_A_l2=7.756491e+00 | lora_B_l2=9.975641e+00 | component_l2=fc_decoder:1.263632e+01 | lora_abs_max=9.301793e-02 | delta_l2=1.176957e+01 | delta_rel=2.551725e+00 | train_loss=4.332112e-03 | test_loss=5.314475e-03 | nmse=-1.973510e+01
+I 06.07/23:41:48 solver.py:224 ] 
+=! Best NMSE: -1.9735e+01 (epoch=11)
+
+I 06.07/23:41:51 solver.py:159 ] Epoch: [12/200][20/282] lr: 2.77e-04 | MSE loss: 5.2525e-03 | time: 0.148
+I 06.07/23:41:54 solver.py:159 ] Epoch: [12/200][40/282] lr: 2.79e-04 | MSE loss: 4.2806e-03 | time: 0.147
+I 06.07/23:41:57 solver.py:159 ] Epoch: [12/200][60/282] lr: 2.80e-04 | MSE loss: 4.4524e-03 | time: 0.145
+I 06.07/23:42:00 solver.py:159 ] Epoch: [12/200][80/282] lr: 2.82e-04 | MSE loss: 4.3988e-03 | time: 0.144
+I 06.07/23:42:05 solver.py:159 ] Epoch: [12/200][100/282] lr: 2.84e-04 | MSE loss: 4.3651e-03 | time: 0.163
+I 06.07/23:42:08 solver.py:159 ] Epoch: [12/200][120/282] lr: 2.86e-04 | MSE loss: 4.4102e-03 | time: 0.163
+I 06.07/23:42:11 solver.py:159 ] Epoch: [12/200][140/282] lr: 2.87e-04 | MSE loss: 4.2606e-03 | time: 0.160
+I 06.07/23:42:14 solver.py:159 ] Epoch: [12/200][160/282] lr: 2.89e-04 | MSE loss: 4.2408e-03 | time: 0.158
+I 06.07/23:42:16 solver.py:159 ] Epoch: [12/200][180/282] lr: 2.91e-04 | MSE loss: 4.1788e-03 | time: 0.155
+I 06.07/23:42:19 solver.py:159 ] Epoch: [12/200][200/282] lr: 2.93e-04 | MSE loss: 4.2475e-03 | time: 0.153
+I 06.07/23:42:22 solver.py:159 ] Epoch: [12/200][220/282] lr: 2.95e-04 | MSE loss: 4.1642e-03 | time: 0.152
+I 06.07/23:42:25 solver.py:159 ] Epoch: [12/200][240/282] lr: 2.96e-04 | MSE loss: 4.1902e-03 | time: 0.151
+I 06.07/23:42:27 solver.py:159 ] Epoch: [12/200][260/282] lr: 2.98e-04 | MSE loss: 4.1952e-03 | time: 0.149
+I 06.07/23:42:30 solver.py:159 ] Epoch: [12/200][280/282] lr: 3.00e-04 | MSE loss: 4.2458e-03 | time: 0.149
+I 06.07/23:42:30 solver.py:169 ] => Train  Loss: 4.2490e-03
+
+I 06.07/23:42:33 solver.py:405 ] [20/32] loss: 6.0124e-03 | NMSE: -1.8983e+01 | time: 0.133
+I 06.07/23:42:34 solver.py:413 ] => Test NMSE: -1.9773e+01
+
+I 06.07/23:42:34 solver.py:345 ] => LoRA monitor [epoch=12] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=1.341004e+01 | lora_A_l2=8.077325e+00 | lora_B_l2=1.070448e+01 | component_l2=fc_decoder:1.341004e+01 | lora_abs_max=9.715545e-02 | delta_l2=1.261801e+01 | delta_rel=2.735675e+00 | train_loss=4.248994e-03 | test_loss=5.268326e-03 | nmse=-1.977297e+01
+I 06.07/23:42:36 solver.py:224 ] 
+=! Best NMSE: -1.9773e+01 (epoch=12)
+
+I 06.07/23:42:39 solver.py:159 ] Epoch: [13/200][20/282] lr: 3.02e-04 | MSE loss: 4.7318e-03 | time: 0.149
+I 06.07/23:42:42 solver.py:159 ] Epoch: [13/200][40/282] lr: 3.04e-04 | MSE loss: 4.3893e-03 | time: 0.149
+I 06.07/23:42:44 solver.py:159 ] Epoch: [13/200][60/282] lr: 3.05e-04 | MSE loss: 4.3059e-03 | time: 0.143
+I 06.07/23:42:47 solver.py:159 ] Epoch: [13/200][80/282] lr: 3.07e-04 | MSE loss: 4.2187e-03 | time: 0.140
+I 06.07/23:42:50 solver.py:159 ] Epoch: [13/200][100/282] lr: 3.09e-04 | MSE loss: 4.1063e-03 | time: 0.142
+I 06.07/23:42:53 solver.py:159 ] Epoch: [13/200][120/282] lr: 3.11e-04 | MSE loss: 4.2793e-03 | time: 0.144
+I 06.07/23:42:56 solver.py:159 ] Epoch: [13/200][140/282] lr: 3.12e-04 | MSE loss: 4.1512e-03 | time: 0.144
+I 06.07/23:42:59 solver.py:159 ] Epoch: [13/200][160/282] lr: 3.14e-04 | MSE loss: 4.2382e-03 | time: 0.147
+I 06.07/23:43:05 solver.py:159 ] Epoch: [13/200][180/282] lr: 3.16e-04 | MSE loss: 4.2018e-03 | time: 0.163
+I 06.07/23:43:08 solver.py:159 ] Epoch: [13/200][200/282] lr: 3.18e-04 | MSE loss: 4.2885e-03 | time: 0.162
+I 06.07/23:43:11 solver.py:159 ] Epoch: [13/200][220/282] lr: 3.20e-04 | MSE loss: 4.2566e-03 | time: 0.159
+I 06.07/23:43:13 solver.py:159 ] Epoch: [13/200][240/282] lr: 3.21e-04 | MSE loss: 4.1740e-03 | time: 0.157
+I 06.07/23:43:16 solver.py:159 ] Epoch: [13/200][260/282] lr: 3.23e-04 | MSE loss: 4.2107e-03 | time: 0.156
+I 06.07/23:43:19 solver.py:159 ] Epoch: [13/200][280/282] lr: 3.25e-04 | MSE loss: 4.1821e-03 | time: 0.155
+I 06.07/23:43:19 solver.py:169 ] => Train  Loss: 4.1652e-03
+
+I 06.07/23:43:22 solver.py:405 ] [20/32] loss: 5.8926e-03 | NMSE: -1.9071e+01 | time: 0.129
+I 06.07/23:43:23 solver.py:413 ] => Test NMSE: -1.9856e+01
+
+I 06.07/23:43:23 solver.py:345 ] => LoRA monitor [epoch=13] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=1.417428e+01 | lora_A_l2=8.380779e+00 | lora_B_l2=1.143122e+01 | component_l2=fc_decoder:1.417428e+01 | lora_abs_max=1.021637e-01 | delta_l2=1.344836e+01 | delta_rel=2.915700e+00 | train_loss=4.165200e-03 | test_loss=5.169074e-03 | nmse=-1.985557e+01
+I 06.07/23:43:24 solver.py:224 ] 
+=! Best NMSE: -1.9856e+01 (epoch=13)
+
+I 06.07/23:43:27 solver.py:159 ] Epoch: [14/200][20/282] lr: 3.27e-04 | MSE loss: 4.0342e-03 | time: 0.133
+I 06.07/23:43:30 solver.py:159 ] Epoch: [14/200][40/282] lr: 3.29e-04 | MSE loss: 4.3547e-03 | time: 0.143
+I 06.07/23:43:32 solver.py:159 ] Epoch: [14/200][60/282] lr: 3.30e-04 | MSE loss: 4.2053e-03 | time: 0.134
+I 06.07/23:43:35 solver.py:159 ] Epoch: [14/200][80/282] lr: 3.32e-04 | MSE loss: 4.3195e-03 | time: 0.140
+I 06.07/23:43:38 solver.py:159 ] Epoch: [14/200][100/282] lr: 3.34e-04 | MSE loss: 4.2316e-03 | time: 0.139
+I 06.07/23:43:41 solver.py:159 ] Epoch: [14/200][120/282] lr: 3.36e-04 | MSE loss: 4.1600e-03 | time: 0.137
+I 06.07/23:43:44 solver.py:159 ] Epoch: [14/200][140/282] lr: 3.37e-04 | MSE loss: 4.1520e-03 | time: 0.138
+I 06.07/23:43:47 solver.py:159 ] Epoch: [14/200][160/282] lr: 3.39e-04 | MSE loss: 4.2521e-03 | time: 0.139
+I 06.07/23:43:49 solver.py:159 ] Epoch: [14/200][180/282] lr: 3.41e-04 | MSE loss: 4.2343e-03 | time: 0.140
+I 06.07/23:43:52 solver.py:159 ] Epoch: [14/200][200/282] lr: 3.43e-04 | MSE loss: 4.1703e-03 | time: 0.140
+I 06.07/23:43:55 solver.py:159 ] Epoch: [14/200][220/282] lr: 3.45e-04 | MSE loss: 4.0804e-03 | time: 0.141
+I 06.07/23:43:58 solver.py:159 ] Epoch: [14/200][240/282] lr: 3.46e-04 | MSE loss: 4.0259e-03 | time: 0.141
+I 06.07/23:44:01 solver.py:159 ] Epoch: [14/200][260/282] lr: 3.48e-04 | MSE loss: 4.0662e-03 | time: 0.142
+I 06.07/23:44:06 solver.py:159 ] Epoch: [14/200][280/282] lr: 3.50e-04 | MSE loss: 4.1204e-03 | time: 0.148
+I 06.07/23:44:06 solver.py:169 ] => Train  Loss: 4.1299e-03
+
+I 06.07/23:44:09 solver.py:405 ] [20/32] loss: 5.8308e-03 | NMSE: -1.9115e+01 | time: 0.138
+I 06.07/23:44:11 solver.py:413 ] => Test NMSE: -1.9886e+01
+
+I 06.07/23:44:11 solver.py:345 ] => LoRA monitor [epoch=14] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=1.483184e+01 | lora_A_l2=8.667992e+00 | lora_B_l2=1.203534e+01 | component_l2=fc_decoder:1.483184e+01 | lora_abs_max=1.107123e-01 | delta_l2=1.415962e+01 | delta_rel=3.069905e+00 | train_loss=4.129881e-03 | test_loss=5.133202e-03 | nmse=-1.988582e+01
+I 06.07/23:44:12 solver.py:224 ] 
+=! Best NMSE: -1.9886e+01 (epoch=14)
+
+I 06.07/23:44:15 solver.py:159 ] Epoch: [15/200][20/282] lr: 3.52e-04 | MSE loss: 3.6163e-03 | time: 0.153
+I 06.07/23:44:17 solver.py:159 ] Epoch: [15/200][40/282] lr: 3.54e-04 | MSE loss: 3.9101e-03 | time: 0.139
+I 06.07/23:44:20 solver.py:159 ] Epoch: [15/200][60/282] lr: 3.55e-04 | MSE loss: 4.3076e-03 | time: 0.136
+I 06.07/23:44:23 solver.py:159 ] Epoch: [15/200][80/282] lr: 3.57e-04 | MSE loss: 4.2714e-03 | time: 0.139
+I 06.07/23:44:26 solver.py:159 ] Epoch: [15/200][100/282] lr: 3.59e-04 | MSE loss: 4.2886e-03 | time: 0.143
+I 06.07/23:44:29 solver.py:159 ] Epoch: [15/200][120/282] lr: 3.61e-04 | MSE loss: 4.2976e-03 | time: 0.146
+I 06.07/23:44:32 solver.py:159 ] Epoch: [15/200][140/282] lr: 3.62e-04 | MSE loss: 4.2847e-03 | time: 0.145
+I 06.07/23:44:35 solver.py:159 ] Epoch: [15/200][160/282] lr: 3.64e-04 | MSE loss: 4.2109e-03 | time: 0.145
+I 06.07/23:44:38 solver.py:159 ] Epoch: [15/200][180/282] lr: 3.66e-04 | MSE loss: 4.1118e-03 | time: 0.144
+I 06.07/23:44:40 solver.py:159 ] Epoch: [15/200][200/282] lr: 3.68e-04 | MSE loss: 4.1066e-03 | time: 0.143
+I 06.07/23:44:43 solver.py:159 ] Epoch: [15/200][220/282] lr: 3.70e-04 | MSE loss: 4.0260e-03 | time: 0.143
+I 06.07/23:44:46 solver.py:159 ] Epoch: [15/200][240/282] lr: 3.71e-04 | MSE loss: 3.9751e-03 | time: 0.144
+I 06.07/23:44:49 solver.py:159 ] Epoch: [15/200][260/282] lr: 3.73e-04 | MSE loss: 4.0400e-03 | time: 0.143
+I 06.07/23:44:52 solver.py:159 ] Epoch: [15/200][280/282] lr: 3.75e-04 | MSE loss: 4.0689e-03 | time: 0.143
+I 06.07/23:44:52 solver.py:169 ] => Train  Loss: 4.0545e-03
+
+I 06.07/23:44:55 solver.py:405 ] [20/32] loss: 5.8032e-03 | NMSE: -1.9136e+01 | time: 0.117
+I 06.07/23:44:56 solver.py:413 ] => Test NMSE: -1.9889e+01
+
+I 06.07/23:44:56 solver.py:345 ] => LoRA monitor [epoch=15] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=1.553527e+01 | lora_A_l2=8.955641e+00 | lora_B_l2=1.269413e+01 | component_l2=fc_decoder:1.553527e+01 | lora_abs_max=1.162812e-01 | delta_l2=1.491361e+01 | delta_rel=3.233377e+00 | train_loss=4.054480e-03 | test_loss=5.129282e-03 | nmse=-1.988913e+01
+I 06.07/23:44:57 solver.py:224 ] 
+=! Best NMSE: -1.9889e+01 (epoch=15)
+
+I 06.07/23:44:59 solver.py:159 ] Epoch: [16/200][20/282] lr: 3.77e-04 | MSE loss: 4.3369e-03 | time: 0.136
+I 06.07/23:45:04 solver.py:159 ] Epoch: [16/200][40/282] lr: 3.79e-04 | MSE loss: 4.3720e-03 | time: 0.177
+I 06.07/23:45:07 solver.py:159 ] Epoch: [16/200][60/282] lr: 3.80e-04 | MSE loss: 3.9941e-03 | time: 0.174
+I 06.07/23:45:10 solver.py:159 ] Epoch: [16/200][80/282] lr: 3.82e-04 | MSE loss: 4.1591e-03 | time: 0.166
+I 06.07/23:45:13 solver.py:159 ] Epoch: [16/200][100/282] lr: 3.84e-04 | MSE loss: 4.1527e-03 | time: 0.161
+I 06.07/23:45:16 solver.py:159 ] Epoch: [16/200][120/282] lr: 3.86e-04 | MSE loss: 4.1244e-03 | time: 0.157
+I 06.07/23:45:18 solver.py:159 ] Epoch: [16/200][140/282] lr: 3.87e-04 | MSE loss: 4.0448e-03 | time: 0.154
+I 06.07/23:45:21 solver.py:159 ] Epoch: [16/200][160/282] lr: 3.89e-04 | MSE loss: 4.0491e-03 | time: 0.154
+I 06.07/23:45:24 solver.py:159 ] Epoch: [16/200][180/282] lr: 3.91e-04 | MSE loss: 3.9914e-03 | time: 0.152
+I 06.07/23:45:27 solver.py:159 ] Epoch: [16/200][200/282] lr: 3.93e-04 | MSE loss: 4.0299e-03 | time: 0.152
+I 06.07/23:45:30 solver.py:159 ] Epoch: [16/200][220/282] lr: 3.95e-04 | MSE loss: 4.0111e-03 | time: 0.150
+I 06.07/23:45:32 solver.py:159 ] Epoch: [16/200][240/282] lr: 3.96e-04 | MSE loss: 4.0774e-03 | time: 0.149
+I 06.07/23:45:35 solver.py:159 ] Epoch: [16/200][260/282] lr: 3.98e-04 | MSE loss: 4.0938e-03 | time: 0.146
+I 06.07/23:45:38 solver.py:159 ] Epoch: [16/200][280/282] lr: 4.00e-04 | MSE loss: 4.0371e-03 | time: 0.147
+I 06.07/23:45:38 solver.py:169 ] => Train  Loss: 4.0275e-03
+
+I 06.07/23:45:41 solver.py:405 ] [20/32] loss: 5.7154e-03 | NMSE: -1.9185e+01 | time: 0.127
+I 06.07/23:45:42 solver.py:413 ] => Test NMSE: -1.9975e+01
+
+I 06.07/23:45:42 solver.py:345 ] => LoRA monitor [epoch=16] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=1.609976e+01 | lora_A_l2=9.222235e+00 | lora_B_l2=1.319670e+01 | component_l2=fc_decoder:1.609976e+01 | lora_abs_max=1.212796e-01 | delta_l2=1.551761e+01 | delta_rel=3.364328e+00 | train_loss=4.027532e-03 | test_loss=5.029365e-03 | nmse=-1.997457e+01
+I 06.07/23:45:43 solver.py:224 ] 
+=! Best NMSE: -1.9975e+01 (epoch=16)
+
+I 06.07/23:45:45 solver.py:159 ] Epoch: [17/200][20/282] lr: 4.02e-04 | MSE loss: 4.9003e-03 | time: 0.125
+I 06.07/23:45:48 solver.py:159 ] Epoch: [17/200][40/282] lr: 4.04e-04 | MSE loss: 4.2234e-03 | time: 0.130
+I 06.07/23:45:51 solver.py:159 ] Epoch: [17/200][60/282] lr: 4.05e-04 | MSE loss: 4.2241e-03 | time: 0.135
+I 06.07/23:45:54 solver.py:159 ] Epoch: [17/200][80/282] lr: 4.07e-04 | MSE loss: 3.9854e-03 | time: 0.138
+I 06.07/23:45:57 solver.py:159 ] Epoch: [17/200][100/282] lr: 4.09e-04 | MSE loss: 4.1928e-03 | time: 0.141
+I 06.07/23:46:00 solver.py:159 ] Epoch: [17/200][120/282] lr: 4.11e-04 | MSE loss: 4.2013e-03 | time: 0.139
+I 06.07/23:46:04 solver.py:159 ] Epoch: [17/200][140/282] lr: 4.12e-04 | MSE loss: 4.1317e-03 | time: 0.150
+I 06.07/23:46:07 solver.py:159 ] Epoch: [17/200][160/282] lr: 4.14e-04 | MSE loss: 4.0848e-03 | time: 0.151
+I 06.07/23:46:10 solver.py:159 ] Epoch: [17/200][180/282] lr: 4.16e-04 | MSE loss: 4.0715e-03 | time: 0.151
+I 06.07/23:46:13 solver.py:159 ] Epoch: [17/200][200/282] lr: 4.18e-04 | MSE loss: 4.0798e-03 | time: 0.149
+I 06.07/23:46:16 solver.py:159 ] Epoch: [17/200][220/282] lr: 4.20e-04 | MSE loss: 4.1163e-03 | time: 0.149
+I 06.07/23:46:18 solver.py:159 ] Epoch: [17/200][240/282] lr: 4.21e-04 | MSE loss: 4.0934e-03 | time: 0.147
+I 06.07/23:46:21 solver.py:159 ] Epoch: [17/200][260/282] lr: 4.23e-04 | MSE loss: 4.0490e-03 | time: 0.146
+I 06.07/23:46:24 solver.py:159 ] Epoch: [17/200][280/282] lr: 4.25e-04 | MSE loss: 3.9992e-03 | time: 0.145
+I 06.07/23:46:24 solver.py:169 ] => Train  Loss: 3.9818e-03
+
+I 06.07/23:46:27 solver.py:405 ] [20/32] loss: 5.6259e-03 | NMSE: -1.9254e+01 | time: 0.140
+I 06.07/23:46:29 solver.py:413 ] => Test NMSE: -2.0028e+01
+
+I 06.07/23:46:29 solver.py:345 ] => LoRA monitor [epoch=17] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=1.671171e+01 | lora_A_l2=9.504088e+00 | lora_B_l2=1.374604e+01 | component_l2=fc_decoder:1.671171e+01 | lora_abs_max=1.252898e-01 | delta_l2=1.616684e+01 | delta_rel=3.505085e+00 | train_loss=3.981772e-03 | test_loss=4.967349e-03 | nmse=-2.002846e+01
+I 06.07/23:46:30 solver.py:224 ] 
+=! Best NMSE: -2.0028e+01 (epoch=17)
+
+I 06.07/23:46:32 solver.py:159 ] Epoch: [18/200][20/282] lr: 4.27e-04 | MSE loss: 3.3477e-03 | time: 0.136
+I 06.07/23:46:35 solver.py:159 ] Epoch: [18/200][40/282] lr: 4.29e-04 | MSE loss: 3.5627e-03 | time: 0.136
+I 06.07/23:46:38 solver.py:159 ] Epoch: [18/200][60/282] lr: 4.30e-04 | MSE loss: 3.7957e-03 | time: 0.135
+I 06.07/23:46:41 solver.py:159 ] Epoch: [18/200][80/282] lr: 4.32e-04 | MSE loss: 3.9152e-03 | time: 0.137
+I 06.07/23:46:44 solver.py:159 ] Epoch: [18/200][100/282] lr: 4.34e-04 | MSE loss: 3.7313e-03 | time: 0.140
+I 06.07/23:46:46 solver.py:159 ] Epoch: [18/200][120/282] lr: 4.36e-04 | MSE loss: 3.7672e-03 | time: 0.139
+I 06.07/23:46:49 solver.py:159 ] Epoch: [18/200][140/282] lr: 4.37e-04 | MSE loss: 3.6474e-03 | time: 0.137
+I 06.07/23:46:51 solver.py:159 ] Epoch: [18/200][160/282] lr: 4.39e-04 | MSE loss: 3.7109e-03 | time: 0.136
+I 06.07/23:46:54 solver.py:159 ] Epoch: [18/200][180/282] lr: 4.41e-04 | MSE loss: 3.6946e-03 | time: 0.136
+I 06.07/23:46:57 solver.py:159 ] Epoch: [18/200][200/282] lr: 4.43e-04 | MSE loss: 3.7570e-03 | time: 0.137
+I 06.07/23:47:00 solver.py:159 ] Epoch: [18/200][220/282] lr: 4.45e-04 | MSE loss: 3.7630e-03 | time: 0.139
+I 06.07/23:47:05 solver.py:159 ] Epoch: [18/200][240/282] lr: 4.46e-04 | MSE loss: 3.8007e-03 | time: 0.146
+I 06.07/23:47:07 solver.py:159 ] Epoch: [18/200][260/282] lr: 4.48e-04 | MSE loss: 3.8454e-03 | time: 0.145
+I 06.07/23:47:10 solver.py:159 ] Epoch: [18/200][280/282] lr: 4.50e-04 | MSE loss: 3.9549e-03 | time: 0.143
+I 06.07/23:47:10 solver.py:169 ] => Train  Loss: 3.9368e-03
+
+I 06.07/23:47:13 solver.py:405 ] [20/32] loss: 5.5741e-03 | NMSE: -1.9291e+01 | time: 0.135
+I 06.07/23:47:14 solver.py:413 ] => Test NMSE: -2.0061e+01
+
+I 06.07/23:47:14 solver.py:345 ] => LoRA monitor [epoch=18] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=1.738636e+01 | lora_A_l2=9.784359e+00 | lora_B_l2=1.437191e+01 | component_l2=fc_decoder:1.738636e+01 | lora_abs_max=1.290035e-01 | delta_l2=1.687448e+01 | delta_rel=3.658505e+00 | train_loss=3.936811e-03 | test_loss=4.930756e-03 | nmse=-2.006057e+01
+I 06.07/23:47:15 solver.py:224 ] 
+=! Best NMSE: -2.0061e+01 (epoch=18)
+
+I 06.07/23:47:18 solver.py:159 ] Epoch: [19/200][20/282] lr: 4.52e-04 | MSE loss: 4.2297e-03 | time: 0.126
+I 06.07/23:47:20 solver.py:159 ] Epoch: [19/200][40/282] lr: 4.54e-04 | MSE loss: 3.9540e-03 | time: 0.128
+I 06.07/23:47:23 solver.py:159 ] Epoch: [19/200][60/282] lr: 4.55e-04 | MSE loss: 3.9070e-03 | time: 0.128
+I 06.07/23:47:26 solver.py:159 ] Epoch: [19/200][80/282] lr: 4.57e-04 | MSE loss: 3.8604e-03 | time: 0.135
+I 06.07/23:47:29 solver.py:159 ] Epoch: [19/200][100/282] lr: 4.59e-04 | MSE loss: 3.9782e-03 | time: 0.134
+I 06.07/23:47:31 solver.py:159 ] Epoch: [19/200][120/282] lr: 4.61e-04 | MSE loss: 3.9382e-03 | time: 0.134
+I 06.07/23:47:34 solver.py:159 ] Epoch: [19/200][140/282] lr: 4.62e-04 | MSE loss: 4.0037e-03 | time: 0.136
+I 06.07/23:47:37 solver.py:159 ] Epoch: [19/200][160/282] lr: 4.64e-04 | MSE loss: 3.9743e-03 | time: 0.135
+I 06.07/23:47:39 solver.py:159 ] Epoch: [19/200][180/282] lr: 4.66e-04 | MSE loss: 3.9059e-03 | time: 0.134
+I 06.07/23:47:42 solver.py:159 ] Epoch: [19/200][200/282] lr: 4.68e-04 | MSE loss: 3.8222e-03 | time: 0.135
+I 06.07/23:47:45 solver.py:159 ] Epoch: [19/200][220/282] lr: 4.70e-04 | MSE loss: 3.8147e-03 | time: 0.135
+I 06.07/23:47:48 solver.py:159 ] Epoch: [19/200][240/282] lr: 4.71e-04 | MSE loss: 3.8889e-03 | time: 0.135
+I 06.07/23:47:51 solver.py:159 ] Epoch: [19/200][260/282] lr: 4.73e-04 | MSE loss: 3.9291e-03 | time: 0.135
+I 06.07/23:47:53 solver.py:159 ] Epoch: [19/200][280/282] lr: 4.75e-04 | MSE loss: 3.9456e-03 | time: 0.135
+I 06.07/23:47:53 solver.py:169 ] => Train  Loss: 3.9457e-03
+
+I 06.07/23:47:56 solver.py:405 ] [20/32] loss: 5.5107e-03 | NMSE: -1.9345e+01 | time: 0.134
+I 06.07/23:47:58 solver.py:413 ] => Test NMSE: -2.0106e+01
+
+I 06.07/23:47:58 solver.py:345 ] => LoRA monitor [epoch=19] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=1.797788e+01 | lora_A_l2=1.008208e+01 | lora_B_l2=1.488475e+01 | component_l2=fc_decoder:1.797788e+01 | lora_abs_max=1.312035e-01 | delta_l2=1.749658e+01 | delta_rel=3.793383e+00 | train_loss=3.945727e-03 | test_loss=4.879476e-03 | nmse=-2.010597e+01
+I 06.07/23:47:59 solver.py:224 ] 
+=! Best NMSE: -2.0106e+01 (epoch=19)
+
+I 06.07/23:48:03 solver.py:159 ] Epoch: [20/200][20/282] lr: 4.77e-04 | MSE loss: 2.8314e-03 | time: 0.230
+I 06.07/23:48:07 solver.py:159 ] Epoch: [20/200][40/282] lr: 4.79e-04 | MSE loss: 3.1527e-03 | time: 0.198
+I 06.07/23:48:09 solver.py:159 ] Epoch: [20/200][60/282] lr: 4.80e-04 | MSE loss: 3.4409e-03 | time: 0.178
+I 06.07/23:48:12 solver.py:159 ] Epoch: [20/200][80/282] lr: 4.82e-04 | MSE loss: 3.5767e-03 | time: 0.170
+I 06.07/23:48:15 solver.py:159 ] Epoch: [20/200][100/282] lr: 4.84e-04 | MSE loss: 3.4200e-03 | time: 0.163
+I 06.07/23:48:18 solver.py:159 ] Epoch: [20/200][120/282] lr: 4.86e-04 | MSE loss: 3.3574e-03 | time: 0.158
+I 06.07/23:48:20 solver.py:159 ] Epoch: [20/200][140/282] lr: 4.87e-04 | MSE loss: 3.4697e-03 | time: 0.155
+I 06.07/23:48:23 solver.py:159 ] Epoch: [20/200][160/282] lr: 4.89e-04 | MSE loss: 3.7326e-03 | time: 0.152
+I 06.07/23:48:26 solver.py:159 ] Epoch: [20/200][180/282] lr: 4.91e-04 | MSE loss: 3.7634e-03 | time: 0.150
+I 06.07/23:48:29 solver.py:159 ] Epoch: [20/200][200/282] lr: 4.93e-04 | MSE loss: 3.7462e-03 | time: 0.150
+I 06.07/23:48:32 solver.py:159 ] Epoch: [20/200][220/282] lr: 4.95e-04 | MSE loss: 3.8141e-03 | time: 0.150
+I 06.07/23:48:34 solver.py:159 ] Epoch: [20/200][240/282] lr: 4.96e-04 | MSE loss: 3.8262e-03 | time: 0.148
+I 06.07/23:48:37 solver.py:159 ] Epoch: [20/200][260/282] lr: 4.98e-04 | MSE loss: 3.8673e-03 | time: 0.147
+I 06.07/23:48:40 solver.py:159 ] Epoch: [20/200][280/282] lr: 5.00e-04 | MSE loss: 3.9530e-03 | time: 0.146
+I 06.07/23:48:40 solver.py:169 ] => Train  Loss: 3.9440e-03
+
+I 06.07/23:48:43 solver.py:159 ] Epoch: [20/200][20/32] lr: 5.00e-04 | MSE loss: 5.6836e-03 | time: 0.144
+I 06.07/23:48:44 solver.py:169 ] => Val  Loss: 4.9871e-03
+
+I 06.07/23:48:47 solver.py:405 ] [20/32] loss: 5.6836e-03 | NMSE: -1.9245e+01 | time: 0.136
+I 06.07/23:48:49 solver.py:413 ] => Test NMSE: -1.9947e+01
+
+I 06.07/23:48:49 solver.py:345 ] => LoRA monitor [epoch=20] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=1.846760e+01 | lora_A_l2=1.040672e+01 | lora_B_l2=1.525622e+01 | component_l2=fc_decoder:1.846760e+01 | lora_abs_max=1.359058e-01 | delta_l2=1.801018e+01 | delta_rel=3.904735e+00 | train_loss=3.943952e-03 | val_loss=4.987099e-03 | test_loss=5.061476e-03 | nmse=-1.994693e+01
+I 06.07/23:48:49 solver.py:224 ] 
+=! Best NMSE: -2.0106e+01 (epoch=19)
+
+I 06.07/23:48:52 solver.py:159 ] Epoch: [21/200][20/282] lr: 5.00e-04 | MSE loss: 3.9710e-03 | time: 0.153
+I 06.07/23:48:55 solver.py:159 ] Epoch: [21/200][40/282] lr: 5.00e-04 | MSE loss: 3.9852e-03 | time: 0.146
+I 06.07/23:48:57 solver.py:159 ] Epoch: [21/200][60/282] lr: 5.00e-04 | MSE loss: 3.8649e-03 | time: 0.145
+I 06.07/23:49:01 solver.py:159 ] Epoch: [21/200][80/282] lr: 5.00e-04 | MSE loss: 4.0356e-03 | time: 0.149
+I 06.07/23:49:05 solver.py:159 ] Epoch: [21/200][100/282] lr: 5.00e-04 | MSE loss: 4.1456e-03 | time: 0.162
+I 06.07/23:49:08 solver.py:159 ] Epoch: [21/200][120/282] lr: 5.00e-04 | MSE loss: 4.0324e-03 | time: 0.158
+I 06.07/23:49:10 solver.py:159 ] Epoch: [21/200][140/282] lr: 5.00e-04 | MSE loss: 3.9734e-03 | time: 0.155
+I 06.07/23:49:13 solver.py:159 ] Epoch: [21/200][160/282] lr: 5.00e-04 | MSE loss: 3.9184e-03 | time: 0.154
+I 06.07/23:49:16 solver.py:159 ] Epoch: [21/200][180/282] lr: 5.00e-04 | MSE loss: 3.9529e-03 | time: 0.151
+I 06.07/23:49:19 solver.py:159 ] Epoch: [21/200][200/282] lr: 5.00e-04 | MSE loss: 3.9654e-03 | time: 0.151
+I 06.07/23:49:21 solver.py:159 ] Epoch: [21/200][220/282] lr: 5.00e-04 | MSE loss: 3.9586e-03 | time: 0.149
+I 06.07/23:49:24 solver.py:159 ] Epoch: [21/200][240/282] lr: 5.00e-04 | MSE loss: 4.0065e-03 | time: 0.148
+I 06.07/23:49:27 solver.py:159 ] Epoch: [21/200][260/282] lr: 5.00e-04 | MSE loss: 3.9742e-03 | time: 0.147
+I 06.07/23:49:30 solver.py:159 ] Epoch: [21/200][280/282] lr: 5.00e-04 | MSE loss: 3.9316e-03 | time: 0.146
+I 06.07/23:49:30 solver.py:169 ] => Train  Loss: 3.9170e-03
+
+I 06.07/23:49:32 solver.py:405 ] [20/32] loss: 5.3178e-03 | NMSE: -1.9459e+01 | time: 0.129
+I 06.07/23:49:34 solver.py:413 ] => Test NMSE: -2.0239e+01
+
+I 06.07/23:49:34 solver.py:345 ] => LoRA monitor [epoch=21] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=1.913787e+01 | lora_A_l2=1.070319e+01 | lora_B_l2=1.586505e+01 | component_l2=fc_decoder:1.913787e+01 | lora_abs_max=1.345691e-01 | delta_l2=1.870679e+01 | delta_rel=4.055765e+00 | train_loss=3.917042e-03 | test_loss=4.732102e-03 | nmse=-2.023916e+01
+I 06.07/23:49:35 solver.py:224 ] 
+=! Best NMSE: -2.0239e+01 (epoch=21)
+
+I 06.07/23:49:38 solver.py:159 ] Epoch: [22/200][20/282] lr: 5.00e-04 | MSE loss: 2.5904e-03 | time: 0.143
+I 06.07/23:49:41 solver.py:159 ] Epoch: [22/200][40/282] lr: 5.00e-04 | MSE loss: 3.3799e-03 | time: 0.149
+I 06.07/23:49:43 solver.py:159 ] Epoch: [22/200][60/282] lr: 5.00e-04 | MSE loss: 3.4533e-03 | time: 0.143
+I 06.07/23:49:46 solver.py:159 ] Epoch: [22/200][80/282] lr: 5.00e-04 | MSE loss: 3.7642e-03 | time: 0.143
+I 06.07/23:49:49 solver.py:159 ] Epoch: [22/200][100/282] lr: 5.00e-04 | MSE loss: 3.7198e-03 | time: 0.142
+I 06.07/23:49:52 solver.py:159 ] Epoch: [22/200][120/282] lr: 5.00e-04 | MSE loss: 3.7268e-03 | time: 0.143
+I 06.07/23:49:55 solver.py:159 ] Epoch: [22/200][140/282] lr: 5.00e-04 | MSE loss: 3.7229e-03 | time: 0.144
+I 06.07/23:49:58 solver.py:159 ] Epoch: [22/200][160/282] lr: 5.00e-04 | MSE loss: 3.8436e-03 | time: 0.143
+I 06.07/23:50:00 solver.py:159 ] Epoch: [22/200][180/282] lr: 5.00e-04 | MSE loss: 3.8601e-03 | time: 0.142
+I 06.07/23:50:05 solver.py:159 ] Epoch: [22/200][200/282] lr: 5.00e-04 | MSE loss: 3.8899e-03 | time: 0.153
+I 06.07/23:50:09 solver.py:159 ] Epoch: [22/200][220/282] lr: 5.00e-04 | MSE loss: 3.8361e-03 | time: 0.155
+I 06.07/23:50:12 solver.py:159 ] Epoch: [22/200][240/282] lr: 5.00e-04 | MSE loss: 3.8336e-03 | time: 0.154
+I 06.07/23:50:15 solver.py:159 ] Epoch: [22/200][260/282] lr: 5.00e-04 | MSE loss: 3.9035e-03 | time: 0.153
+I 06.07/23:50:17 solver.py:159 ] Epoch: [22/200][280/282] lr: 5.00e-04 | MSE loss: 3.8550e-03 | time: 0.152
+I 06.07/23:50:18 solver.py:169 ] => Train  Loss: 3.8710e-03
+
+I 06.07/23:50:20 solver.py:405 ] [20/32] loss: 5.2570e-03 | NMSE: -1.9499e+01 | time: 0.122
+I 06.07/23:50:22 solver.py:413 ] => Test NMSE: -2.0291e+01
+
+I 06.07/23:50:22 solver.py:345 ] => LoRA monitor [epoch=22] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=1.964391e+01 | lora_A_l2=1.096338e+01 | lora_B_l2=1.629993e+01 | component_l2=fc_decoder:1.964391e+01 | lora_abs_max=1.410745e-01 | delta_l2=1.923224e+01 | delta_rel=4.169685e+00 | train_loss=3.871034e-03 | test_loss=4.676164e-03 | nmse=-2.029080e+01
+I 06.07/23:50:22 solver.py:224 ] 
+=! Best NMSE: -2.0291e+01 (epoch=22)
+
+I 06.07/23:50:25 solver.py:159 ] Epoch: [23/200][20/282] lr: 5.00e-04 | MSE loss: 4.3132e-03 | time: 0.153
+I 06.07/23:50:28 solver.py:159 ] Epoch: [23/200][40/282] lr: 5.00e-04 | MSE loss: 3.9496e-03 | time: 0.138
+I 06.07/23:50:30 solver.py:159 ] Epoch: [23/200][60/282] lr: 5.00e-04 | MSE loss: 3.9945e-03 | time: 0.133
+I 06.07/23:50:33 solver.py:159 ] Epoch: [23/200][80/282] lr: 5.00e-04 | MSE loss: 4.2860e-03 | time: 0.133
+I 06.07/23:50:36 solver.py:159 ] Epoch: [23/200][100/282] lr: 5.00e-04 | MSE loss: 4.0856e-03 | time: 0.136
+I 06.07/23:50:38 solver.py:159 ] Epoch: [23/200][120/282] lr: 5.00e-04 | MSE loss: 3.9642e-03 | time: 0.136
+I 06.07/23:50:41 solver.py:159 ] Epoch: [23/200][140/282] lr: 5.00e-04 | MSE loss: 4.0763e-03 | time: 0.137
+I 06.07/23:50:44 solver.py:159 ] Epoch: [23/200][160/282] lr: 5.00e-04 | MSE loss: 4.1006e-03 | time: 0.135
+I 06.07/23:50:47 solver.py:159 ] Epoch: [23/200][180/282] lr: 5.00e-04 | MSE loss: 4.0511e-03 | time: 0.136
+I 06.07/23:50:49 solver.py:159 ] Epoch: [23/200][200/282] lr: 5.00e-04 | MSE loss: 3.9554e-03 | time: 0.135
+I 06.07/23:50:52 solver.py:159 ] Epoch: [23/200][220/282] lr: 5.00e-04 | MSE loss: 3.9383e-03 | time: 0.137
+I 06.07/23:50:55 solver.py:159 ] Epoch: [23/200][240/282] lr: 5.00e-04 | MSE loss: 3.9052e-03 | time: 0.138
+I 06.07/23:50:58 solver.py:159 ] Epoch: [23/200][260/282] lr: 5.00e-04 | MSE loss: 3.8443e-03 | time: 0.138
+I 06.07/23:51:01 solver.py:159 ] Epoch: [23/200][280/282] lr: 5.00e-04 | MSE loss: 3.8348e-03 | time: 0.138
+I 06.07/23:51:01 solver.py:169 ] => Train  Loss: 3.8204e-03
+
+I 06.07/23:51:05 solver.py:405 ] [20/32] loss: 5.2292e-03 | NMSE: -1.9511e+01 | time: 0.221
+I 06.07/23:51:07 solver.py:413 ] => Test NMSE: -2.0280e+01
+
+I 06.07/23:51:07 solver.py:345 ] => LoRA monitor [epoch=23] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=2.018532e+01 | lora_A_l2=1.120459e+01 | lora_B_l2=1.679000e+01 | component_l2=fc_decoder:2.018532e+01 | lora_abs_max=1.394887e-01 | delta_l2=1.979349e+01 | delta_rel=4.291367e+00 | train_loss=3.820394e-03 | test_loss=4.688167e-03 | nmse=-2.027967e+01
+I 06.07/23:51:07 solver.py:224 ] 
+=! Best NMSE: -2.0291e+01 (epoch=22)
+
+I 06.07/23:51:10 solver.py:159 ] Epoch: [24/200][20/282] lr: 5.00e-04 | MSE loss: 4.1940e-03 | time: 0.158
+I 06.07/23:51:13 solver.py:159 ] Epoch: [24/200][40/282] lr: 5.00e-04 | MSE loss: 3.9421e-03 | time: 0.151
+I 06.07/23:51:16 solver.py:159 ] Epoch: [24/200][60/282] lr: 5.00e-04 | MSE loss: 4.1072e-03 | time: 0.141
+I 06.07/23:51:18 solver.py:159 ] Epoch: [24/200][80/282] lr: 5.00e-04 | MSE loss: 4.1198e-03 | time: 0.140
+I 06.07/23:51:21 solver.py:159 ] Epoch: [24/200][100/282] lr: 5.00e-04 | MSE loss: 4.0504e-03 | time: 0.138
+I 06.07/23:51:24 solver.py:159 ] Epoch: [24/200][120/282] lr: 5.00e-04 | MSE loss: 4.0210e-03 | time: 0.139
+I 06.07/23:51:27 solver.py:159 ] Epoch: [24/200][140/282] lr: 5.00e-04 | MSE loss: 4.0294e-03 | time: 0.140
+I 06.07/23:51:29 solver.py:159 ] Epoch: [24/200][160/282] lr: 5.00e-04 | MSE loss: 3.9778e-03 | time: 0.138
+I 06.07/23:51:32 solver.py:159 ] Epoch: [24/200][180/282] lr: 5.00e-04 | MSE loss: 3.8695e-03 | time: 0.139
+I 06.07/23:51:35 solver.py:159 ] Epoch: [24/200][200/282] lr: 5.00e-04 | MSE loss: 3.8899e-03 | time: 0.138
+I 06.07/23:51:37 solver.py:159 ] Epoch: [24/200][220/282] lr: 5.00e-04 | MSE loss: 3.8477e-03 | time: 0.138
+I 06.07/23:51:40 solver.py:159 ] Epoch: [24/200][240/282] lr: 4.99e-04 | MSE loss: 3.8535e-03 | time: 0.138
+I 06.07/23:51:43 solver.py:159 ] Epoch: [24/200][260/282] lr: 4.99e-04 | MSE loss: 3.7929e-03 | time: 0.139
+I 06.07/23:51:46 solver.py:159 ] Epoch: [24/200][280/282] lr: 4.99e-04 | MSE loss: 3.7925e-03 | time: 0.139
+I 06.07/23:51:46 solver.py:169 ] => Train  Loss: 3.7981e-03
+
+I 06.07/23:51:49 solver.py:405 ] [20/32] loss: 5.1629e-03 | NMSE: -1.9523e+01 | time: 0.120
+I 06.07/23:51:50 solver.py:413 ] => Test NMSE: -2.0336e+01
+
+I 06.07/23:51:50 solver.py:345 ] => LoRA monitor [epoch=24] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=2.061322e+01 | lora_A_l2=1.144687e+01 | lora_B_l2=1.714275e+01 | component_l2=fc_decoder:2.061322e+01 | lora_abs_max=1.418599e-01 | delta_l2=2.023497e+01 | delta_rel=4.387084e+00 | train_loss=3.798124e-03 | test_loss=4.627645e-03 | nmse=-2.033610e+01
+I 06.07/23:51:51 solver.py:224 ] 
+=! Best NMSE: -2.0336e+01 (epoch=24)
+
+I 06.07/23:51:54 solver.py:159 ] Epoch: [25/200][20/282] lr: 4.99e-04 | MSE loss: 3.7697e-03 | time: 0.142
+I 06.07/23:51:57 solver.py:159 ] Epoch: [25/200][40/282] lr: 4.99e-04 | MSE loss: 3.7565e-03 | time: 0.144
+I 06.07/23:52:00 solver.py:159 ] Epoch: [25/200][60/282] lr: 4.99e-04 | MSE loss: 3.9014e-03 | time: 0.147
+I 06.07/23:52:04 solver.py:159 ] Epoch: [25/200][80/282] lr: 4.99e-04 | MSE loss: 3.8677e-03 | time: 0.170
+I 06.07/23:52:07 solver.py:159 ] Epoch: [25/200][100/282] lr: 4.99e-04 | MSE loss: 3.7163e-03 | time: 0.161
+I 06.07/23:52:09 solver.py:159 ] Epoch: [25/200][120/282] lr: 4.99e-04 | MSE loss: 3.7065e-03 | time: 0.155
+I 06.07/23:52:13 solver.py:159 ] Epoch: [25/200][140/282] lr: 4.99e-04 | MSE loss: 3.7057e-03 | time: 0.156
+I 06.07/23:52:16 solver.py:159 ] Epoch: [25/200][160/282] lr: 4.99e-04 | MSE loss: 3.5742e-03 | time: 0.156
+I 06.07/23:52:18 solver.py:159 ] Epoch: [25/200][180/282] lr: 4.99e-04 | MSE loss: 3.5811e-03 | time: 0.152
+I 06.07/23:52:21 solver.py:159 ] Epoch: [25/200][200/282] lr: 4.99e-04 | MSE loss: 3.5985e-03 | time: 0.151
+I 06.07/23:52:24 solver.py:159 ] Epoch: [25/200][220/282] lr: 4.99e-04 | MSE loss: 3.6915e-03 | time: 0.149
+I 06.07/23:52:27 solver.py:159 ] Epoch: [25/200][240/282] lr: 4.99e-04 | MSE loss: 3.6825e-03 | time: 0.149
+I 06.07/23:52:30 solver.py:159 ] Epoch: [25/200][260/282] lr: 4.99e-04 | MSE loss: 3.7264e-03 | time: 0.149
+I 06.07/23:52:32 solver.py:159 ] Epoch: [25/200][280/282] lr: 4.99e-04 | MSE loss: 3.7739e-03 | time: 0.148
+I 06.07/23:52:32 solver.py:169 ] => Train  Loss: 3.7675e-03
+
+I 06.07/23:52:35 solver.py:405 ] [20/32] loss: 5.1598e-03 | NMSE: -1.9521e+01 | time: 0.117
+I 06.07/23:52:36 solver.py:413 ] => Test NMSE: -2.0330e+01
+
+I 06.07/23:52:36 solver.py:345 ] => LoRA monitor [epoch=25] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=2.108763e+01 | lora_A_l2=1.168787e+01 | lora_B_l2=1.755227e+01 | component_l2=fc_decoder:2.108763e+01 | lora_abs_max=1.479596e-01 | delta_l2=2.072408e+01 | delta_rel=4.493127e+00 | train_loss=3.767500e-03 | test_loss=4.634132e-03 | nmse=-2.033002e+01
+I 06.07/23:52:36 solver.py:224 ] 
+=! Best NMSE: -2.0336e+01 (epoch=24)
+
+I 06.07/23:52:39 solver.py:159 ] Epoch: [26/200][20/282] lr: 4.99e-04 | MSE loss: 3.8136e-03 | time: 0.123
+I 06.07/23:52:41 solver.py:159 ] Epoch: [26/200][40/282] lr: 4.99e-04 | MSE loss: 3.6246e-03 | time: 0.123
+I 06.07/23:52:44 solver.py:159 ] Epoch: [26/200][60/282] lr: 4.99e-04 | MSE loss: 3.6887e-03 | time: 0.130
+I 06.07/23:52:47 solver.py:159 ] Epoch: [26/200][80/282] lr: 4.99e-04 | MSE loss: 3.7217e-03 | time: 0.128
+I 06.07/23:52:49 solver.py:159 ] Epoch: [26/200][100/282] lr: 4.99e-04 | MSE loss: 3.8086e-03 | time: 0.131
+I 06.07/23:52:52 solver.py:159 ] Epoch: [26/200][120/282] lr: 4.99e-04 | MSE loss: 3.7137e-03 | time: 0.129
+I 06.07/23:52:54 solver.py:159 ] Epoch: [26/200][140/282] lr: 4.99e-04 | MSE loss: 3.7105e-03 | time: 0.129
+I 06.07/23:52:57 solver.py:159 ] Epoch: [26/200][160/282] lr: 4.99e-04 | MSE loss: 3.7261e-03 | time: 0.131
+I 06.07/23:53:00 solver.py:159 ] Epoch: [26/200][180/282] lr: 4.99e-04 | MSE loss: 3.7894e-03 | time: 0.133
+I 06.07/23:53:05 solver.py:159 ] Epoch: [26/200][200/282] lr: 4.99e-04 | MSE loss: 3.9668e-03 | time: 0.143
+I 06.07/23:53:07 solver.py:159 ] Epoch: [26/200][220/282] lr: 4.99e-04 | MSE loss: 3.9111e-03 | time: 0.141
+I 06.07/23:53:10 solver.py:159 ] Epoch: [26/200][240/282] lr: 4.99e-04 | MSE loss: 3.7780e-03 | time: 0.141
+I 06.07/23:53:13 solver.py:159 ] Epoch: [26/200][260/282] lr: 4.99e-04 | MSE loss: 3.7877e-03 | time: 0.140
+I 06.07/23:53:15 solver.py:159 ] Epoch: [26/200][280/282] lr: 4.99e-04 | MSE loss: 3.7752e-03 | time: 0.140
+I 06.07/23:53:16 solver.py:169 ] => Train  Loss: 3.7631e-03
+
+I 06.07/23:53:18 solver.py:405 ] [20/32] loss: 5.0460e-03 | NMSE: -1.9639e+01 | time: 0.135
+I 06.07/23:53:20 solver.py:413 ] => Test NMSE: -2.0429e+01
+
+I 06.07/23:53:20 solver.py:345 ] => LoRA monitor [epoch=26] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=2.144590e+01 | lora_A_l2=1.190122e+01 | lora_B_l2=1.784063e+01 | component_l2=fc_decoder:2.144590e+01 | lora_abs_max=1.550865e-01 | delta_l2=2.109476e+01 | delta_rel=4.573494e+00 | train_loss=3.763056e-03 | test_loss=4.530199e-03 | nmse=-2.042853e+01
+I 06.07/23:53:21 solver.py:224 ] 
+=! Best NMSE: -2.0429e+01 (epoch=26)
+
+I 06.07/23:53:24 solver.py:159 ] Epoch: [27/200][20/282] lr: 4.99e-04 | MSE loss: 2.6543e-03 | time: 0.140
+I 06.07/23:53:27 solver.py:159 ] Epoch: [27/200][40/282] lr: 4.99e-04 | MSE loss: 3.5972e-03 | time: 0.146
+I 06.07/23:53:29 solver.py:159 ] Epoch: [27/200][60/282] lr: 4.99e-04 | MSE loss: 3.9271e-03 | time: 0.140
+I 06.07/23:53:32 solver.py:159 ] Epoch: [27/200][80/282] lr: 4.99e-04 | MSE loss: 3.8350e-03 | time: 0.141
+I 06.07/23:53:35 solver.py:159 ] Epoch: [27/200][100/282] lr: 4.99e-04 | MSE loss: 3.9763e-03 | time: 0.141
+I 06.07/23:53:38 solver.py:159 ] Epoch: [27/200][120/282] lr: 4.99e-04 | MSE loss: 3.9136e-03 | time: 0.140
+I 06.07/23:53:40 solver.py:159 ] Epoch: [27/200][140/282] lr: 4.99e-04 | MSE loss: 3.8947e-03 | time: 0.140
+I 06.07/23:53:43 solver.py:159 ] Epoch: [27/200][160/282] lr: 4.99e-04 | MSE loss: 3.7434e-03 | time: 0.140
+I 06.07/23:53:46 solver.py:159 ] Epoch: [27/200][180/282] lr: 4.98e-04 | MSE loss: 3.7682e-03 | time: 0.142
+I 06.07/23:53:49 solver.py:159 ] Epoch: [27/200][200/282] lr: 4.98e-04 | MSE loss: 3.7347e-03 | time: 0.141
+I 06.07/23:53:51 solver.py:159 ] Epoch: [27/200][220/282] lr: 4.98e-04 | MSE loss: 3.6938e-03 | time: 0.139
+I 06.07/23:53:54 solver.py:159 ] Epoch: [27/200][240/282] lr: 4.98e-04 | MSE loss: 3.6831e-03 | time: 0.137
+I 06.07/23:53:57 solver.py:159 ] Epoch: [27/200][260/282] lr: 4.98e-04 | MSE loss: 3.7610e-03 | time: 0.138
+I 06.07/23:53:59 solver.py:159 ] Epoch: [27/200][280/282] lr: 4.98e-04 | MSE loss: 3.7104e-03 | time: 0.137
+I 06.07/23:53:59 solver.py:169 ] => Train  Loss: 3.7624e-03
+
+I 06.07/23:54:03 solver.py:405 ] [20/32] loss: 5.0491e-03 | NMSE: -1.9625e+01 | time: 0.208
+I 06.07/23:54:05 solver.py:413 ] => Test NMSE: -2.0403e+01
+
+I 06.07/23:54:05 solver.py:345 ] => LoRA monitor [epoch=27] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=2.187329e+01 | lora_A_l2=1.212159e+01 | lora_B_l2=1.820736e+01 | component_l2=fc_decoder:2.187329e+01 | lora_abs_max=1.551878e-01 | delta_l2=2.153401e+01 | delta_rel=4.668726e+00 | train_loss=3.762434e-03 | test_loss=4.556566e-03 | nmse=-2.040332e+01
+I 06.07/23:54:05 solver.py:224 ] 
+=! Best NMSE: -2.0429e+01 (epoch=26)
+
+I 06.07/23:54:07 solver.py:159 ] Epoch: [28/200][20/282] lr: 4.98e-04 | MSE loss: 4.3324e-03 | time: 0.113
+I 06.07/23:54:10 solver.py:159 ] Epoch: [28/200][40/282] lr: 4.98e-04 | MSE loss: 4.7807e-03 | time: 0.119
+I 06.07/23:54:12 solver.py:159 ] Epoch: [28/200][60/282] lr: 4.98e-04 | MSE loss: 4.5875e-03 | time: 0.125
+I 06.07/23:54:15 solver.py:159 ] Epoch: [28/200][80/282] lr: 4.98e-04 | MSE loss: 4.1956e-03 | time: 0.131
+I 06.07/23:54:18 solver.py:159 ] Epoch: [28/200][100/282] lr: 4.98e-04 | MSE loss: 3.8674e-03 | time: 0.132
+I 06.07/23:54:21 solver.py:159 ] Epoch: [28/200][120/282] lr: 4.98e-04 | MSE loss: 4.0022e-03 | time: 0.132
+I 06.07/23:54:23 solver.py:159 ] Epoch: [28/200][140/282] lr: 4.98e-04 | MSE loss: 3.9795e-03 | time: 0.132
+I 06.07/23:54:26 solver.py:159 ] Epoch: [28/200][160/282] lr: 4.98e-04 | MSE loss: 3.8006e-03 | time: 0.132
+I 06.07/23:54:28 solver.py:159 ] Epoch: [28/200][180/282] lr: 4.98e-04 | MSE loss: 3.7718e-03 | time: 0.131
+I 06.07/23:54:31 solver.py:159 ] Epoch: [28/200][200/282] lr: 4.98e-04 | MSE loss: 3.7105e-03 | time: 0.131
+I 06.07/23:54:34 solver.py:159 ] Epoch: [28/200][220/282] lr: 4.98e-04 | MSE loss: 3.6639e-03 | time: 0.131
+I 06.07/23:54:36 solver.py:159 ] Epoch: [28/200][240/282] lr: 4.98e-04 | MSE loss: 3.6839e-03 | time: 0.131
+I 06.07/23:54:39 solver.py:159 ] Epoch: [28/200][260/282] lr: 4.98e-04 | MSE loss: 3.7527e-03 | time: 0.132
+I 06.07/23:54:41 solver.py:159 ] Epoch: [28/200][280/282] lr: 4.98e-04 | MSE loss: 3.7178e-03 | time: 0.131
+I 06.07/23:54:42 solver.py:169 ] => Train  Loss: 3.7055e-03
+
+I 06.07/23:54:44 solver.py:405 ] [20/32] loss: 5.0003e-03 | NMSE: -1.9643e+01 | time: 0.113
+I 06.07/23:54:45 solver.py:413 ] => Test NMSE: -2.0456e+01
+
+I 06.07/23:54:45 solver.py:345 ] => LoRA monitor [epoch=28] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=2.228511e+01 | lora_A_l2=1.233721e+01 | lora_B_l2=1.855854e+01 | component_l2=fc_decoder:2.228511e+01 | lora_abs_max=1.600397e-01 | delta_l2=2.195572e+01 | delta_rel=4.760155e+00 | train_loss=3.705516e-03 | test_loss=4.501603e-03 | nmse=-2.045603e+01
+I 06.07/23:54:46 solver.py:224 ] 
+=! Best NMSE: -2.0456e+01 (epoch=28)
+
+I 06.07/23:54:49 solver.py:159 ] Epoch: [29/200][20/282] lr: 4.98e-04 | MSE loss: 2.9345e-03 | time: 0.144
+I 06.07/23:54:52 solver.py:159 ] Epoch: [29/200][40/282] lr: 4.98e-04 | MSE loss: 2.9515e-03 | time: 0.137
+I 06.07/23:54:54 solver.py:159 ] Epoch: [29/200][60/282] lr: 4.98e-04 | MSE loss: 3.4314e-03 | time: 0.135
+I 06.07/23:54:57 solver.py:159 ] Epoch: [29/200][80/282] lr: 4.98e-04 | MSE loss: 3.2845e-03 | time: 0.135
+I 06.07/23:55:00 solver.py:159 ] Epoch: [29/200][100/282] lr: 4.98e-04 | MSE loss: 3.5174e-03 | time: 0.137
+I 06.07/23:55:04 solver.py:159 ] Epoch: [29/200][120/282] lr: 4.98e-04 | MSE loss: 3.3877e-03 | time: 0.153
+I 06.07/23:55:07 solver.py:159 ] Epoch: [29/200][140/282] lr: 4.98e-04 | MSE loss: 3.3935e-03 | time: 0.149
+I 06.07/23:55:09 solver.py:159 ] Epoch: [29/200][160/282] lr: 4.97e-04 | MSE loss: 3.5570e-03 | time: 0.145
+I 06.07/23:55:12 solver.py:159 ] Epoch: [29/200][180/282] lr: 4.97e-04 | MSE loss: 3.6175e-03 | time: 0.143
+I 06.07/23:55:15 solver.py:159 ] Epoch: [29/200][200/282] lr: 4.97e-04 | MSE loss: 3.6347e-03 | time: 0.142
+I 06.07/23:55:17 solver.py:159 ] Epoch: [29/200][220/282] lr: 4.97e-04 | MSE loss: 3.6997e-03 | time: 0.141
+I 06.07/23:55:20 solver.py:159 ] Epoch: [29/200][240/282] lr: 4.97e-04 | MSE loss: 3.6495e-03 | time: 0.140
+I 06.07/23:55:23 solver.py:159 ] Epoch: [29/200][260/282] lr: 4.97e-04 | MSE loss: 3.6651e-03 | time: 0.140
+I 06.07/23:55:25 solver.py:159 ] Epoch: [29/200][280/282] lr: 4.97e-04 | MSE loss: 3.7065e-03 | time: 0.139
+I 06.07/23:55:25 solver.py:169 ] => Train  Loss: 3.7141e-03
+
+I 06.07/23:55:28 solver.py:405 ] [20/32] loss: 4.9721e-03 | NMSE: -1.9686e+01 | time: 0.121
+I 06.07/23:55:29 solver.py:413 ] => Test NMSE: -2.0453e+01
+
+I 06.07/23:55:29 solver.py:345 ] => LoRA monitor [epoch=29] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=2.258142e+01 | lora_A_l2=1.250765e+01 | lora_B_l2=1.880104e+01 | component_l2=fc_decoder:2.258142e+01 | lora_abs_max=1.607729e-01 | delta_l2=2.226259e+01 | delta_rel=4.826688e+00 | train_loss=3.714084e-03 | test_loss=4.504329e-03 | nmse=-2.045340e+01
+I 06.07/23:55:29 solver.py:224 ] 
+=! Best NMSE: -2.0456e+01 (epoch=28)
+
+I 06.07/23:55:32 solver.py:159 ] Epoch: [30/200][20/282] lr: 4.97e-04 | MSE loss: 3.9269e-03 | time: 0.147
+I 06.07/23:55:35 solver.py:159 ] Epoch: [30/200][40/282] lr: 4.97e-04 | MSE loss: 3.9503e-03 | time: 0.138
+I 06.07/23:55:37 solver.py:159 ] Epoch: [30/200][60/282] lr: 4.97e-04 | MSE loss: 3.5430e-03 | time: 0.135
+I 06.07/23:55:40 solver.py:159 ] Epoch: [30/200][80/282] lr: 4.97e-04 | MSE loss: 3.5630e-03 | time: 0.133
+I 06.07/23:55:43 solver.py:159 ] Epoch: [30/200][100/282] lr: 4.97e-04 | MSE loss: 3.6237e-03 | time: 0.133
+I 06.07/23:55:45 solver.py:159 ] Epoch: [30/200][120/282] lr: 4.97e-04 | MSE loss: 3.6687e-03 | time: 0.130
+I 06.07/23:55:48 solver.py:159 ] Epoch: [30/200][140/282] lr: 4.97e-04 | MSE loss: 3.7961e-03 | time: 0.131
+I 06.07/23:55:50 solver.py:159 ] Epoch: [30/200][160/282] lr: 4.97e-04 | MSE loss: 3.7765e-03 | time: 0.132
+I 06.07/23:55:53 solver.py:159 ] Epoch: [30/200][180/282] lr: 4.97e-04 | MSE loss: 3.8234e-03 | time: 0.133
+I 06.07/23:55:56 solver.py:159 ] Epoch: [30/200][200/282] lr: 4.97e-04 | MSE loss: 3.8012e-03 | time: 0.133
+I 06.07/23:55:59 solver.py:159 ] Epoch: [30/200][220/282] lr: 4.97e-04 | MSE loss: 3.7804e-03 | time: 0.133
+I 06.07/23:56:01 solver.py:159 ] Epoch: [30/200][240/282] lr: 4.97e-04 | MSE loss: 3.8527e-03 | time: 0.134
+I 06.07/23:56:05 solver.py:159 ] Epoch: [30/200][260/282] lr: 4.97e-04 | MSE loss: 3.8931e-03 | time: 0.138
+I 06.07/23:56:08 solver.py:159 ] Epoch: [30/200][280/282] lr: 4.97e-04 | MSE loss: 3.9959e-03 | time: 0.138
+I 06.07/23:56:08 solver.py:169 ] => Train  Loss: 4.0197e-03
+
+I 06.07/23:56:11 solver.py:159 ] Epoch: [30/200][20/32] lr: 4.97e-04 | MSE loss: 5.6797e-03 | time: 0.122
+I 06.07/23:56:12 solver.py:169 ] => Val  Loss: 5.0696e-03
+
+I 06.07/23:56:15 solver.py:405 ] [20/32] loss: 5.6797e-03 | NMSE: -1.9097e+01 | time: 0.113
+I 06.07/23:56:16 solver.py:413 ] => Test NMSE: -1.9881e+01
+
+I 06.07/23:56:16 solver.py:345 ] => LoRA monitor [epoch=30] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=2.311911e+01 | lora_A_l2=1.253660e+01 | lora_B_l2=1.942491e+01 | component_l2=fc_decoder:2.311911e+01 | lora_abs_max=1.632742e-01 | delta_l2=2.282019e+01 | delta_rel=4.947578e+00 | train_loss=4.019682e-03 | val_loss=5.069616e-03 | test_loss=5.139056e-03 | nmse=-1.988087e+01
+I 06.07/23:56:16 solver.py:224 ] 
+=! Best NMSE: -2.0456e+01 (epoch=28)
+
+I 06.07/23:56:19 solver.py:159 ] Epoch: [31/200][20/282] lr: 4.97e-04 | MSE loss: 3.8176e-03 | time: 0.131
+I 06.07/23:56:21 solver.py:159 ] Epoch: [31/200][40/282] lr: 4.96e-04 | MSE loss: 4.4381e-03 | time: 0.134
+I 06.07/23:56:24 solver.py:159 ] Epoch: [31/200][60/282] lr: 4.96e-04 | MSE loss: 4.4872e-03 | time: 0.139
+I 06.07/23:56:27 solver.py:159 ] Epoch: [31/200][80/282] lr: 4.96e-04 | MSE loss: 4.4237e-03 | time: 0.139
+I 06.07/23:56:30 solver.py:159 ] Epoch: [31/200][100/282] lr: 4.96e-04 | MSE loss: 4.3275e-03 | time: 0.141
+I 06.07/23:56:32 solver.py:159 ] Epoch: [31/200][120/282] lr: 4.96e-04 | MSE loss: 4.4813e-03 | time: 0.138
+I 06.07/23:56:35 solver.py:159 ] Epoch: [31/200][140/282] lr: 4.96e-04 | MSE loss: 5.2299e-03 | time: 0.139
+I 06.07/23:56:38 solver.py:159 ] Epoch: [31/200][160/282] lr: 4.96e-04 | MSE loss: 5.4312e-03 | time: 0.137
+I 06.07/23:56:40 solver.py:159 ] Epoch: [31/200][180/282] lr: 4.96e-04 | MSE loss: 5.9580e-03 | time: 0.136
+I 06.07/23:56:43 solver.py:159 ] Epoch: [31/200][200/282] lr: 4.96e-04 | MSE loss: 6.3350e-03 | time: 0.136
+I 06.07/23:56:46 solver.py:159 ] Epoch: [31/200][220/282] lr: 4.96e-04 | MSE loss: 6.6489e-03 | time: 0.135
+I 06.07/23:56:48 solver.py:159 ] Epoch: [31/200][240/282] lr: 4.96e-04 | MSE loss: 6.9082e-03 | time: 0.134
+I 06.07/23:56:51 solver.py:159 ] Epoch: [31/200][260/282] lr: 4.96e-04 | MSE loss: 7.2139e-03 | time: 0.135
+I 06.07/23:56:53 solver.py:159 ] Epoch: [31/200][280/282] lr: 4.96e-04 | MSE loss: 7.1771e-03 | time: 0.134
+I 06.07/23:56:53 solver.py:169 ] => Train  Loss: 7.1804e-03
+
+I 06.07/23:56:56 solver.py:405 ] [20/32] loss: 9.6060e-03 | NMSE: -1.6948e+01 | time: 0.120
+I 06.07/23:56:58 solver.py:413 ] => Test NMSE: -1.7913e+01
+
+I 06.07/23:56:58 solver.py:345 ] => LoRA monitor [epoch=31] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=2.578740e+01 | lora_A_l2=1.270071e+01 | lora_B_l2=2.244286e+01 | component_l2=fc_decoder:2.578740e+01 | lora_abs_max=1.773444e-01 | delta_l2=2.553082e+01 | delta_rel=5.535263e+00 | train_loss=7.180444e-03 | test_loss=8.083960e-03 | nmse=-1.791346e+01
+I 06.07/23:56:58 solver.py:224 ] 
+=! Best NMSE: -2.0456e+01 (epoch=28)
+
+I 06.07/23:57:00 solver.py:159 ] Epoch: [32/200][20/282] lr: 4.96e-04 | MSE loss: 9.7195e-03 | time: 0.130
+I 06.07/23:57:05 solver.py:159 ] Epoch: [32/200][40/282] lr: 4.96e-04 | MSE loss: 7.7124e-03 | time: 0.176
+I 06.07/23:57:07 solver.py:159 ] Epoch: [32/200][60/282] lr: 4.96e-04 | MSE loss: 6.7104e-03 | time: 0.158
+I 06.07/23:57:10 solver.py:159 ] Epoch: [32/200][80/282] lr: 4.96e-04 | MSE loss: 5.9135e-03 | time: 0.152
+I 06.07/23:57:13 solver.py:159 ] Epoch: [32/200][100/282] lr: 4.96e-04 | MSE loss: 5.6143e-03 | time: 0.148
+I 06.07/23:57:15 solver.py:159 ] Epoch: [32/200][120/282] lr: 4.96e-04 | MSE loss: 5.4055e-03 | time: 0.146
+I 06.07/23:57:18 solver.py:159 ] Epoch: [32/200][140/282] lr: 4.95e-04 | MSE loss: 5.2318e-03 | time: 0.145
+I 06.07/23:57:21 solver.py:159 ] Epoch: [32/200][160/282] lr: 4.95e-04 | MSE loss: 5.1761e-03 | time: 0.144
+I 06.07/23:57:24 solver.py:159 ] Epoch: [32/200][180/282] lr: 4.95e-04 | MSE loss: 4.9767e-03 | time: 0.144
+I 06.07/23:57:26 solver.py:159 ] Epoch: [32/200][200/282] lr: 4.95e-04 | MSE loss: 4.8357e-03 | time: 0.142
+I 06.07/23:57:29 solver.py:159 ] Epoch: [32/200][220/282] lr: 4.95e-04 | MSE loss: 4.7113e-03 | time: 0.140
+I 06.07/23:57:31 solver.py:159 ] Epoch: [32/200][240/282] lr: 4.95e-04 | MSE loss: 4.7043e-03 | time: 0.138
+I 06.07/23:57:34 solver.py:159 ] Epoch: [32/200][260/282] lr: 4.95e-04 | MSE loss: 4.6772e-03 | time: 0.139
+I 06.07/23:57:36 solver.py:159 ] Epoch: [32/200][280/282] lr: 4.95e-04 | MSE loss: 4.6731e-03 | time: 0.137
+I 06.07/23:57:36 solver.py:169 ] => Train  Loss: 4.6543e-03
+
+I 06.07/23:57:39 solver.py:405 ] [20/32] loss: 5.1927e-03 | NMSE: -1.9461e+01 | time: 0.117
+I 06.07/23:57:40 solver.py:413 ] => Test NMSE: -2.0281e+01
+
+I 06.07/23:57:40 solver.py:345 ] => LoRA monitor [epoch=32] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=2.556115e+01 | lora_A_l2=1.255917e+01 | lora_B_l2=2.226296e+01 | component_l2=fc_decoder:2.556115e+01 | lora_abs_max=1.826642e-01 | delta_l2=2.530237e+01 | delta_rel=5.485734e+00 | train_loss=4.654339e-03 | test_loss=4.686537e-03 | nmse=-2.028118e+01
+I 06.07/23:57:40 solver.py:224 ] 
+=! Best NMSE: -2.0456e+01 (epoch=28)
+
+I 06.07/23:57:43 solver.py:159 ] Epoch: [33/200][20/282] lr: 4.95e-04 | MSE loss: 3.6820e-03 | time: 0.130
+I 06.07/23:57:45 solver.py:159 ] Epoch: [33/200][40/282] lr: 4.95e-04 | MSE loss: 3.2313e-03 | time: 0.127
+I 06.07/23:57:48 solver.py:159 ] Epoch: [33/200][60/282] lr: 4.95e-04 | MSE loss: 3.5168e-03 | time: 0.127
+I 06.07/23:57:51 solver.py:159 ] Epoch: [33/200][80/282] lr: 4.95e-04 | MSE loss: 3.6817e-03 | time: 0.133
+I 06.07/23:57:53 solver.py:159 ] Epoch: [33/200][100/282] lr: 4.95e-04 | MSE loss: 3.6556e-03 | time: 0.131
+I 06.07/23:57:56 solver.py:159 ] Epoch: [33/200][120/282] lr: 4.95e-04 | MSE loss: 3.7705e-03 | time: 0.129
+I 06.07/23:57:59 solver.py:159 ] Epoch: [33/200][140/282] lr: 4.95e-04 | MSE loss: 3.7458e-03 | time: 0.130
+I 06.07/23:58:02 solver.py:159 ] Epoch: [33/200][160/282] lr: 4.95e-04 | MSE loss: 3.7741e-03 | time: 0.136
+I 06.07/23:58:06 solver.py:159 ] Epoch: [33/200][180/282] lr: 4.95e-04 | MSE loss: 3.7749e-03 | time: 0.141
+I 06.07/23:58:08 solver.py:159 ] Epoch: [33/200][200/282] lr: 4.94e-04 | MSE loss: 3.8775e-03 | time: 0.139
+I 06.07/23:58:11 solver.py:159 ] Epoch: [33/200][220/282] lr: 4.94e-04 | MSE loss: 3.8157e-03 | time: 0.138
+I 06.07/23:58:13 solver.py:159 ] Epoch: [33/200][240/282] lr: 4.94e-04 | MSE loss: 3.8227e-03 | time: 0.137
+I 06.07/23:58:16 solver.py:159 ] Epoch: [33/200][260/282] lr: 4.94e-04 | MSE loss: 3.8176e-03 | time: 0.137
+I 06.07/23:58:19 solver.py:159 ] Epoch: [33/200][280/282] lr: 4.94e-04 | MSE loss: 3.8075e-03 | time: 0.138
+I 06.07/23:58:19 solver.py:169 ] => Train  Loss: 3.7903e-03
+
+I 06.07/23:58:22 solver.py:405 ] [20/32] loss: 5.0297e-03 | NMSE: -1.9589e+01 | time: 0.127
+I 06.07/23:58:23 solver.py:413 ] => Test NMSE: -2.0416e+01
+
+I 06.07/23:58:23 solver.py:345 ] => LoRA monitor [epoch=33] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=2.564510e+01 | lora_A_l2=1.258641e+01 | lora_B_l2=2.234398e+01 | component_l2=fc_decoder:2.564510e+01 | lora_abs_max=1.853020e-01 | delta_l2=2.538685e+01 | delta_rel=5.504049e+00 | train_loss=3.790315e-03 | test_loss=4.543105e-03 | nmse=-2.041617e+01
+I 06.07/23:58:23 solver.py:224 ] 
+=! Best NMSE: -2.0456e+01 (epoch=28)
+
+I 06.07/23:58:25 solver.py:159 ] Epoch: [34/200][20/282] lr: 4.94e-04 | MSE loss: 4.0742e-03 | time: 0.123
+I 06.07/23:58:28 solver.py:159 ] Epoch: [34/200][40/282] lr: 4.94e-04 | MSE loss: 4.0426e-03 | time: 0.125
+I 06.07/23:58:30 solver.py:159 ] Epoch: [34/200][60/282] lr: 4.94e-04 | MSE loss: 3.8863e-03 | time: 0.126
+I 06.07/23:58:33 solver.py:159 ] Epoch: [34/200][80/282] lr: 4.94e-04 | MSE loss: 3.8866e-03 | time: 0.134
+I 06.07/23:58:36 solver.py:159 ] Epoch: [34/200][100/282] lr: 4.94e-04 | MSE loss: 3.8565e-03 | time: 0.135
+I 06.07/23:58:39 solver.py:159 ] Epoch: [34/200][120/282] lr: 4.94e-04 | MSE loss: 3.9384e-03 | time: 0.134
+I 06.07/23:58:42 solver.py:159 ] Epoch: [34/200][140/282] lr: 4.94e-04 | MSE loss: 3.8543e-03 | time: 0.134
+I 06.07/23:58:44 solver.py:159 ] Epoch: [34/200][160/282] lr: 4.94e-04 | MSE loss: 3.8344e-03 | time: 0.134
+I 06.07/23:58:47 solver.py:159 ] Epoch: [34/200][180/282] lr: 4.94e-04 | MSE loss: 3.8432e-03 | time: 0.133
+I 06.07/23:58:49 solver.py:159 ] Epoch: [34/200][200/282] lr: 4.94e-04 | MSE loss: 3.7626e-03 | time: 0.131
+I 06.07/23:58:52 solver.py:159 ] Epoch: [34/200][220/282] lr: 4.94e-04 | MSE loss: 3.7646e-03 | time: 0.131
+I 06.07/23:58:54 solver.py:159 ] Epoch: [34/200][240/282] lr: 4.93e-04 | MSE loss: 3.7000e-03 | time: 0.130
+I 06.07/23:58:57 solver.py:159 ] Epoch: [34/200][260/282] lr: 4.93e-04 | MSE loss: 3.6663e-03 | time: 0.131
+I 06.07/23:59:00 solver.py:159 ] Epoch: [34/200][280/282] lr: 4.93e-04 | MSE loss: 3.6847e-03 | time: 0.131
+I 06.07/23:59:00 solver.py:169 ] => Train  Loss: 3.6927e-03
+
+I 06.07/23:59:04 solver.py:405 ] [20/32] loss: 4.9348e-03 | NMSE: -1.9666e+01 | time: 0.224
+I 06.07/23:59:06 solver.py:413 ] => Test NMSE: -2.0493e+01
+
+I 06.07/23:59:06 solver.py:345 ] => LoRA monitor [epoch=34] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=2.574500e+01 | lora_A_l2=1.262315e+01 | lora_B_l2=2.243794e+01 | component_l2=fc_decoder:2.574500e+01 | lora_abs_max=1.871564e-01 | delta_l2=2.548784e+01 | delta_rel=5.525945e+00 | train_loss=3.692708e-03 | test_loss=4.463344e-03 | nmse=-2.049310e+01
+I 06.07/23:59:06 solver.py:224 ] 
+=! Best NMSE: -2.0493e+01 (epoch=34)
+
+I 06.07/23:59:09 solver.py:159 ] Epoch: [35/200][20/282] lr: 4.93e-04 | MSE loss: 3.6102e-03 | time: 0.135
+I 06.07/23:59:12 solver.py:159 ] Epoch: [35/200][40/282] lr: 4.93e-04 | MSE loss: 3.4449e-03 | time: 0.131
+I 06.07/23:59:15 solver.py:159 ] Epoch: [35/200][60/282] lr: 4.93e-04 | MSE loss: 3.5853e-03 | time: 0.134
+I 06.07/23:59:17 solver.py:159 ] Epoch: [35/200][80/282] lr: 4.93e-04 | MSE loss: 3.6093e-03 | time: 0.132
+I 06.07/23:59:20 solver.py:159 ] Epoch: [35/200][100/282] lr: 4.93e-04 | MSE loss: 3.6442e-03 | time: 0.132
+I 06.07/23:59:22 solver.py:159 ] Epoch: [35/200][120/282] lr: 4.93e-04 | MSE loss: 3.7066e-03 | time: 0.133
+I 06.07/23:59:25 solver.py:159 ] Epoch: [35/200][140/282] lr: 4.93e-04 | MSE loss: 3.6167e-03 | time: 0.131
+I 06.07/23:59:28 solver.py:159 ] Epoch: [35/200][160/282] lr: 4.93e-04 | MSE loss: 3.5915e-03 | time: 0.133
+I 06.07/23:59:31 solver.py:159 ] Epoch: [35/200][180/282] lr: 4.93e-04 | MSE loss: 3.5670e-03 | time: 0.134
+I 06.07/23:59:33 solver.py:159 ] Epoch: [35/200][200/282] lr: 4.93e-04 | MSE loss: 3.6866e-03 | time: 0.133
+I 06.07/23:59:36 solver.py:159 ] Epoch: [35/200][220/282] lr: 4.93e-04 | MSE loss: 3.5943e-03 | time: 0.133
+I 06.07/23:59:38 solver.py:159 ] Epoch: [35/200][240/282] lr: 4.92e-04 | MSE loss: 3.6588e-03 | time: 0.133
+I 06.07/23:59:41 solver.py:159 ] Epoch: [35/200][260/282] lr: 4.92e-04 | MSE loss: 3.6392e-03 | time: 0.132
+I 06.07/23:59:43 solver.py:159 ] Epoch: [35/200][280/282] lr: 4.92e-04 | MSE loss: 3.6407e-03 | time: 0.131
+I 06.07/23:59:43 solver.py:169 ] => Train  Loss: 3.6421e-03
+
+I 06.07/23:59:46 solver.py:405 ] [20/32] loss: 4.8828e-03 | NMSE: -1.9714e+01 | time: 0.121
+I 06.07/23:59:48 solver.py:413 ] => Test NMSE: -2.0535e+01
+
+I 06.07/23:59:48 solver.py:345 ] => LoRA monitor [epoch=35] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=2.585175e+01 | lora_A_l2=1.266526e+01 | lora_B_l2=2.253673e+01 | component_l2=fc_decoder:2.585175e+01 | lora_abs_max=1.895947e-01 | delta_l2=2.559631e+01 | delta_rel=5.549460e+00 | train_loss=3.642073e-03 | test_loss=4.420026e-03 | nmse=-2.053545e+01
+I 06.07/23:59:48 solver.py:224 ] 
+=! Best NMSE: -2.0535e+01 (epoch=35)
+
+I 06.07/23:59:51 solver.py:159 ] Epoch: [36/200][20/282] lr: 4.92e-04 | MSE loss: 3.2990e-03 | time: 0.146
+I 06.07/23:59:54 solver.py:159 ] Epoch: [36/200][40/282] lr: 4.92e-04 | MSE loss: 3.2480e-03 | time: 0.146
+I 06.07/23:59:57 solver.py:159 ] Epoch: [36/200][60/282] lr: 4.92e-04 | MSE loss: 3.4328e-03 | time: 0.143
+I 06.08/00:00:00 solver.py:159 ] Epoch: [36/200][80/282] lr: 4.92e-04 | MSE loss: 3.4752e-03 | time: 0.142
+I 06.08/00:00:04 solver.py:159 ] Epoch: [36/200][100/282] lr: 4.92e-04 | MSE loss: 3.5346e-03 | time: 0.159
+I 06.08/00:00:07 solver.py:159 ] Epoch: [36/200][120/282] lr: 4.92e-04 | MSE loss: 3.5976e-03 | time: 0.153
+I 06.08/00:00:09 solver.py:159 ] Epoch: [36/200][140/282] lr: 4.92e-04 | MSE loss: 3.6600e-03 | time: 0.150
+I 06.08/00:00:12 solver.py:159 ] Epoch: [36/200][160/282] lr: 4.92e-04 | MSE loss: 3.6578e-03 | time: 0.147
+I 06.08/00:00:14 solver.py:159 ] Epoch: [36/200][180/282] lr: 4.92e-04 | MSE loss: 3.5675e-03 | time: 0.146
+I 06.08/00:00:17 solver.py:159 ] Epoch: [36/200][200/282] lr: 4.92e-04 | MSE loss: 3.5342e-03 | time: 0.144
+I 06.08/00:00:20 solver.py:159 ] Epoch: [36/200][220/282] lr: 4.92e-04 | MSE loss: 3.5252e-03 | time: 0.143
+I 06.08/00:00:23 solver.py:159 ] Epoch: [36/200][240/282] lr: 4.91e-04 | MSE loss: 3.5522e-03 | time: 0.143
+I 06.08/00:00:25 solver.py:159 ] Epoch: [36/200][260/282] lr: 4.91e-04 | MSE loss: 3.5709e-03 | time: 0.142
+I 06.08/00:00:28 solver.py:159 ] Epoch: [36/200][280/282] lr: 4.91e-04 | MSE loss: 3.6124e-03 | time: 0.141
+I 06.08/00:00:28 solver.py:169 ] => Train  Loss: 3.6046e-03
+
+I 06.08/00:00:31 solver.py:405 ] [20/32] loss: 4.8470e-03 | NMSE: -1.9743e+01 | time: 0.132
+I 06.08/00:00:32 solver.py:413 ] => Test NMSE: -2.0564e+01
+
+I 06.08/00:00:32 solver.py:345 ] => LoRA monitor [epoch=36] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=2.594676e+01 | lora_A_l2=1.270639e+01 | lora_B_l2=2.262260e+01 | component_l2=fc_decoder:2.594676e+01 | lora_abs_max=1.924569e-01 | delta_l2=2.569295e+01 | delta_rel=5.570413e+00 | train_loss=3.604626e-03 | test_loss=4.391396e-03 | nmse=-2.056367e+01
+I 06.08/00:00:33 solver.py:224 ] 
+=! Best NMSE: -2.0564e+01 (epoch=36)
+
+I 06.08/00:00:36 solver.py:159 ] Epoch: [37/200][20/282] lr: 4.91e-04 | MSE loss: 4.0336e-03 | time: 0.142
+I 06.08/00:00:39 solver.py:159 ] Epoch: [37/200][40/282] lr: 4.91e-04 | MSE loss: 3.6042e-03 | time: 0.141
+I 06.08/00:00:41 solver.py:159 ] Epoch: [37/200][60/282] lr: 4.91e-04 | MSE loss: 3.6689e-03 | time: 0.142
+I 06.08/00:00:44 solver.py:159 ] Epoch: [37/200][80/282] lr: 4.91e-04 | MSE loss: 3.5547e-03 | time: 0.139
+I 06.08/00:00:46 solver.py:159 ] Epoch: [37/200][100/282] lr: 4.91e-04 | MSE loss: 3.6341e-03 | time: 0.136
+I 06.08/00:00:49 solver.py:159 ] Epoch: [37/200][120/282] lr: 4.91e-04 | MSE loss: 3.6092e-03 | time: 0.134
+I 06.08/00:00:52 solver.py:159 ] Epoch: [37/200][140/282] lr: 4.91e-04 | MSE loss: 3.5642e-03 | time: 0.134
+I 06.08/00:00:54 solver.py:159 ] Epoch: [37/200][160/282] lr: 4.91e-04 | MSE loss: 3.5925e-03 | time: 0.133
+I 06.08/00:00:57 solver.py:159 ] Epoch: [37/200][180/282] lr: 4.91e-04 | MSE loss: 3.5053e-03 | time: 0.132
+I 06.08/00:00:59 solver.py:159 ] Epoch: [37/200][200/282] lr: 4.90e-04 | MSE loss: 3.5223e-03 | time: 0.133
+I 06.08/00:01:04 solver.py:159 ] Epoch: [37/200][220/282] lr: 4.90e-04 | MSE loss: 3.5664e-03 | time: 0.141
+I 06.08/00:01:07 solver.py:159 ] Epoch: [37/200][240/282] lr: 4.90e-04 | MSE loss: 3.6113e-03 | time: 0.141
+I 06.08/00:01:10 solver.py:159 ] Epoch: [37/200][260/282] lr: 4.90e-04 | MSE loss: 3.6643e-03 | time: 0.141
+I 06.08/00:01:13 solver.py:159 ] Epoch: [37/200][280/282] lr: 4.90e-04 | MSE loss: 3.5818e-03 | time: 0.142
+I 06.08/00:01:13 solver.py:169 ] => Train  Loss: 3.6224e-03
+
+I 06.08/00:01:15 solver.py:405 ] [20/32] loss: 4.8180e-03 | NMSE: -1.9771e+01 | time: 0.127
+I 06.08/00:01:16 solver.py:413 ] => Test NMSE: -2.0593e+01
+
+I 06.08/00:01:16 solver.py:345 ] => LoRA monitor [epoch=37] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=2.603620e+01 | lora_A_l2=1.274968e+01 | lora_B_l2=2.270087e+01 | component_l2=fc_decoder:2.603620e+01 | lora_abs_max=1.934788e-01 | delta_l2=2.578459e+01 | delta_rel=5.590281e+00 | train_loss=3.622380e-03 | test_loss=4.361989e-03 | nmse=-2.059286e+01
+I 06.08/00:01:17 solver.py:224 ] 
+=! Best NMSE: -2.0593e+01 (epoch=37)
+
+I 06.08/00:01:20 solver.py:159 ] Epoch: [38/200][20/282] lr: 4.90e-04 | MSE loss: 4.1369e-03 | time: 0.138
+I 06.08/00:01:23 solver.py:159 ] Epoch: [38/200][40/282] lr: 4.90e-04 | MSE loss: 3.4860e-03 | time: 0.146
+I 06.08/00:01:25 solver.py:159 ] Epoch: [38/200][60/282] lr: 4.90e-04 | MSE loss: 3.3419e-03 | time: 0.139
+I 06.08/00:01:28 solver.py:159 ] Epoch: [38/200][80/282] lr: 4.90e-04 | MSE loss: 3.7082e-03 | time: 0.141
+I 06.08/00:01:31 solver.py:159 ] Epoch: [38/200][100/282] lr: 4.90e-04 | MSE loss: 3.6929e-03 | time: 0.140
+I 06.08/00:01:34 solver.py:159 ] Epoch: [38/200][120/282] lr: 4.90e-04 | MSE loss: 3.4708e-03 | time: 0.140
+I 06.08/00:01:37 solver.py:159 ] Epoch: [38/200][140/282] lr: 4.90e-04 | MSE loss: 3.4933e-03 | time: 0.140
+I 06.08/00:01:40 solver.py:159 ] Epoch: [38/200][160/282] lr: 4.90e-04 | MSE loss: 3.4944e-03 | time: 0.140
+I 06.08/00:01:42 solver.py:159 ] Epoch: [38/200][180/282] lr: 4.89e-04 | MSE loss: 3.5519e-03 | time: 0.139
+I 06.08/00:01:45 solver.py:159 ] Epoch: [38/200][200/282] lr: 4.89e-04 | MSE loss: 3.6264e-03 | time: 0.139
+I 06.08/00:01:48 solver.py:159 ] Epoch: [38/200][220/282] lr: 4.89e-04 | MSE loss: 3.6229e-03 | time: 0.138
+I 06.08/00:01:50 solver.py:159 ] Epoch: [38/200][240/282] lr: 4.89e-04 | MSE loss: 3.6138e-03 | time: 0.138
+I 06.08/00:01:53 solver.py:159 ] Epoch: [38/200][260/282] lr: 4.89e-04 | MSE loss: 3.6012e-03 | time: 0.138
+I 06.08/00:01:56 solver.py:159 ] Epoch: [38/200][280/282] lr: 4.89e-04 | MSE loss: 3.5735e-03 | time: 0.137
+I 06.08/00:01:56 solver.py:169 ] => Train  Loss: 3.5667e-03
+
+I 06.08/00:01:59 solver.py:405 ] [20/32] loss: 4.7979e-03 | NMSE: -1.9786e+01 | time: 0.135
+I 06.08/00:02:00 solver.py:413 ] => Test NMSE: -2.0601e+01
+
+I 06.08/00:02:00 solver.py:345 ] => LoRA monitor [epoch=38] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=2.613271e+01 | lora_A_l2=1.280156e+01 | lora_B_l2=2.278241e+01 | component_l2=fc_decoder:2.613271e+01 | lora_abs_max=1.964085e-01 | delta_l2=2.588312e+01 | delta_rel=5.611644e+00 | train_loss=3.566719e-03 | test_loss=4.353651e-03 | nmse=-2.060116e+01
+I 06.08/00:02:01 solver.py:224 ] 
+=! Best NMSE: -2.0601e+01 (epoch=38)
+
+I 06.08/00:02:05 solver.py:159 ] Epoch: [39/200][20/282] lr: 4.89e-04 | MSE loss: 3.4986e-03 | time: 0.229
+I 06.08/00:02:08 solver.py:159 ] Epoch: [39/200][40/282] lr: 4.89e-04 | MSE loss: 3.4535e-03 | time: 0.178
+I 06.08/00:02:10 solver.py:159 ] Epoch: [39/200][60/282] lr: 4.89e-04 | MSE loss: 3.4150e-03 | time: 0.162
+I 06.08/00:02:13 solver.py:159 ] Epoch: [39/200][80/282] lr: 4.89e-04 | MSE loss: 3.3589e-03 | time: 0.156
+I 06.08/00:02:16 solver.py:159 ] Epoch: [39/200][100/282] lr: 4.89e-04 | MSE loss: 3.3090e-03 | time: 0.153
+I 06.08/00:02:19 solver.py:159 ] Epoch: [39/200][120/282] lr: 4.88e-04 | MSE loss: 3.1826e-03 | time: 0.149
+I 06.08/00:02:22 solver.py:159 ] Epoch: [39/200][140/282] lr: 4.88e-04 | MSE loss: 3.2819e-03 | time: 0.150
+I 06.08/00:02:24 solver.py:159 ] Epoch: [39/200][160/282] lr: 4.88e-04 | MSE loss: 3.3758e-03 | time: 0.147
+I 06.08/00:02:27 solver.py:159 ] Epoch: [39/200][180/282] lr: 4.88e-04 | MSE loss: 3.4801e-03 | time: 0.145
+I 06.08/00:02:30 solver.py:159 ] Epoch: [39/200][200/282] lr: 4.88e-04 | MSE loss: 3.5540e-03 | time: 0.145
+I 06.08/00:02:32 solver.py:159 ] Epoch: [39/200][220/282] lr: 4.88e-04 | MSE loss: 3.5885e-03 | time: 0.143
+I 06.08/00:02:35 solver.py:159 ] Epoch: [39/200][240/282] lr: 4.88e-04 | MSE loss: 3.6408e-03 | time: 0.143
+I 06.08/00:02:38 solver.py:159 ] Epoch: [39/200][260/282] lr: 4.88e-04 | MSE loss: 3.5661e-03 | time: 0.143
+I 06.08/00:02:40 solver.py:159 ] Epoch: [39/200][280/282] lr: 4.88e-04 | MSE loss: 3.5594e-03 | time: 0.142
+I 06.08/00:02:41 solver.py:169 ] => Train  Loss: 3.5838e-03
+
+I 06.08/00:02:43 solver.py:405 ] [20/32] loss: 4.7693e-03 | NMSE: -1.9816e+01 | time: 0.124
+I 06.08/00:02:45 solver.py:413 ] => Test NMSE: -2.0624e+01
+
+I 06.08/00:02:45 solver.py:345 ] => LoRA monitor [epoch=39] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=2.622456e+01 | lora_A_l2=1.285841e+01 | lora_B_l2=2.285582e+01 | component_l2=fc_decoder:2.622456e+01 | lora_abs_max=2.022660e-01 | delta_l2=2.597753e+01 | delta_rel=5.632112e+00 | train_loss=3.583822e-03 | test_loss=4.331232e-03 | nmse=-2.062359e+01
+I 06.08/00:02:46 solver.py:224 ] 
+=! Best NMSE: -2.0624e+01 (epoch=39)
+
+I 06.08/00:02:49 solver.py:159 ] Epoch: [40/200][20/282] lr: 4.88e-04 | MSE loss: 3.7298e-03 | time: 0.163
+I 06.08/00:02:53 solver.py:159 ] Epoch: [40/200][40/282] lr: 4.88e-04 | MSE loss: 3.6966e-03 | time: 0.164
+I 06.08/00:02:55 solver.py:159 ] Epoch: [40/200][60/282] lr: 4.87e-04 | MSE loss: 3.7431e-03 | time: 0.155
+I 06.08/00:02:58 solver.py:159 ] Epoch: [40/200][80/282] lr: 4.87e-04 | MSE loss: 3.8023e-03 | time: 0.150
+I 06.08/00:03:01 solver.py:159 ] Epoch: [40/200][100/282] lr: 4.87e-04 | MSE loss: 3.5971e-03 | time: 0.148
+I 06.08/00:03:06 solver.py:159 ] Epoch: [40/200][120/282] lr: 4.87e-04 | MSE loss: 3.6208e-03 | time: 0.163
+I 06.08/00:03:09 solver.py:159 ] Epoch: [40/200][140/282] lr: 4.87e-04 | MSE loss: 3.6050e-03 | time: 0.161
+I 06.08/00:03:11 solver.py:159 ] Epoch: [40/200][160/282] lr: 4.87e-04 | MSE loss: 3.5300e-03 | time: 0.157
+I 06.08/00:03:14 solver.py:159 ] Epoch: [40/200][180/282] lr: 4.87e-04 | MSE loss: 3.5495e-03 | time: 0.156
+I 06.08/00:03:17 solver.py:159 ] Epoch: [40/200][200/282] lr: 4.87e-04 | MSE loss: 3.5296e-03 | time: 0.157
+I 06.08/00:03:20 solver.py:159 ] Epoch: [40/200][220/282] lr: 4.87e-04 | MSE loss: 3.5332e-03 | time: 0.156
+I 06.08/00:03:23 solver.py:159 ] Epoch: [40/200][240/282] lr: 4.87e-04 | MSE loss: 3.5331e-03 | time: 0.155
+I 06.08/00:03:26 solver.py:159 ] Epoch: [40/200][260/282] lr: 4.87e-04 | MSE loss: 3.5042e-03 | time: 0.154
+I 06.08/00:03:29 solver.py:159 ] Epoch: [40/200][280/282] lr: 4.86e-04 | MSE loss: 3.5638e-03 | time: 0.152
+I 06.08/00:03:29 solver.py:169 ] => Train  Loss: 3.5524e-03
+
+I 06.08/00:03:32 solver.py:159 ] Epoch: [40/200][20/32] lr: 4.86e-04 | MSE loss: 4.7669e-03 | time: 0.130
+I 06.08/00:03:33 solver.py:169 ] => Val  Loss: 4.2594e-03
+
+I 06.08/00:03:36 solver.py:405 ] [20/32] loss: 4.7669e-03 | NMSE: -1.9816e+01 | time: 0.127
+I 06.08/00:03:37 solver.py:413 ] => Test NMSE: -2.0633e+01
+
+I 06.08/00:03:37 solver.py:345 ] => LoRA monitor [epoch=40] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=2.632400e+01 | lora_A_l2=1.292638e+01 | lora_B_l2=2.293167e+01 | component_l2=fc_decoder:2.632400e+01 | lora_abs_max=2.059821e-01 | delta_l2=2.607880e+01 | delta_rel=5.654068e+00 | train_loss=3.552363e-03 | val_loss=4.259403e-03 | test_loss=4.321432e-03 | nmse=-2.063342e+01
+I 06.08/00:03:38 solver.py:224 ] 
+=! Best NMSE: -2.0633e+01 (epoch=40)
+
+I 06.08/00:03:41 solver.py:159 ] Epoch: [41/200][20/282] lr: 4.86e-04 | MSE loss: 3.2889e-03 | time: 0.136
+I 06.08/00:03:43 solver.py:159 ] Epoch: [41/200][40/282] lr: 4.86e-04 | MSE loss: 3.6126e-03 | time: 0.133
+I 06.08/00:03:46 solver.py:159 ] Epoch: [41/200][60/282] lr: 4.86e-04 | MSE loss: 3.8143e-03 | time: 0.132
+I 06.08/00:03:48 solver.py:159 ] Epoch: [41/200][80/282] lr: 4.86e-04 | MSE loss: 3.5179e-03 | time: 0.132
+I 06.08/00:03:51 solver.py:159 ] Epoch: [41/200][100/282] lr: 4.86e-04 | MSE loss: 3.5358e-03 | time: 0.129
+I 06.08/00:03:54 solver.py:159 ] Epoch: [41/200][120/282] lr: 4.86e-04 | MSE loss: 3.5867e-03 | time: 0.130
+I 06.08/00:03:56 solver.py:159 ] Epoch: [41/200][140/282] lr: 4.86e-04 | MSE loss: 3.7403e-03 | time: 0.130
+I 06.08/00:03:59 solver.py:159 ] Epoch: [41/200][160/282] lr: 4.86e-04 | MSE loss: 3.7926e-03 | time: 0.131
+I 06.08/00:04:02 solver.py:159 ] Epoch: [41/200][180/282] lr: 4.86e-04 | MSE loss: 3.7646e-03 | time: 0.135
+I 06.08/00:04:06 solver.py:159 ] Epoch: [41/200][200/282] lr: 4.85e-04 | MSE loss: 3.7167e-03 | time: 0.141
+I 06.08/00:04:08 solver.py:159 ] Epoch: [41/200][220/282] lr: 4.85e-04 | MSE loss: 3.6592e-03 | time: 0.139
+I 06.08/00:04:11 solver.py:159 ] Epoch: [41/200][240/282] lr: 4.85e-04 | MSE loss: 3.6421e-03 | time: 0.137
+I 06.08/00:04:13 solver.py:159 ] Epoch: [41/200][260/282] lr: 4.85e-04 | MSE loss: 3.5984e-03 | time: 0.136
+I 06.08/00:04:16 solver.py:159 ] Epoch: [41/200][280/282] lr: 4.85e-04 | MSE loss: 3.5327e-03 | time: 0.136
+I 06.08/00:04:16 solver.py:169 ] => Train  Loss: 3.5505e-03
+
+I 06.08/00:04:19 solver.py:405 ] [20/32] loss: 4.7454e-03 | NMSE: -1.9833e+01 | time: 0.128
+I 06.08/00:04:20 solver.py:413 ] => Test NMSE: -2.0641e+01
+
+I 06.08/00:04:20 solver.py:345 ] => LoRA monitor [epoch=41] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=2.639754e+01 | lora_A_l2=1.299170e+01 | lora_B_l2=2.297925e+01 | component_l2=fc_decoder:2.639754e+01 | lora_abs_max=2.063145e-01 | delta_l2=2.615483e+01 | delta_rel=5.670552e+00 | train_loss=3.550452e-03 | test_loss=4.313767e-03 | nmse=-2.064113e+01
+I 06.08/00:04:21 solver.py:224 ] 
+=! Best NMSE: -2.0641e+01 (epoch=41)
+
+I 06.08/00:04:24 solver.py:159 ] Epoch: [42/200][20/282] lr: 4.85e-04 | MSE loss: 2.3179e-03 | time: 0.142
+I 06.08/00:04:27 solver.py:159 ] Epoch: [42/200][40/282] lr: 4.85e-04 | MSE loss: 2.8934e-03 | time: 0.139
+I 06.08/00:04:29 solver.py:159 ] Epoch: [42/200][60/282] lr: 4.85e-04 | MSE loss: 3.1474e-03 | time: 0.138
+I 06.08/00:04:32 solver.py:159 ] Epoch: [42/200][80/282] lr: 4.85e-04 | MSE loss: 3.2188e-03 | time: 0.138
+I 06.08/00:04:35 solver.py:159 ] Epoch: [42/200][100/282] lr: 4.85e-04 | MSE loss: 3.3200e-03 | time: 0.138
+I 06.08/00:04:37 solver.py:159 ] Epoch: [42/200][120/282] lr: 4.84e-04 | MSE loss: 3.3638e-03 | time: 0.136
+I 06.08/00:04:40 solver.py:159 ] Epoch: [42/200][140/282] lr: 4.84e-04 | MSE loss: 3.4615e-03 | time: 0.137
+I 06.08/00:04:43 solver.py:159 ] Epoch: [42/200][160/282] lr: 4.84e-04 | MSE loss: 3.5548e-03 | time: 0.135
+I 06.08/00:04:46 solver.py:159 ] Epoch: [42/200][180/282] lr: 4.84e-04 | MSE loss: 3.4708e-03 | time: 0.136
+I 06.08/00:04:48 solver.py:159 ] Epoch: [42/200][200/282] lr: 4.84e-04 | MSE loss: 3.5093e-03 | time: 0.137
+I 06.08/00:04:51 solver.py:159 ] Epoch: [42/200][220/282] lr: 4.84e-04 | MSE loss: 3.5259e-03 | time: 0.136
+I 06.08/00:04:54 solver.py:159 ] Epoch: [42/200][240/282] lr: 4.84e-04 | MSE loss: 3.5544e-03 | time: 0.136
+I 06.08/00:04:56 solver.py:159 ] Epoch: [42/200][260/282] lr: 4.84e-04 | MSE loss: 3.5810e-03 | time: 0.135
+I 06.08/00:04:59 solver.py:159 ] Epoch: [42/200][280/282] lr: 4.84e-04 | MSE loss: 3.5690e-03 | time: 0.136
+I 06.08/00:04:59 solver.py:169 ] => Train  Loss: 3.5540e-03
+
+I 06.08/00:05:04 solver.py:405 ] [20/32] loss: 4.7621e-03 | NMSE: -1.9815e+01 | time: 0.236
+I 06.08/00:05:06 solver.py:413 ] => Test NMSE: -2.0636e+01
+
+I 06.08/00:05:06 solver.py:345 ] => LoRA monitor [epoch=42] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=2.645414e+01 | lora_A_l2=1.307030e+01 | lora_B_l2=2.299976e+01 | component_l2=fc_decoder:2.645414e+01 | lora_abs_max=2.109037e-01 | delta_l2=2.621369e+01 | delta_rel=5.683313e+00 | train_loss=3.554045e-03 | test_loss=4.318948e-03 | nmse=-2.063592e+01
+I 06.08/00:05:06 solver.py:224 ] 
+=! Best NMSE: -2.0641e+01 (epoch=41)
+
+I 06.08/00:05:09 solver.py:159 ] Epoch: [43/200][20/282] lr: 4.84e-04 | MSE loss: 3.0863e-03 | time: 0.169
+I 06.08/00:05:12 solver.py:159 ] Epoch: [43/200][40/282] lr: 4.83e-04 | MSE loss: 3.2072e-03 | time: 0.164
+I 06.08/00:05:16 solver.py:159 ] Epoch: [43/200][60/282] lr: 4.83e-04 | MSE loss: 2.9795e-03 | time: 0.165
+I 06.08/00:05:19 solver.py:159 ] Epoch: [43/200][80/282] lr: 4.83e-04 | MSE loss: 3.1510e-03 | time: 0.169
+I 06.08/00:05:22 solver.py:159 ] Epoch: [43/200][100/282] lr: 4.83e-04 | MSE loss: 3.4210e-03 | time: 0.166
+I 06.08/00:05:26 solver.py:159 ] Epoch: [43/200][120/282] lr: 4.83e-04 | MSE loss: 3.4116e-03 | time: 0.170
+I 06.08/00:05:30 solver.py:159 ] Epoch: [43/200][140/282] lr: 4.83e-04 | MSE loss: 3.5732e-03 | time: 0.172
+I 06.08/00:05:34 solver.py:159 ] Epoch: [43/200][160/282] lr: 4.83e-04 | MSE loss: 3.6523e-03 | time: 0.174
+I 06.08/00:05:38 solver.py:159 ] Epoch: [43/200][180/282] lr: 4.83e-04 | MSE loss: 3.7102e-03 | time: 0.177
+I 06.08/00:05:42 solver.py:159 ] Epoch: [43/200][200/282] lr: 4.83e-04 | MSE loss: 3.6703e-03 | time: 0.180
+I 06.08/00:05:46 solver.py:159 ] Epoch: [43/200][220/282] lr: 4.82e-04 | MSE loss: 3.6688e-03 | time: 0.182
+I 06.08/00:05:50 solver.py:159 ] Epoch: [43/200][240/282] lr: 4.82e-04 | MSE loss: 3.5940e-03 | time: 0.182
+I 06.08/00:05:53 solver.py:159 ] Epoch: [43/200][260/282] lr: 4.82e-04 | MSE loss: 3.5772e-03 | time: 0.183
+I 06.08/00:05:57 solver.py:159 ] Epoch: [43/200][280/282] lr: 4.82e-04 | MSE loss: 3.5762e-03 | time: 0.185
+I 06.08/00:05:58 solver.py:169 ] => Train  Loss: 3.5640e-03
+
+I 06.08/00:06:03 solver.py:405 ] [20/32] loss: 4.7230e-03 | NMSE: -1.9852e+01 | time: 0.233
+I 06.08/00:06:05 solver.py:413 ] => Test NMSE: -2.0664e+01
+
+I 06.08/00:06:05 solver.py:345 ] => LoRA monitor [epoch=43] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=2.649175e+01 | lora_A_l2=1.315949e+01 | lora_B_l2=2.299218e+01 | component_l2=fc_decoder:2.649175e+01 | lora_abs_max=2.122762e-01 | delta_l2=2.625387e+01 | delta_rel=5.692026e+00 | train_loss=3.564024e-03 | test_loss=4.291416e-03 | nmse=-2.066370e+01
+I 06.08/00:06:06 solver.py:224 ] 
+=! Best NMSE: -2.0664e+01 (epoch=43)
+
+I 06.08/00:06:10 solver.py:159 ] Epoch: [44/200][20/282] lr: 4.82e-04 | MSE loss: 2.7543e-03 | time: 0.174
+I 06.08/00:06:13 solver.py:159 ] Epoch: [44/200][40/282] lr: 4.82e-04 | MSE loss: 3.3402e-03 | time: 0.169
+I 06.08/00:06:16 solver.py:159 ] Epoch: [44/200][60/282] lr: 4.82e-04 | MSE loss: 3.5098e-03 | time: 0.161
+I 06.08/00:06:19 solver.py:159 ] Epoch: [44/200][80/282] lr: 4.82e-04 | MSE loss: 3.4092e-03 | time: 0.157
+I 06.08/00:06:22 solver.py:159 ] Epoch: [44/200][100/282] lr: 4.82e-04 | MSE loss: 3.3885e-03 | time: 0.160
+I 06.08/00:06:26 solver.py:159 ] Epoch: [44/200][120/282] lr: 4.81e-04 | MSE loss: 3.5371e-03 | time: 0.160
+I 06.08/00:06:29 solver.py:159 ] Epoch: [44/200][140/282] lr: 4.81e-04 | MSE loss: 3.5698e-03 | time: 0.162
+I 06.08/00:06:32 solver.py:159 ] Epoch: [44/200][160/282] lr: 4.81e-04 | MSE loss: 3.4903e-03 | time: 0.161
+I 06.08/00:06:35 solver.py:159 ] Epoch: [44/200][180/282] lr: 4.81e-04 | MSE loss: 3.4621e-03 | time: 0.162
+I 06.08/00:06:39 solver.py:159 ] Epoch: [44/200][200/282] lr: 4.81e-04 | MSE loss: 3.5233e-03 | time: 0.161
+I 06.08/00:06:42 solver.py:159 ] Epoch: [44/200][220/282] lr: 4.81e-04 | MSE loss: 3.6159e-03 | time: 0.160
+I 06.08/00:06:45 solver.py:159 ] Epoch: [44/200][240/282] lr: 4.81e-04 | MSE loss: 3.5846e-03 | time: 0.159
+I 06.08/00:06:48 solver.py:159 ] Epoch: [44/200][260/282] lr: 4.81e-04 | MSE loss: 3.6454e-03 | time: 0.159
+I 06.08/00:06:51 solver.py:159 ] Epoch: [44/200][280/282] lr: 4.81e-04 | MSE loss: 3.5783e-03 | time: 0.158
+I 06.08/00:06:51 solver.py:169 ] => Train  Loss: 3.5739e-03
+
+I 06.08/00:06:55 solver.py:405 ] [20/32] loss: 4.7740e-03 | NMSE: -1.9824e+01 | time: 0.155
+I 06.08/00:06:56 solver.py:413 ] => Test NMSE: -2.0612e+01
+
+I 06.08/00:06:56 solver.py:345 ] => LoRA monitor [epoch=44] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=2.653976e+01 | lora_A_l2=1.327789e+01 | lora_B_l2=2.297948e+01 | component_l2=fc_decoder:2.653976e+01 | lora_abs_max=2.140479e-01 | delta_l2=2.630327e+01 | delta_rel=5.702734e+00 | train_loss=3.573950e-03 | test_loss=4.342649e-03 | nmse=-2.061215e+01
+I 06.08/00:06:56 solver.py:224 ] 
+=! Best NMSE: -2.0664e+01 (epoch=43)
+
+I 06.08/00:07:00 solver.py:159 ] Epoch: [45/200][20/282] lr: 4.80e-04 | MSE loss: 3.4304e-03 | time: 0.168
+I 06.08/00:07:05 solver.py:159 ] Epoch: [45/200][40/282] lr: 4.80e-04 | MSE loss: 3.7118e-03 | time: 0.209
+I 06.08/00:07:08 solver.py:159 ] Epoch: [45/200][60/282] lr: 4.80e-04 | MSE loss: 3.6759e-03 | time: 0.196
+I 06.08/00:07:11 solver.py:159 ] Epoch: [45/200][80/282] lr: 4.80e-04 | MSE loss: 3.3222e-03 | time: 0.186
+I 06.08/00:07:14 solver.py:159 ] Epoch: [45/200][100/282] lr: 4.80e-04 | MSE loss: 3.5312e-03 | time: 0.180
+I 06.08/00:07:17 solver.py:159 ] Epoch: [45/200][120/282] lr: 4.80e-04 | MSE loss: 3.6510e-03 | time: 0.173
+I 06.08/00:07:21 solver.py:159 ] Epoch: [45/200][140/282] lr: 4.80e-04 | MSE loss: 3.6703e-03 | time: 0.172
+I 06.08/00:07:24 solver.py:159 ] Epoch: [45/200][160/282] lr: 4.80e-04 | MSE loss: 3.5911e-03 | time: 0.171
+I 06.08/00:07:27 solver.py:159 ] Epoch: [45/200][180/282] lr: 4.80e-04 | MSE loss: 3.6222e-03 | time: 0.169
+I 06.08/00:07:30 solver.py:159 ] Epoch: [45/200][200/282] lr: 4.79e-04 | MSE loss: 3.6330e-03 | time: 0.169
+I 06.08/00:07:34 solver.py:159 ] Epoch: [45/200][220/282] lr: 4.79e-04 | MSE loss: 3.6251e-03 | time: 0.169
+I 06.08/00:07:37 solver.py:159 ] Epoch: [45/200][240/282] lr: 4.79e-04 | MSE loss: 3.5916e-03 | time: 0.167
+I 06.08/00:07:40 solver.py:159 ] Epoch: [45/200][260/282] lr: 4.79e-04 | MSE loss: 3.5443e-03 | time: 0.167
+I 06.08/00:07:43 solver.py:159 ] Epoch: [45/200][280/282] lr: 4.79e-04 | MSE loss: 3.5739e-03 | time: 0.166
+I 06.08/00:07:43 solver.py:169 ] => Train  Loss: 3.5730e-03
+
+I 06.08/00:07:46 solver.py:405 ] [20/32] loss: 4.8023e-03 | NMSE: -1.9785e+01 | time: 0.159
+I 06.08/00:07:48 solver.py:413 ] => Test NMSE: -2.0602e+01
+
+I 06.08/00:07:48 solver.py:345 ] => LoRA monitor [epoch=45] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=2.661367e+01 | lora_A_l2=1.340196e+01 | lora_B_l2=2.299293e+01 | component_l2=fc_decoder:2.661367e+01 | lora_abs_max=2.081242e-01 | delta_l2=2.637935e+01 | delta_rel=5.719229e+00 | train_loss=3.573036e-03 | test_loss=4.352343e-03 | nmse=-2.060247e+01
+I 06.08/00:07:48 solver.py:224 ] 
+=! Best NMSE: -2.0664e+01 (epoch=43)
+
+I 06.08/00:07:52 solver.py:159 ] Epoch: [46/200][20/282] lr: 4.79e-04 | MSE loss: 4.2329e-03 | time: 0.174
+I 06.08/00:07:55 solver.py:159 ] Epoch: [46/200][40/282] lr: 4.79e-04 | MSE loss: 3.4572e-03 | time: 0.167
+I 06.08/00:07:58 solver.py:159 ] Epoch: [46/200][60/282] lr: 4.79e-04 | MSE loss: 3.2814e-03 | time: 0.164
+I 06.08/00:08:02 solver.py:159 ] Epoch: [46/200][80/282] lr: 4.78e-04 | MSE loss: 3.3097e-03 | time: 0.168
+I 06.08/00:08:06 solver.py:159 ] Epoch: [46/200][100/282] lr: 4.78e-04 | MSE loss: 3.4325e-03 | time: 0.178
+I 06.08/00:08:09 solver.py:159 ] Epoch: [46/200][120/282] lr: 4.78e-04 | MSE loss: 3.4692e-03 | time: 0.174
+I 06.08/00:08:12 solver.py:159 ] Epoch: [46/200][140/282] lr: 4.78e-04 | MSE loss: 3.4049e-03 | time: 0.171
+I 06.08/00:08:15 solver.py:159 ] Epoch: [46/200][160/282] lr: 4.78e-04 | MSE loss: 3.5325e-03 | time: 0.169
+I 06.08/00:08:18 solver.py:159 ] Epoch: [46/200][180/282] lr: 4.78e-04 | MSE loss: 3.5339e-03 | time: 0.167
+I 06.08/00:08:21 solver.py:159 ] Epoch: [46/200][200/282] lr: 4.78e-04 | MSE loss: 3.4518e-03 | time: 0.166
+I 06.08/00:08:25 solver.py:159 ] Epoch: [46/200][220/282] lr: 4.78e-04 | MSE loss: 3.5010e-03 | time: 0.166
+I 06.08/00:08:28 solver.py:159 ] Epoch: [46/200][240/282] lr: 4.77e-04 | MSE loss: 3.5614e-03 | time: 0.166
+I 06.08/00:08:31 solver.py:159 ] Epoch: [46/200][260/282] lr: 4.77e-04 | MSE loss: 3.5589e-03 | time: 0.166
+I 06.08/00:08:34 solver.py:159 ] Epoch: [46/200][280/282] lr: 4.77e-04 | MSE loss: 3.5925e-03 | time: 0.165
+I 06.08/00:08:35 solver.py:169 ] => Train  Loss: 3.5901e-03
+
+I 06.08/00:08:38 solver.py:405 ] [20/32] loss: 4.7635e-03 | NMSE: -1.9834e+01 | time: 0.161
+I 06.08/00:08:40 solver.py:413 ] => Test NMSE: -2.0625e+01
+
+I 06.08/00:08:40 solver.py:345 ] => LoRA monitor [epoch=46] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=2.665686e+01 | lora_A_l2=1.353622e+01 | lora_B_l2=2.296430e+01 | component_l2=fc_decoder:2.665686e+01 | lora_abs_max=2.069421e-01 | delta_l2=2.642421e+01 | delta_rel=5.728956e+00 | train_loss=3.590127e-03 | test_loss=4.329533e-03 | nmse=-2.062529e+01
+I 06.08/00:08:40 solver.py:224 ] 
+=! Best NMSE: -2.0664e+01 (epoch=43)
+
+I 06.08/00:08:43 solver.py:159 ] Epoch: [47/200][20/282] lr: 4.77e-04 | MSE loss: 3.3592e-03 | time: 0.169
+I 06.08/00:08:46 solver.py:159 ] Epoch: [47/200][40/282] lr: 4.77e-04 | MSE loss: 3.5653e-03 | time: 0.156
+I 06.08/00:08:50 solver.py:159 ] Epoch: [47/200][60/282] lr: 4.77e-04 | MSE loss: 3.3187e-03 | time: 0.162
+I 06.08/00:08:53 solver.py:159 ] Epoch: [47/200][80/282] lr: 4.77e-04 | MSE loss: 3.4321e-03 | time: 0.162
+I 06.08/00:08:56 solver.py:159 ] Epoch: [47/200][100/282] lr: 4.77e-04 | MSE loss: 3.3905e-03 | time: 0.159
+I 06.08/00:08:59 solver.py:159 ] Epoch: [47/200][120/282] lr: 4.76e-04 | MSE loss: 3.4577e-03 | time: 0.159
+I 06.08/00:09:03 solver.py:159 ] Epoch: [47/200][140/282] lr: 4.76e-04 | MSE loss: 3.5296e-03 | time: 0.167
+I 06.08/00:09:07 solver.py:159 ] Epoch: [47/200][160/282] lr: 4.76e-04 | MSE loss: 3.4659e-03 | time: 0.169
+I 06.08/00:09:09 solver.py:159 ] Epoch: [47/200][180/282] lr: 4.76e-04 | MSE loss: 3.4450e-03 | time: 0.164
+I 06.08/00:09:12 solver.py:159 ] Epoch: [47/200][200/282] lr: 4.76e-04 | MSE loss: 3.4816e-03 | time: 0.163
+I 06.08/00:09:15 solver.py:159 ] Epoch: [47/200][220/282] lr: 4.76e-04 | MSE loss: 3.5172e-03 | time: 0.162
+I 06.08/00:09:18 solver.py:159 ] Epoch: [47/200][240/282] lr: 4.76e-04 | MSE loss: 3.5207e-03 | time: 0.161
+I 06.08/00:09:21 solver.py:159 ] Epoch: [47/200][260/282] lr: 4.76e-04 | MSE loss: 3.5207e-03 | time: 0.160
+I 06.08/00:09:25 solver.py:159 ] Epoch: [47/200][280/282] lr: 4.75e-04 | MSE loss: 3.5790e-03 | time: 0.160
+I 06.08/00:09:25 solver.py:169 ] => Train  Loss: 3.6136e-03
+
+I 06.08/00:09:28 solver.py:405 ] [20/32] loss: 4.7564e-03 | NMSE: -1.9836e+01 | time: 0.153
+I 06.08/00:09:30 solver.py:413 ] => Test NMSE: -2.0634e+01
+
+I 06.08/00:09:30 solver.py:345 ] => LoRA monitor [epoch=47] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=2.680061e+01 | lora_A_l2=1.368835e+01 | lora_B_l2=2.304130e+01 | component_l2=fc_decoder:2.680061e+01 | lora_abs_max=2.135410e-01 | delta_l2=2.656924e+01 | delta_rel=5.760400e+00 | train_loss=3.613558e-03 | test_loss=4.320560e-03 | nmse=-2.063430e+01
+I 06.08/00:09:30 solver.py:224 ] 
+=! Best NMSE: -2.0664e+01 (epoch=43)
+
+I 06.08/00:09:33 solver.py:159 ] Epoch: [48/200][20/282] lr: 4.75e-04 | MSE loss: 3.2665e-03 | time: 0.174
+I 06.08/00:09:37 solver.py:159 ] Epoch: [48/200][40/282] lr: 4.75e-04 | MSE loss: 3.2803e-03 | time: 0.174
+I 06.08/00:09:40 solver.py:159 ] Epoch: [48/200][60/282] lr: 4.75e-04 | MSE loss: 3.2791e-03 | time: 0.172
+I 06.08/00:09:43 solver.py:159 ] Epoch: [48/200][80/282] lr: 4.75e-04 | MSE loss: 3.4239e-03 | time: 0.167
+I 06.08/00:09:46 solver.py:159 ] Epoch: [48/200][100/282] lr: 4.75e-04 | MSE loss: 3.4442e-03 | time: 0.163
+I 06.08/00:09:49 solver.py:159 ] Epoch: [48/200][120/282] lr: 4.75e-04 | MSE loss: 3.3289e-03 | time: 0.161
+I 06.08/00:09:53 solver.py:159 ] Epoch: [48/200][140/282] lr: 4.75e-04 | MSE loss: 3.5354e-03 | time: 0.162
+I 06.08/00:09:55 solver.py:159 ] Epoch: [48/200][160/282] lr: 4.74e-04 | MSE loss: 3.5942e-03 | time: 0.155
+I 06.08/00:09:56 solver.py:159 ] Epoch: [48/200][180/282] lr: 4.74e-04 | MSE loss: 3.6299e-03 | time: 0.148
+I 06.08/00:09:59 solver.py:159 ] Epoch: [48/200][200/282] lr: 4.74e-04 | MSE loss: 3.5801e-03 | time: 0.145
+I 06.08/00:10:01 solver.py:159 ] Epoch: [48/200][220/282] lr: 4.74e-04 | MSE loss: 3.5314e-03 | time: 0.143
+I 06.08/00:10:05 solver.py:159 ] Epoch: [48/200][240/282] lr: 4.74e-04 | MSE loss: 3.5369e-03 | time: 0.146
+I 06.08/00:10:07 solver.py:159 ] Epoch: [48/200][260/282] lr: 4.74e-04 | MSE loss: 3.5110e-03 | time: 0.142
+I 06.08/00:10:09 solver.py:159 ] Epoch: [48/200][280/282] lr: 4.74e-04 | MSE loss: 3.5711e-03 | time: 0.138
+I 06.08/00:10:09 solver.py:169 ] => Train  Loss: 3.5803e-03
+
+I 06.08/00:10:10 solver.py:405 ] [20/32] loss: 4.7356e-03 | NMSE: -1.9860e+01 | time: 0.073
+I 06.08/00:10:11 solver.py:413 ] => Test NMSE: -2.0647e+01
+
+I 06.08/00:10:11 solver.py:345 ] => LoRA monitor [epoch=48] | trainable=655360/655360 | non_lora_trainable=0 | lora_l2=2.684673e+01 | lora_A_l2=1.380072e+01 | lora_B_l2=2.302797e+01 | component_l2=fc_decoder:2.684673e+01 | lora_abs_max=2.121506e-01 | delta_l2=2.661821e+01 | delta_rel=5.771016e+00 | train_loss=3.580346e-03 | test_loss=4.308233e-03 | nmse=-2.064671e+01
+I 06.08/00:10:11 solver.py:224 ] 
+=! Best NMSE: -2.0664e+01 (epoch=43)
+
+I 06.08/00:10:13 solver.py:159 ] Epoch: [49/200][20/282] lr: 4.74e-04 | MSE loss: 2.9629e-03 | time: 0.089
+I 06.08/00:10:14 solver.py:159 ] Epoch: [49/200][40/282] lr: 4.73e-04 | MSE loss: 3.2684e-03 | time: 0.085
+I 06.08/00:10:16 solver.py:159 ] Epoch: [49/200][60/282] lr: 4.73e-04 | MSE loss: 3.1638e-03 | time: 0.084
+I 06.08/00:10:18 solver.py:159 ] Epoch: [49/200][80/282] lr: 4.73e-04 | MSE loss: 3.4249e-03 | time: 0.089

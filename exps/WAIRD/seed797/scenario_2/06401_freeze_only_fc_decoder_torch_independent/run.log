@@ -1,0 +1,1430 @@
+I 06.08/06:28:58 main.py:23  ] => Experiment directory: /home/hujiacong/zxd/Huawei/TransNet/exps/WAIRD/seed797/scenario_2/06401_freeze_only_fc_decoder_torch_independent
+I 06.08/06:28:58 main.py:24  ] => PyTorch Version: 2.5.1
+I 06.08/06:28:58 main.py:26  ] ==================================================
+I 06.08/06:28:58 main.py:30  ] => Arguments:
+	train_path: data/scenario_2/06401/train.pt
+	val_path: data/scenario_2/06401/test.pt
+	test_path: data/scenario_2/06401/test.pt
+	batch_size: 256
+	workers: 0
+	evaluate: False
+	pretrained: exps/WAIRD/seed797/base/torch_independent/checkpoints/best_nmse.pth
+	resume: None
+	seed: 797
+	gpu: 4
+	cpu: False
+	cpu_affinity: None
+	epochs: 200
+	cr: 4
+	exp_name: WAIRD/seed797/scenario_2/06401_freeze_only_fc_decoder_torch_independent
+	channel: 2
+	nt: 64
+	nc: 64
+	d_model: 64
+	dim_feedforward: 2048
+	fc_lora: False
+	fc_lora_rank: None
+	layer_sharing: independent
+	transformer_backend: torch
+	scheduler: cosine
+	lr_init: 0.0002
+	weight_decay: 0.001
+	freeze_components: ['encoder_self_attn', 'encoder_ffn', 'decoder_self_attn', 'decoder_cross_attn', 'decoder_ffn', 'fc_encoder']
+	lora_component: []
+	lora_pretrained: None
+	lora_rank: 8
+	lora_alpha: 16
+I 06.08/06:28:58 main.py:31  ] ==================================================
+I 06.08/06:28:58 init.py:17  ] Random seed set to 797
+I 06.08/06:28:58 init.py:236 ] Running on GPU 4
+I 06.08/06:28:58 dataloader.py:69  ] data/scenario_2/06401/train.pt loaded.
+I 06.08/06:28:58 dataloader.py:74  ] data/scenario_2/06401/test.pt loaded.
+I 06.08/06:28:58 dataloader.py:79  ] data/scenario_2/06401/test.pt loaded.
+I 06.08/06:29:01 init.py:277 ] pretrained model loaded from exps/WAIRD/seed797/base/torch_independent/checkpoints/best_nmse.pth
+I 06.08/06:29:01 init.py:67  ] => Frozen components: encoder_self_attn, encoder_ffn, decoder_self_attn, decoder_cross_attn, decoder_ffn, fc_encoder (42/68 params frozen)
+I 06.08/06:29:05 init.py:306 ] => Model Name: TransNet [pretrained: exps/WAIRD/seed797/base/torch_independent/checkpoints/best_nmse.pth]
+I 06.08/06:29:05 init.py:307 ] => Model Config: compression ratio=1/4; input shape=(2, 64, 64); input dim=8192; layer sharing=independent; transformer backend=torch; fc_lora=False; fc_lora_rank=None
+I 06.08/06:29:05 init.py:314 ] => Model Flops: 1.6817e+02M
+I 06.08/06:29:05 init.py:315 ] => Model Params Num: 3.4623e+01M
+
+I 06.08/06:29:05 init.py:316 ] 
+==================================================
+Transformer(
+  (encoder): TransformerEncoder(
+    (layers): ModuleList(
+      (0-1): 2 x TransformerEncoderLayer(
+        (self_attn): MultiheadAttention(
+          (out_proj): NonDynamicallyQuantizableLinear(in_features=64, out_features=64, bias=True)
+        )
+        (linear1): Linear(in_features=64, out_features=2048, bias=True)
+        (dropout): Dropout(p=0.0, inplace=False)
+        (linear2): Linear(in_features=2048, out_features=64, bias=True)
+        (norm1): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (dropout1): Dropout(p=0.0, inplace=False)
+        (dropout2): Dropout(p=0.0, inplace=False)
+      )
+    )
+    (norm): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+  )
+  (decoder): TransformerDecoder(
+    (layers): ModuleList(
+      (0-1): 2 x TransformerDecoderLayer(
+        (self_attn): MultiheadAttention(
+          (out_proj): NonDynamicallyQuantizableLinear(in_features=64, out_features=64, bias=True)
+        )
+        (multihead_attn): MultiheadAttention(
+          (out_proj): NonDynamicallyQuantizableLinear(in_features=64, out_features=64, bias=True)
+        )
+        (linear1): Linear(in_features=64, out_features=2048, bias=True)
+        (dropout): Dropout(p=0.0, inplace=False)
+        (linear2): Linear(in_features=2048, out_features=64, bias=True)
+        (norm1): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (norm3): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+        (dropout1): Dropout(p=0.0, inplace=False)
+        (dropout2): Dropout(p=0.0, inplace=False)
+        (dropout3): Dropout(p=0.0, inplace=False)
+      )
+    )
+    (norm): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+  )
+  (fc_encoder): Linear(in_features=8192, out_features=2048, bias=True)
+  (fc_decoder): Linear(in_features=2048, out_features=8192, bias=True)
+)
+==================================================
+
+I 06.08/06:29:05 init.py:216 ] 
+encoder.layers.0.self_attn.in_proj_weight                         False    (192, 64)
+encoder.layers.0.self_attn.in_proj_bias                           False    (192,)
+encoder.layers.0.self_attn.out_proj.weight                        False    (64, 64)
+encoder.layers.0.self_attn.out_proj.bias                          False    (64,)
+encoder.layers.0.linear1.weight                                   False    (2048, 64)
+encoder.layers.0.linear1.bias                                     False    (2048,)
+encoder.layers.0.linear2.weight                                   False    (64, 2048)
+encoder.layers.0.linear2.bias                                     False    (64,)
+encoder.layers.0.norm1.weight                                     True     (64,)
+encoder.layers.0.norm1.bias                                       True     (64,)
+encoder.layers.0.norm2.weight                                     True     (64,)
+encoder.layers.0.norm2.bias                                       True     (64,)
+encoder.layers.1.self_attn.in_proj_weight                         False    (192, 64)
+encoder.layers.1.self_attn.in_proj_bias                           False    (192,)
+encoder.layers.1.self_attn.out_proj.weight                        False    (64, 64)
+encoder.layers.1.self_attn.out_proj.bias                          False    (64,)
+encoder.layers.1.linear1.weight                                   False    (2048, 64)
+encoder.layers.1.linear1.bias                                     False    (2048,)
+encoder.layers.1.linear2.weight                                   False    (64, 2048)
+encoder.layers.1.linear2.bias                                     False    (64,)
+encoder.layers.1.norm1.weight                                     True     (64,)
+encoder.layers.1.norm1.bias                                       True     (64,)
+encoder.layers.1.norm2.weight                                     True     (64,)
+encoder.layers.1.norm2.bias                                       True     (64,)
+encoder.norm.weight                                               True     (64,)
+encoder.norm.bias                                                 True     (64,)
+decoder.layers.0.self_attn.in_proj_weight                         False    (192, 64)
+decoder.layers.0.self_attn.in_proj_bias                           False    (192,)
+decoder.layers.0.self_attn.out_proj.weight                        False    (64, 64)
+decoder.layers.0.self_attn.out_proj.bias                          False    (64,)
+decoder.layers.0.multihead_attn.in_proj_weight                    False    (192, 64)
+decoder.layers.0.multihead_attn.in_proj_bias                      False    (192,)
+decoder.layers.0.multihead_attn.out_proj.weight                   False    (64, 64)
+decoder.layers.0.multihead_attn.out_proj.bias                     False    (64,)
+decoder.layers.0.linear1.weight                                   False    (2048, 64)
+decoder.layers.0.linear1.bias                                     False    (2048,)
+decoder.layers.0.linear2.weight                                   False    (64, 2048)
+decoder.layers.0.linear2.bias                                     False    (64,)
+decoder.layers.0.norm1.weight                                     True     (64,)
+decoder.layers.0.norm1.bias                                       True     (64,)
+decoder.layers.0.norm2.weight                                     True     (64,)
+decoder.layers.0.norm2.bias                                       True     (64,)
+decoder.layers.0.norm3.weight                                     True     (64,)
+decoder.layers.0.norm3.bias                                       True     (64,)
+decoder.layers.1.self_attn.in_proj_weight                         False    (192, 64)
+decoder.layers.1.self_attn.in_proj_bias                           False    (192,)
+decoder.layers.1.self_attn.out_proj.weight                        False    (64, 64)
+decoder.layers.1.self_attn.out_proj.bias                          False    (64,)
+decoder.layers.1.multihead_attn.in_proj_weight                    False    (192, 64)
+decoder.layers.1.multihead_attn.in_proj_bias                      False    (192,)
+decoder.layers.1.multihead_attn.out_proj.weight                   False    (64, 64)
+decoder.layers.1.multihead_attn.out_proj.bias                     False    (64,)
+decoder.layers.1.linear1.weight                                   False    (2048, 64)
+decoder.layers.1.linear1.bias                                     False    (2048,)
+decoder.layers.1.linear2.weight                                   False    (64, 2048)
+decoder.layers.1.linear2.bias                                     False    (64,)
+decoder.layers.1.norm1.weight                                     True     (64,)
+decoder.layers.1.norm1.bias                                       True     (64,)
+decoder.layers.1.norm2.weight                                     True     (64,)
+decoder.layers.1.norm2.bias                                       True     (64,)
+decoder.layers.1.norm3.weight                                     True     (64,)
+decoder.layers.1.norm3.bias                                       True     (64,)
+decoder.norm.weight                                               True     (64,)
+decoder.norm.bias                                                 True     (64,)
+fc_encoder.weight                                                 False    (2048, 8192)
+fc_encoder.bias                                                   False    (2048,)
+fc_decoder.weight                                                 True     (8192, 2048)
+fc_decoder.bias                                                   True     (8192,)
+==================================================
+I 06.08/06:29:08 solver.py:159 ] Epoch: [1/200][20/36] lr: 5.56e-06 | MSE loss: 8.5144e-03 | time: 0.059
+I 06.08/06:29:08 solver.py:169 ] => Train  Loss: 8.2218e-03
+
+I 06.08/06:29:09 solver.py:159 ] Epoch: [2/200][20/36] lr: 1.56e-05 | MSE loss: 8.2815e-03 | time: 0.044
+I 06.08/06:29:10 solver.py:169 ] => Train  Loss: 8.1961e-03
+
+I 06.08/06:29:11 solver.py:159 ] Epoch: [3/200][20/36] lr: 2.56e-05 | MSE loss: 7.8777e-03 | time: 0.047
+I 06.08/06:29:11 solver.py:169 ] => Train  Loss: 8.1378e-03
+
+I 06.08/06:29:12 solver.py:159 ] Epoch: [4/200][20/36] lr: 3.56e-05 | MSE loss: 8.5422e-03 | time: 0.043
+I 06.08/06:29:13 solver.py:169 ] => Train  Loss: 8.0469e-03
+
+I 06.08/06:29:14 solver.py:159 ] Epoch: [5/200][20/36] lr: 4.56e-05 | MSE loss: 8.1253e-03 | time: 0.042
+I 06.08/06:29:15 solver.py:169 ] => Train  Loss: 8.4796e-03
+
+I 06.08/06:29:15 solver.py:159 ] Epoch: [6/200][20/36] lr: 5.56e-05 | MSE loss: 8.4438e-03 | time: 0.046
+I 06.08/06:29:16 solver.py:169 ] => Train  Loss: 7.9974e-03
+
+I 06.08/06:29:17 solver.py:159 ] Epoch: [7/200][20/36] lr: 6.56e-05 | MSE loss: 7.6126e-03 | time: 0.040
+I 06.08/06:29:18 solver.py:169 ] => Train  Loss: 8.2370e-03
+
+I 06.08/06:29:18 solver.py:159 ] Epoch: [8/200][20/36] lr: 7.56e-05 | MSE loss: 8.2537e-03 | time: 0.043
+I 06.08/06:29:19 solver.py:169 ] => Train  Loss: 7.9827e-03
+
+I 06.08/06:29:20 solver.py:159 ] Epoch: [9/200][20/36] lr: 8.56e-05 | MSE loss: 8.0847e-03 | time: 0.044
+I 06.08/06:29:21 solver.py:169 ] => Train  Loss: 8.1326e-03
+
+I 06.08/06:29:21 solver.py:159 ] Epoch: [10/200][20/36] lr: 9.56e-05 | MSE loss: 7.9911e-03 | time: 0.043
+I 06.08/06:29:22 solver.py:169 ] => Train  Loss: 8.0994e-03
+
+I 06.08/06:29:22 solver.py:169 ] => Val  Loss: 8.2023e-03
+
+I 06.08/06:29:22 solver.py:413 ] => Test NMSE: -1.7842e+01
+
+I 06.08/06:29:23 solver.py:224 ] 
+=! Best NMSE: -1.7842e+01 (epoch=10)
+
+I 06.08/06:29:24 solver.py:159 ] Epoch: [11/200][20/36] lr: 1.06e-04 | MSE loss: 8.2138e-03 | time: 0.043
+I 06.08/06:29:24 solver.py:169 ] => Train  Loss: 8.4561e-03
+
+I 06.08/06:29:24 solver.py:224 ] 
+=! Best NMSE: -1.7842e+01 (epoch=10)
+
+I 06.08/06:29:25 solver.py:159 ] Epoch: [12/200][20/36] lr: 1.16e-04 | MSE loss: 8.5126e-03 | time: 0.050
+I 06.08/06:29:26 solver.py:169 ] => Train  Loss: 8.0405e-03
+
+I 06.08/06:29:26 solver.py:224 ] 
+=! Best NMSE: -1.7842e+01 (epoch=10)
+
+I 06.08/06:29:27 solver.py:159 ] Epoch: [13/200][20/36] lr: 1.26e-04 | MSE loss: 8.3002e-03 | time: 0.046
+I 06.08/06:29:28 solver.py:169 ] => Train  Loss: 8.1201e-03
+
+I 06.08/06:29:28 solver.py:224 ] 
+=! Best NMSE: -1.7842e+01 (epoch=10)
+
+I 06.08/06:29:29 solver.py:159 ] Epoch: [14/200][20/36] lr: 1.36e-04 | MSE loss: 8.0291e-03 | time: 0.043
+I 06.08/06:29:29 solver.py:169 ] => Train  Loss: 8.1368e-03
+
+I 06.08/06:29:29 solver.py:224 ] 
+=! Best NMSE: -1.7842e+01 (epoch=10)
+
+I 06.08/06:29:30 solver.py:159 ] Epoch: [15/200][20/36] lr: 1.46e-04 | MSE loss: 7.8906e-03 | time: 0.051
+I 06.08/06:29:31 solver.py:169 ] => Train  Loss: 7.9938e-03
+
+I 06.08/06:29:31 solver.py:224 ] 
+=! Best NMSE: -1.7842e+01 (epoch=10)
+
+I 06.08/06:29:32 solver.py:159 ] Epoch: [16/200][20/36] lr: 1.56e-04 | MSE loss: 7.8680e-03 | time: 0.043
+I 06.08/06:29:32 solver.py:169 ] => Train  Loss: 7.9914e-03
+
+I 06.08/06:29:32 solver.py:224 ] 
+=! Best NMSE: -1.7842e+01 (epoch=10)
+
+I 06.08/06:29:33 solver.py:159 ] Epoch: [17/200][20/36] lr: 1.66e-04 | MSE loss: 8.3574e-03 | time: 0.044
+I 06.08/06:29:34 solver.py:169 ] => Train  Loss: 7.9988e-03
+
+I 06.08/06:29:34 solver.py:224 ] 
+=! Best NMSE: -1.7842e+01 (epoch=10)
+
+I 06.08/06:29:35 solver.py:159 ] Epoch: [18/200][20/36] lr: 1.76e-04 | MSE loss: 7.8941e-03 | time: 0.049
+I 06.08/06:29:36 solver.py:169 ] => Train  Loss: 7.9446e-03
+
+I 06.08/06:29:36 solver.py:224 ] 
+=! Best NMSE: -1.7842e+01 (epoch=10)
+
+I 06.08/06:29:37 solver.py:159 ] Epoch: [19/200][20/36] lr: 1.86e-04 | MSE loss: 8.2247e-03 | time: 0.049
+I 06.08/06:29:37 solver.py:169 ] => Train  Loss: 8.0003e-03
+
+I 06.08/06:29:37 solver.py:224 ] 
+=! Best NMSE: -1.7842e+01 (epoch=10)
+
+I 06.08/06:29:38 solver.py:159 ] Epoch: [20/200][20/36] lr: 1.96e-04 | MSE loss: 7.9004e-03 | time: 0.046
+I 06.08/06:29:39 solver.py:169 ] => Train  Loss: 8.2846e-03
+
+I 06.08/06:29:39 solver.py:169 ] => Val  Loss: 8.1499e-03
+
+I 06.08/06:29:39 solver.py:413 ] => Test NMSE: -1.7869e+01
+
+I 06.08/06:29:40 solver.py:224 ] 
+=! Best NMSE: -1.7869e+01 (epoch=20)
+
+I 06.08/06:29:41 solver.py:159 ] Epoch: [21/200][20/36] lr: 2.00e-04 | MSE loss: 8.2014e-03 | time: 0.050
+I 06.08/06:29:42 solver.py:169 ] => Train  Loss: 7.9640e-03
+
+I 06.08/06:29:42 solver.py:224 ] 
+=! Best NMSE: -1.7869e+01 (epoch=20)
+
+I 06.08/06:29:43 solver.py:159 ] Epoch: [22/200][20/36] lr: 2.00e-04 | MSE loss: 8.0705e-03 | time: 0.046
+I 06.08/06:29:43 solver.py:169 ] => Train  Loss: 8.2246e-03
+
+I 06.08/06:29:43 solver.py:224 ] 
+=! Best NMSE: -1.7869e+01 (epoch=20)
+
+I 06.08/06:29:44 solver.py:159 ] Epoch: [23/200][20/36] lr: 2.00e-04 | MSE loss: 7.1284e-03 | time: 0.049
+I 06.08/06:29:45 solver.py:169 ] => Train  Loss: 8.0592e-03
+
+I 06.08/06:29:45 solver.py:224 ] 
+=! Best NMSE: -1.7869e+01 (epoch=20)
+
+I 06.08/06:29:46 solver.py:159 ] Epoch: [24/200][20/36] lr: 2.00e-04 | MSE loss: 8.2657e-03 | time: 0.051
+I 06.08/06:29:47 solver.py:169 ] => Train  Loss: 8.2277e-03
+
+I 06.08/06:29:47 solver.py:224 ] 
+=! Best NMSE: -1.7869e+01 (epoch=20)
+
+I 06.08/06:29:48 solver.py:159 ] Epoch: [25/200][20/36] lr: 2.00e-04 | MSE loss: 8.3198e-03 | time: 0.046
+I 06.08/06:29:48 solver.py:169 ] => Train  Loss: 7.9534e-03
+
+I 06.08/06:29:48 solver.py:224 ] 
+=! Best NMSE: -1.7869e+01 (epoch=20)
+
+I 06.08/06:29:49 solver.py:159 ] Epoch: [26/200][20/36] lr: 2.00e-04 | MSE loss: 7.9412e-03 | time: 0.047
+I 06.08/06:29:50 solver.py:169 ] => Train  Loss: 8.1481e-03
+
+I 06.08/06:29:50 solver.py:224 ] 
+=! Best NMSE: -1.7869e+01 (epoch=20)
+
+I 06.08/06:29:51 solver.py:159 ] Epoch: [27/200][20/36] lr: 2.00e-04 | MSE loss: 8.1942e-03 | time: 0.048
+I 06.08/06:29:52 solver.py:169 ] => Train  Loss: 7.9867e-03
+
+I 06.08/06:29:52 solver.py:224 ] 
+=! Best NMSE: -1.7869e+01 (epoch=20)
+
+I 06.08/06:29:53 solver.py:159 ] Epoch: [28/200][20/36] lr: 1.99e-04 | MSE loss: 7.8302e-03 | time: 0.049
+I 06.08/06:29:53 solver.py:169 ] => Train  Loss: 8.1170e-03
+
+I 06.08/06:29:53 solver.py:224 ] 
+=! Best NMSE: -1.7869e+01 (epoch=20)
+
+I 06.08/06:29:54 solver.py:159 ] Epoch: [29/200][20/36] lr: 1.99e-04 | MSE loss: 7.7899e-03 | time: 0.049
+I 06.08/06:29:55 solver.py:169 ] => Train  Loss: 7.9486e-03
+
+I 06.08/06:29:55 solver.py:224 ] 
+=! Best NMSE: -1.7869e+01 (epoch=20)
+
+I 06.08/06:29:56 solver.py:159 ] Epoch: [30/200][20/36] lr: 1.99e-04 | MSE loss: 7.8744e-03 | time: 0.050
+I 06.08/06:29:57 solver.py:169 ] => Train  Loss: 7.8434e-03
+
+I 06.08/06:29:57 solver.py:169 ] => Val  Loss: 8.0765e-03
+
+I 06.08/06:29:57 solver.py:413 ] => Test NMSE: -1.7908e+01
+
+I 06.08/06:29:58 solver.py:224 ] 
+=! Best NMSE: -1.7908e+01 (epoch=30)
+
+I 06.08/06:29:58 solver.py:159 ] Epoch: [31/200][20/36] lr: 1.99e-04 | MSE loss: 7.6382e-03 | time: 0.044
+I 06.08/06:29:59 solver.py:169 ] => Train  Loss: 8.0074e-03
+
+I 06.08/06:29:59 solver.py:224 ] 
+=! Best NMSE: -1.7908e+01 (epoch=30)
+
+I 06.08/06:30:00 solver.py:159 ] Epoch: [32/200][20/36] lr: 1.98e-04 | MSE loss: 8.1083e-03 | time: 0.060
+I 06.08/06:30:02 solver.py:169 ] => Train  Loss: 7.9055e-03
+
+I 06.08/06:30:02 solver.py:224 ] 
+=! Best NMSE: -1.7908e+01 (epoch=30)
+
+I 06.08/06:30:04 solver.py:159 ] Epoch: [33/200][20/36] lr: 1.98e-04 | MSE loss: 7.8238e-03 | time: 0.114
+I 06.08/06:30:05 solver.py:169 ] => Train  Loss: 8.0557e-03
+
+I 06.08/06:30:05 solver.py:224 ] 
+=! Best NMSE: -1.7908e+01 (epoch=30)
+
+I 06.08/06:30:06 solver.py:159 ] Epoch: [34/200][20/36] lr: 1.98e-04 | MSE loss: 7.5004e-03 | time: 0.046
+I 06.08/06:30:07 solver.py:169 ] => Train  Loss: 8.0180e-03
+
+I 06.08/06:30:07 solver.py:224 ] 
+=! Best NMSE: -1.7908e+01 (epoch=30)
+
+I 06.08/06:30:08 solver.py:159 ] Epoch: [35/200][20/36] lr: 1.98e-04 | MSE loss: 7.9247e-03 | time: 0.045
+I 06.08/06:30:08 solver.py:169 ] => Train  Loss: 7.8913e-03
+
+I 06.08/06:30:08 solver.py:224 ] 
+=! Best NMSE: -1.7908e+01 (epoch=30)
+
+I 06.08/06:30:09 solver.py:159 ] Epoch: [36/200][20/36] lr: 1.97e-04 | MSE loss: 7.7833e-03 | time: 0.044
+I 06.08/06:30:10 solver.py:169 ] => Train  Loss: 7.8343e-03
+
+I 06.08/06:30:10 solver.py:224 ] 
+=! Best NMSE: -1.7908e+01 (epoch=30)
+
+I 06.08/06:30:11 solver.py:159 ] Epoch: [37/200][20/36] lr: 1.97e-04 | MSE loss: 7.9957e-03 | time: 0.054
+I 06.08/06:30:12 solver.py:169 ] => Train  Loss: 7.9294e-03
+
+I 06.08/06:30:12 solver.py:224 ] 
+=! Best NMSE: -1.7908e+01 (epoch=30)
+
+I 06.08/06:30:13 solver.py:159 ] Epoch: [38/200][20/36] lr: 1.97e-04 | MSE loss: 7.9351e-03 | time: 0.044
+I 06.08/06:30:13 solver.py:169 ] => Train  Loss: 7.8940e-03
+
+I 06.08/06:30:13 solver.py:224 ] 
+=! Best NMSE: -1.7908e+01 (epoch=30)
+
+I 06.08/06:30:14 solver.py:159 ] Epoch: [39/200][20/36] lr: 1.96e-04 | MSE loss: 7.9167e-03 | time: 0.046
+I 06.08/06:30:15 solver.py:169 ] => Train  Loss: 7.7790e-03
+
+I 06.08/06:30:15 solver.py:224 ] 
+=! Best NMSE: -1.7908e+01 (epoch=30)
+
+I 06.08/06:30:16 solver.py:159 ] Epoch: [40/200][20/36] lr: 1.96e-04 | MSE loss: 8.0676e-03 | time: 0.050
+I 06.08/06:30:16 solver.py:169 ] => Train  Loss: 7.9433e-03
+
+I 06.08/06:30:17 solver.py:169 ] => Val  Loss: 8.0118e-03
+
+I 06.08/06:30:17 solver.py:413 ] => Test NMSE: -1.7943e+01
+
+I 06.08/06:30:17 solver.py:224 ] 
+=! Best NMSE: -1.7943e+01 (epoch=40)
+
+I 06.08/06:30:18 solver.py:159 ] Epoch: [41/200][20/36] lr: 1.95e-04 | MSE loss: 7.5886e-03 | time: 0.052
+I 06.08/06:30:19 solver.py:169 ] => Train  Loss: 7.8550e-03
+
+I 06.08/06:30:19 solver.py:224 ] 
+=! Best NMSE: -1.7943e+01 (epoch=40)
+
+I 06.08/06:30:20 solver.py:159 ] Epoch: [42/200][20/36] lr: 1.95e-04 | MSE loss: 8.1613e-03 | time: 0.042
+I 06.08/06:30:20 solver.py:169 ] => Train  Loss: 7.8244e-03
+
+I 06.08/06:30:20 solver.py:224 ] 
+=! Best NMSE: -1.7943e+01 (epoch=40)
+
+I 06.08/06:30:21 solver.py:159 ] Epoch: [43/200][20/36] lr: 1.94e-04 | MSE loss: 7.7646e-03 | time: 0.039
+I 06.08/06:30:22 solver.py:169 ] => Train  Loss: 7.7677e-03
+
+I 06.08/06:30:22 solver.py:224 ] 
+=! Best NMSE: -1.7943e+01 (epoch=40)
+
+I 06.08/06:30:23 solver.py:159 ] Epoch: [44/200][20/36] lr: 1.94e-04 | MSE loss: 8.1117e-03 | time: 0.050
+I 06.08/06:30:23 solver.py:169 ] => Train  Loss: 8.1300e-03
+
+I 06.08/06:30:23 solver.py:224 ] 
+=! Best NMSE: -1.7943e+01 (epoch=40)
+
+I 06.08/06:30:24 solver.py:159 ] Epoch: [45/200][20/36] lr: 1.93e-04 | MSE loss: 7.3992e-03 | time: 0.041
+I 06.08/06:30:25 solver.py:169 ] => Train  Loss: 8.0314e-03
+
+I 06.08/06:30:25 solver.py:224 ] 
+=! Best NMSE: -1.7943e+01 (epoch=40)
+
+I 06.08/06:30:26 solver.py:159 ] Epoch: [46/200][20/36] lr: 1.93e-04 | MSE loss: 8.0252e-03 | time: 0.043
+I 06.08/06:30:27 solver.py:169 ] => Train  Loss: 7.7477e-03
+
+I 06.08/06:30:27 solver.py:224 ] 
+=! Best NMSE: -1.7943e+01 (epoch=40)
+
+I 06.08/06:30:27 solver.py:159 ] Epoch: [47/200][20/36] lr: 1.92e-04 | MSE loss: 8.1124e-03 | time: 0.045
+I 06.08/06:30:28 solver.py:169 ] => Train  Loss: 7.9262e-03
+
+I 06.08/06:30:28 solver.py:224 ] 
+=! Best NMSE: -1.7943e+01 (epoch=40)
+
+I 06.08/06:30:29 solver.py:159 ] Epoch: [48/200][20/36] lr: 1.91e-04 | MSE loss: 8.0585e-03 | time: 0.045
+I 06.08/06:30:30 solver.py:169 ] => Train  Loss: 7.7568e-03
+
+I 06.08/06:30:30 solver.py:224 ] 
+=! Best NMSE: -1.7943e+01 (epoch=40)
+
+I 06.08/06:30:31 solver.py:159 ] Epoch: [49/200][20/36] lr: 1.91e-04 | MSE loss: 8.2263e-03 | time: 0.048
+I 06.08/06:30:31 solver.py:169 ] => Train  Loss: 7.7143e-03
+
+I 06.08/06:30:31 solver.py:224 ] 
+=! Best NMSE: -1.7943e+01 (epoch=40)
+
+I 06.08/06:30:32 solver.py:159 ] Epoch: [50/200][20/36] lr: 1.90e-04 | MSE loss: 7.5051e-03 | time: 0.045
+I 06.08/06:30:33 solver.py:169 ] => Train  Loss: 7.7384e-03
+
+I 06.08/06:30:33 solver.py:169 ] => Val  Loss: 7.9633e-03
+
+I 06.08/06:30:33 solver.py:413 ] => Test NMSE: -1.7969e+01
+
+I 06.08/06:30:34 solver.py:224 ] 
+=! Best NMSE: -1.7969e+01 (epoch=50)
+
+I 06.08/06:30:35 solver.py:159 ] Epoch: [51/200][20/36] lr: 1.90e-04 | MSE loss: 7.7940e-03 | time: 0.044
+I 06.08/06:30:35 solver.py:169 ] => Train  Loss: 7.7252e-03
+
+I 06.08/06:30:35 solver.py:224 ] 
+=! Best NMSE: -1.7969e+01 (epoch=50)
+
+I 06.08/06:30:36 solver.py:159 ] Epoch: [52/200][20/36] lr: 1.89e-04 | MSE loss: 7.9666e-03 | time: 0.041
+I 06.08/06:30:37 solver.py:169 ] => Train  Loss: 7.7464e-03
+
+I 06.08/06:30:37 solver.py:224 ] 
+=! Best NMSE: -1.7969e+01 (epoch=50)
+
+I 06.08/06:30:38 solver.py:159 ] Epoch: [53/200][20/36] lr: 1.88e-04 | MSE loss: 7.4877e-03 | time: 0.042
+I 06.08/06:30:38 solver.py:169 ] => Train  Loss: 7.6973e-03
+
+I 06.08/06:30:38 solver.py:224 ] 
+=! Best NMSE: -1.7969e+01 (epoch=50)
+
+I 06.08/06:30:39 solver.py:159 ] Epoch: [54/200][20/36] lr: 1.88e-04 | MSE loss: 7.9053e-03 | time: 0.047
+I 06.08/06:30:40 solver.py:169 ] => Train  Loss: 7.7223e-03
+
+I 06.08/06:30:40 solver.py:224 ] 
+=! Best NMSE: -1.7969e+01 (epoch=50)
+
+I 06.08/06:30:41 solver.py:159 ] Epoch: [55/200][20/36] lr: 1.87e-04 | MSE loss: 7.6560e-03 | time: 0.047
+I 06.08/06:30:42 solver.py:169 ] => Train  Loss: 7.8320e-03
+
+I 06.08/06:30:42 solver.py:224 ] 
+=! Best NMSE: -1.7969e+01 (epoch=50)
+
+I 06.08/06:30:42 solver.py:159 ] Epoch: [56/200][20/36] lr: 1.86e-04 | MSE loss: 7.9323e-03 | time: 0.042
+I 06.08/06:30:43 solver.py:169 ] => Train  Loss: 7.7054e-03
+
+I 06.08/06:30:43 solver.py:224 ] 
+=! Best NMSE: -1.7969e+01 (epoch=50)
+
+I 06.08/06:30:44 solver.py:159 ] Epoch: [57/200][20/36] lr: 1.85e-04 | MSE loss: 7.9859e-03 | time: 0.043
+I 06.08/06:30:45 solver.py:169 ] => Train  Loss: 7.6895e-03
+
+I 06.08/06:30:45 solver.py:224 ] 
+=! Best NMSE: -1.7969e+01 (epoch=50)
+
+I 06.08/06:30:46 solver.py:159 ] Epoch: [58/200][20/36] lr: 1.84e-04 | MSE loss: 8.5765e-03 | time: 0.045
+I 06.08/06:30:46 solver.py:169 ] => Train  Loss: 8.0093e-03
+
+I 06.08/06:30:46 solver.py:224 ] 
+=! Best NMSE: -1.7969e+01 (epoch=50)
+
+I 06.08/06:30:47 solver.py:159 ] Epoch: [59/200][20/36] lr: 1.84e-04 | MSE loss: 7.9519e-03 | time: 0.049
+I 06.08/06:30:48 solver.py:169 ] => Train  Loss: 7.6720e-03
+
+I 06.08/06:30:48 solver.py:224 ] 
+=! Best NMSE: -1.7969e+01 (epoch=50)
+
+I 06.08/06:30:49 solver.py:159 ] Epoch: [60/200][20/36] lr: 1.83e-04 | MSE loss: 8.1355e-03 | time: 0.049
+I 06.08/06:30:50 solver.py:169 ] => Train  Loss: 7.9509e-03
+
+I 06.08/06:30:50 solver.py:169 ] => Val  Loss: 7.8983e-03
+
+I 06.08/06:30:50 solver.py:413 ] => Test NMSE: -1.8004e+01
+
+I 06.08/06:30:50 solver.py:224 ] 
+=! Best NMSE: -1.8004e+01 (epoch=60)
+
+I 06.08/06:30:51 solver.py:159 ] Epoch: [61/200][20/36] lr: 1.82e-04 | MSE loss: 7.5837e-03 | time: 0.046
+I 06.08/06:30:52 solver.py:169 ] => Train  Loss: 7.8226e-03
+
+I 06.08/06:30:52 solver.py:224 ] 
+=! Best NMSE: -1.8004e+01 (epoch=60)
+
+I 06.08/06:30:53 solver.py:159 ] Epoch: [62/200][20/36] lr: 1.81e-04 | MSE loss: 7.8210e-03 | time: 0.044
+I 06.08/06:30:54 solver.py:169 ] => Train  Loss: 7.7271e-03
+
+I 06.08/06:30:54 solver.py:224 ] 
+=! Best NMSE: -1.8004e+01 (epoch=60)
+
+I 06.08/06:30:54 solver.py:159 ] Epoch: [63/200][20/36] lr: 1.80e-04 | MSE loss: 7.6622e-03 | time: 0.045
+I 06.08/06:30:55 solver.py:169 ] => Train  Loss: 7.8623e-03
+
+I 06.08/06:30:55 solver.py:224 ] 
+=! Best NMSE: -1.8004e+01 (epoch=60)
+
+I 06.08/06:30:56 solver.py:159 ] Epoch: [64/200][20/36] lr: 1.79e-04 | MSE loss: 7.5248e-03 | time: 0.046
+I 06.08/06:30:57 solver.py:169 ] => Train  Loss: 7.8104e-03
+
+I 06.08/06:30:57 solver.py:224 ] 
+=! Best NMSE: -1.8004e+01 (epoch=60)
+
+I 06.08/06:30:58 solver.py:159 ] Epoch: [65/200][20/36] lr: 1.78e-04 | MSE loss: 7.9221e-03 | time: 0.042
+I 06.08/06:30:58 solver.py:169 ] => Train  Loss: 7.7466e-03
+
+I 06.08/06:30:58 solver.py:224 ] 
+=! Best NMSE: -1.8004e+01 (epoch=60)
+
+I 06.08/06:30:59 solver.py:159 ] Epoch: [66/200][20/36] lr: 1.78e-04 | MSE loss: 7.7114e-03 | time: 0.045
+I 06.08/06:31:00 solver.py:169 ] => Train  Loss: 7.7031e-03
+
+I 06.08/06:31:00 solver.py:224 ] 
+=! Best NMSE: -1.8004e+01 (epoch=60)
+
+I 06.08/06:31:01 solver.py:159 ] Epoch: [67/200][20/36] lr: 1.77e-04 | MSE loss: 7.7726e-03 | time: 0.075
+I 06.08/06:31:03 solver.py:169 ] => Train  Loss: 7.7913e-03
+
+I 06.08/06:31:03 solver.py:224 ] 
+=! Best NMSE: -1.8004e+01 (epoch=60)
+
+I 06.08/06:31:05 solver.py:159 ] Epoch: [68/200][20/36] lr: 1.76e-04 | MSE loss: 8.1449e-03 | time: 0.083
+I 06.08/06:31:05 solver.py:169 ] => Train  Loss: 7.8464e-03
+
+I 06.08/06:31:05 solver.py:224 ] 
+=! Best NMSE: -1.8004e+01 (epoch=60)
+
+I 06.08/06:31:06 solver.py:159 ] Epoch: [69/200][20/36] lr: 1.75e-04 | MSE loss: 7.6779e-03 | time: 0.044
+I 06.08/06:31:07 solver.py:169 ] => Train  Loss: 7.6199e-03
+
+I 06.08/06:31:07 solver.py:224 ] 
+=! Best NMSE: -1.8004e+01 (epoch=60)
+
+I 06.08/06:31:08 solver.py:159 ] Epoch: [70/200][20/36] lr: 1.74e-04 | MSE loss: 7.5725e-03 | time: 0.043
+I 06.08/06:31:08 solver.py:169 ] => Train  Loss: 7.8328e-03
+
+I 06.08/06:31:09 solver.py:169 ] => Val  Loss: 7.8484e-03
+
+I 06.08/06:31:09 solver.py:413 ] => Test NMSE: -1.8032e+01
+
+I 06.08/06:31:09 solver.py:224 ] 
+=! Best NMSE: -1.8032e+01 (epoch=70)
+
+I 06.08/06:31:10 solver.py:159 ] Epoch: [71/200][20/36] lr: 1.73e-04 | MSE loss: 7.7808e-03 | time: 0.047
+I 06.08/06:31:11 solver.py:169 ] => Train  Loss: 7.6946e-03
+
+I 06.08/06:31:11 solver.py:224 ] 
+=! Best NMSE: -1.8032e+01 (epoch=70)
+
+I 06.08/06:31:12 solver.py:159 ] Epoch: [72/200][20/36] lr: 1.72e-04 | MSE loss: 7.3009e-03 | time: 0.044
+I 06.08/06:31:12 solver.py:169 ] => Train  Loss: 7.8155e-03
+
+I 06.08/06:31:12 solver.py:224 ] 
+=! Best NMSE: -1.8032e+01 (epoch=70)
+
+I 06.08/06:31:13 solver.py:159 ] Epoch: [73/200][20/36] lr: 1.71e-04 | MSE loss: 7.5267e-03 | time: 0.042
+I 06.08/06:31:14 solver.py:169 ] => Train  Loss: 7.7550e-03
+
+I 06.08/06:31:14 solver.py:224 ] 
+=! Best NMSE: -1.8032e+01 (epoch=70)
+
+I 06.08/06:31:15 solver.py:159 ] Epoch: [74/200][20/36] lr: 1.70e-04 | MSE loss: 7.6310e-03 | time: 0.046
+I 06.08/06:31:15 solver.py:169 ] => Train  Loss: 7.8065e-03
+
+I 06.08/06:31:15 solver.py:224 ] 
+=! Best NMSE: -1.8032e+01 (epoch=70)
+
+I 06.08/06:31:16 solver.py:159 ] Epoch: [75/200][20/36] lr: 1.68e-04 | MSE loss: 7.7386e-03 | time: 0.043
+I 06.08/06:31:17 solver.py:169 ] => Train  Loss: 7.7991e-03
+
+I 06.08/06:31:17 solver.py:224 ] 
+=! Best NMSE: -1.8032e+01 (epoch=70)
+
+I 06.08/06:31:18 solver.py:159 ] Epoch: [76/200][20/36] lr: 1.67e-04 | MSE loss: 7.7636e-03 | time: 0.047
+I 06.08/06:31:19 solver.py:169 ] => Train  Loss: 7.7998e-03
+
+I 06.08/06:31:19 solver.py:224 ] 
+=! Best NMSE: -1.8032e+01 (epoch=70)
+
+I 06.08/06:31:20 solver.py:159 ] Epoch: [77/200][20/36] lr: 1.66e-04 | MSE loss: 7.7460e-03 | time: 0.051
+I 06.08/06:31:20 solver.py:169 ] => Train  Loss: 7.5835e-03
+
+I 06.08/06:31:20 solver.py:224 ] 
+=! Best NMSE: -1.8032e+01 (epoch=70)
+
+I 06.08/06:31:21 solver.py:159 ] Epoch: [78/200][20/36] lr: 1.65e-04 | MSE loss: 7.5686e-03 | time: 0.047
+I 06.08/06:31:22 solver.py:169 ] => Train  Loss: 7.8074e-03
+
+I 06.08/06:31:22 solver.py:224 ] 
+=! Best NMSE: -1.8032e+01 (epoch=70)
+
+I 06.08/06:31:23 solver.py:159 ] Epoch: [79/200][20/36] lr: 1.64e-04 | MSE loss: 7.7462e-03 | time: 0.041
+I 06.08/06:31:23 solver.py:169 ] => Train  Loss: 7.7439e-03
+
+I 06.08/06:31:23 solver.py:224 ] 
+=! Best NMSE: -1.8032e+01 (epoch=70)
+
+I 06.08/06:31:24 solver.py:159 ] Epoch: [80/200][20/36] lr: 1.63e-04 | MSE loss: 8.1731e-03 | time: 0.044
+I 06.08/06:31:25 solver.py:169 ] => Train  Loss: 7.6883e-03
+
+I 06.08/06:31:25 solver.py:169 ] => Val  Loss: 7.8047e-03
+
+I 06.08/06:31:25 solver.py:413 ] => Test NMSE: -1.8056e+01
+
+I 06.08/06:31:26 solver.py:224 ] 
+=! Best NMSE: -1.8056e+01 (epoch=80)
+
+I 06.08/06:31:27 solver.py:159 ] Epoch: [81/200][20/36] lr: 1.62e-04 | MSE loss: 7.8453e-03 | time: 0.046
+I 06.08/06:31:27 solver.py:169 ] => Train  Loss: 7.7045e-03
+
+I 06.08/06:31:27 solver.py:224 ] 
+=! Best NMSE: -1.8056e+01 (epoch=80)
+
+I 06.08/06:31:28 solver.py:159 ] Epoch: [82/200][20/36] lr: 1.61e-04 | MSE loss: 7.4147e-03 | time: 0.045
+I 06.08/06:31:29 solver.py:169 ] => Train  Loss: 7.8148e-03
+
+I 06.08/06:31:29 solver.py:224 ] 
+=! Best NMSE: -1.8056e+01 (epoch=80)
+
+I 06.08/06:31:30 solver.py:159 ] Epoch: [83/200][20/36] lr: 1.60e-04 | MSE loss: 7.6962e-03 | time: 0.045
+I 06.08/06:31:30 solver.py:169 ] => Train  Loss: 7.7308e-03
+
+I 06.08/06:31:30 solver.py:224 ] 
+=! Best NMSE: -1.8056e+01 (epoch=80)
+
+I 06.08/06:31:31 solver.py:159 ] Epoch: [84/200][20/36] lr: 1.58e-04 | MSE loss: 8.1349e-03 | time: 0.041
+I 06.08/06:31:32 solver.py:169 ] => Train  Loss: 7.8029e-03
+
+I 06.08/06:31:32 solver.py:224 ] 
+=! Best NMSE: -1.8056e+01 (epoch=80)
+
+I 06.08/06:31:33 solver.py:159 ] Epoch: [85/200][20/36] lr: 1.57e-04 | MSE loss: 8.0923e-03 | time: 0.047
+I 06.08/06:31:34 solver.py:169 ] => Train  Loss: 7.6281e-03
+
+I 06.08/06:31:34 solver.py:224 ] 
+=! Best NMSE: -1.8056e+01 (epoch=80)
+
+I 06.08/06:31:35 solver.py:159 ] Epoch: [86/200][20/36] lr: 1.56e-04 | MSE loss: 7.6731e-03 | time: 0.047
+I 06.08/06:31:35 solver.py:169 ] => Train  Loss: 7.7222e-03
+
+I 06.08/06:31:35 solver.py:224 ] 
+=! Best NMSE: -1.8056e+01 (epoch=80)
+
+I 06.08/06:31:36 solver.py:159 ] Epoch: [87/200][20/36] lr: 1.55e-04 | MSE loss: 7.7604e-03 | time: 0.041
+I 06.08/06:31:37 solver.py:169 ] => Train  Loss: 7.5449e-03
+
+I 06.08/06:31:37 solver.py:224 ] 
+=! Best NMSE: -1.8056e+01 (epoch=80)
+
+I 06.08/06:31:38 solver.py:159 ] Epoch: [88/200][20/36] lr: 1.54e-04 | MSE loss: 7.5939e-03 | time: 0.043
+I 06.08/06:31:38 solver.py:169 ] => Train  Loss: 7.5588e-03
+
+I 06.08/06:31:38 solver.py:224 ] 
+=! Best NMSE: -1.8056e+01 (epoch=80)
+
+I 06.08/06:31:39 solver.py:159 ] Epoch: [89/200][20/36] lr: 1.52e-04 | MSE loss: 7.7701e-03 | time: 0.045
+I 06.08/06:31:40 solver.py:169 ] => Train  Loss: 7.5856e-03
+
+I 06.08/06:31:40 solver.py:224 ] 
+=! Best NMSE: -1.8056e+01 (epoch=80)
+
+I 06.08/06:31:41 solver.py:159 ] Epoch: [90/200][20/36] lr: 1.51e-04 | MSE loss: 7.4399e-03 | time: 0.043
+I 06.08/06:31:41 solver.py:169 ] => Train  Loss: 7.8710e-03
+
+I 06.08/06:31:41 solver.py:169 ] => Val  Loss: 7.7617e-03
+
+I 06.08/06:31:41 solver.py:413 ] => Test NMSE: -1.8080e+01
+
+I 06.08/06:31:42 solver.py:224 ] 
+=! Best NMSE: -1.8080e+01 (epoch=90)
+
+I 06.08/06:31:43 solver.py:159 ] Epoch: [91/200][20/36] lr: 1.50e-04 | MSE loss: 7.1913e-03 | time: 0.042
+I 06.08/06:31:43 solver.py:169 ] => Train  Loss: 7.5206e-03
+
+I 06.08/06:31:43 solver.py:224 ] 
+=! Best NMSE: -1.8080e+01 (epoch=90)
+
+I 06.08/06:31:44 solver.py:159 ] Epoch: [92/200][20/36] lr: 1.49e-04 | MSE loss: 7.9094e-03 | time: 0.043
+I 06.08/06:31:45 solver.py:169 ] => Train  Loss: 7.5301e-03
+
+I 06.08/06:31:45 solver.py:224 ] 
+=! Best NMSE: -1.8080e+01 (epoch=90)
+
+I 06.08/06:31:46 solver.py:159 ] Epoch: [93/200][20/36] lr: 1.47e-04 | MSE loss: 7.6697e-03 | time: 0.044
+I 06.08/06:31:46 solver.py:169 ] => Train  Loss: 7.5291e-03
+
+I 06.08/06:31:46 solver.py:224 ] 
+=! Best NMSE: -1.8080e+01 (epoch=90)
+
+I 06.08/06:31:47 solver.py:159 ] Epoch: [94/200][20/36] lr: 1.46e-04 | MSE loss: 7.9018e-03 | time: 0.044
+I 06.08/06:31:48 solver.py:169 ] => Train  Loss: 7.5282e-03
+
+I 06.08/06:31:48 solver.py:224 ] 
+=! Best NMSE: -1.8080e+01 (epoch=90)
+
+I 06.08/06:31:49 solver.py:159 ] Epoch: [95/200][20/36] lr: 1.45e-04 | MSE loss: 8.2152e-03 | time: 0.042
+I 06.08/06:31:50 solver.py:169 ] => Train  Loss: 7.6414e-03
+
+I 06.08/06:31:50 solver.py:224 ] 
+=! Best NMSE: -1.8080e+01 (epoch=90)
+
+I 06.08/06:31:50 solver.py:159 ] Epoch: [96/200][20/36] lr: 1.44e-04 | MSE loss: 7.7918e-03 | time: 0.045
+I 06.08/06:31:51 solver.py:169 ] => Train  Loss: 7.5567e-03
+
+I 06.08/06:31:51 solver.py:224 ] 
+=! Best NMSE: -1.8080e+01 (epoch=90)
+
+I 06.08/06:31:52 solver.py:159 ] Epoch: [97/200][20/36] lr: 1.42e-04 | MSE loss: 8.0174e-03 | time: 0.044
+I 06.08/06:31:53 solver.py:169 ] => Train  Loss: 7.6225e-03
+
+I 06.08/06:31:53 solver.py:224 ] 
+=! Best NMSE: -1.8080e+01 (epoch=90)
+
+I 06.08/06:31:54 solver.py:159 ] Epoch: [98/200][20/36] lr: 1.41e-04 | MSE loss: 7.3400e-03 | time: 0.045
+I 06.08/06:31:54 solver.py:169 ] => Train  Loss: 7.8647e-03
+
+I 06.08/06:31:54 solver.py:224 ] 
+=! Best NMSE: -1.8080e+01 (epoch=90)
+
+I 06.08/06:31:55 solver.py:159 ] Epoch: [99/200][20/36] lr: 1.40e-04 | MSE loss: 7.3981e-03 | time: 0.047
+I 06.08/06:31:56 solver.py:169 ] => Train  Loss: 7.7090e-03
+
+I 06.08/06:31:56 solver.py:224 ] 
+=! Best NMSE: -1.8080e+01 (epoch=90)
+
+I 06.08/06:31:57 solver.py:159 ] Epoch: [100/200][20/36] lr: 1.39e-04 | MSE loss: 7.6509e-03 | time: 0.047
+I 06.08/06:31:57 solver.py:169 ] => Train  Loss: 7.7766e-03
+
+I 06.08/06:31:58 solver.py:169 ] => Val  Loss: 7.7254e-03
+
+I 06.08/06:31:58 solver.py:413 ] => Test NMSE: -1.8100e+01
+
+I 06.08/06:31:58 solver.py:224 ] 
+=! Best NMSE: -1.8100e+01 (epoch=100)
+
+I 06.08/06:31:59 solver.py:159 ] Epoch: [101/200][20/36] lr: 1.37e-04 | MSE loss: 7.4894e-03 | time: 0.047
+I 06.08/06:32:00 solver.py:169 ] => Train  Loss: 7.5706e-03
+
+I 06.08/06:32:00 solver.py:224 ] 
+=! Best NMSE: -1.8100e+01 (epoch=100)
+
+I 06.08/06:32:01 solver.py:159 ] Epoch: [102/200][20/36] lr: 1.36e-04 | MSE loss: 7.7975e-03 | time: 0.072
+I 06.08/06:32:03 solver.py:169 ] => Train  Loss: 7.4941e-03
+
+I 06.08/06:32:03 solver.py:224 ] 
+=! Best NMSE: -1.8100e+01 (epoch=100)
+
+I 06.08/06:32:05 solver.py:159 ] Epoch: [103/200][20/36] lr: 1.35e-04 | MSE loss: 7.1406e-03 | time: 0.089
+I 06.08/06:32:05 solver.py:169 ] => Train  Loss: 7.5722e-03
+
+I 06.08/06:32:05 solver.py:224 ] 
+=! Best NMSE: -1.8100e+01 (epoch=100)
+
+I 06.08/06:32:06 solver.py:159 ] Epoch: [104/200][20/36] lr: 1.33e-04 | MSE loss: 7.3262e-03 | time: 0.042
+I 06.08/06:32:07 solver.py:169 ] => Train  Loss: 7.6387e-03
+
+I 06.08/06:32:07 solver.py:224 ] 
+=! Best NMSE: -1.8100e+01 (epoch=100)
+
+I 06.08/06:32:08 solver.py:159 ] Epoch: [105/200][20/36] lr: 1.32e-04 | MSE loss: 7.6792e-03 | time: 0.043
+I 06.08/06:32:08 solver.py:169 ] => Train  Loss: 7.5138e-03
+
+I 06.08/06:32:08 solver.py:224 ] 
+=! Best NMSE: -1.8100e+01 (epoch=100)
+
+I 06.08/06:32:09 solver.py:159 ] Epoch: [106/200][20/36] lr: 1.31e-04 | MSE loss: 7.4959e-03 | time: 0.042
+I 06.08/06:32:10 solver.py:169 ] => Train  Loss: 7.4889e-03
+
+I 06.08/06:32:10 solver.py:224 ] 
+=! Best NMSE: -1.8100e+01 (epoch=100)
+
+I 06.08/06:32:11 solver.py:159 ] Epoch: [107/200][20/36] lr: 1.30e-04 | MSE loss: 7.5376e-03 | time: 0.048
+I 06.08/06:32:12 solver.py:169 ] => Train  Loss: 7.7310e-03
+
+I 06.08/06:32:12 solver.py:224 ] 
+=! Best NMSE: -1.8100e+01 (epoch=100)
+
+I 06.08/06:32:12 solver.py:159 ] Epoch: [108/200][20/36] lr: 1.28e-04 | MSE loss: 7.3876e-03 | time: 0.045
+I 06.08/06:32:13 solver.py:169 ] => Train  Loss: 7.4848e-03
+
+I 06.08/06:32:13 solver.py:224 ] 
+=! Best NMSE: -1.8100e+01 (epoch=100)
+
+I 06.08/06:32:14 solver.py:159 ] Epoch: [109/200][20/36] lr: 1.27e-04 | MSE loss: 7.2746e-03 | time: 0.044
+I 06.08/06:32:15 solver.py:169 ] => Train  Loss: 7.7137e-03
+
+I 06.08/06:32:15 solver.py:224 ] 
+=! Best NMSE: -1.8100e+01 (epoch=100)
+
+I 06.08/06:32:15 solver.py:159 ] Epoch: [110/200][20/36] lr: 1.26e-04 | MSE loss: 7.1191e-03 | time: 0.038
+I 06.08/06:32:16 solver.py:169 ] => Train  Loss: 7.4734e-03
+
+I 06.08/06:32:16 solver.py:169 ] => Val  Loss: 7.6912e-03
+
+I 06.08/06:32:16 solver.py:413 ] => Test NMSE: -1.8119e+01
+
+I 06.08/06:32:17 solver.py:224 ] 
+=! Best NMSE: -1.8119e+01 (epoch=110)
+
+I 06.08/06:32:18 solver.py:159 ] Epoch: [111/200][20/36] lr: 1.24e-04 | MSE loss: 7.7598e-03 | time: 0.046
+I 06.08/06:32:18 solver.py:169 ] => Train  Loss: 7.5530e-03
+
+I 06.08/06:32:18 solver.py:224 ] 
+=! Best NMSE: -1.8119e+01 (epoch=110)
+
+I 06.08/06:32:19 solver.py:159 ] Epoch: [112/200][20/36] lr: 1.23e-04 | MSE loss: 7.8683e-03 | time: 0.045
+I 06.08/06:32:20 solver.py:169 ] => Train  Loss: 7.4763e-03
+
+I 06.08/06:32:20 solver.py:224 ] 
+=! Best NMSE: -1.8119e+01 (epoch=110)
+
+I 06.08/06:32:21 solver.py:159 ] Epoch: [113/200][20/36] lr: 1.22e-04 | MSE loss: 8.1176e-03 | time: 0.045
+I 06.08/06:32:21 solver.py:169 ] => Train  Loss: 7.4732e-03
+
+I 06.08/06:32:21 solver.py:224 ] 
+=! Best NMSE: -1.8119e+01 (epoch=110)
+
+I 06.08/06:32:22 solver.py:159 ] Epoch: [114/200][20/36] lr: 1.20e-04 | MSE loss: 7.6123e-03 | time: 0.047
+I 06.08/06:32:23 solver.py:169 ] => Train  Loss: 7.5722e-03
+
+I 06.08/06:32:23 solver.py:224 ] 
+=! Best NMSE: -1.8119e+01 (epoch=110)
+
+I 06.08/06:32:24 solver.py:159 ] Epoch: [115/200][20/36] lr: 1.19e-04 | MSE loss: 7.3730e-03 | time: 0.046
+I 06.08/06:32:25 solver.py:169 ] => Train  Loss: 7.4856e-03
+
+I 06.08/06:32:25 solver.py:224 ] 
+=! Best NMSE: -1.8119e+01 (epoch=110)
+
+I 06.08/06:32:26 solver.py:159 ] Epoch: [116/200][20/36] lr: 1.18e-04 | MSE loss: 7.7613e-03 | time: 0.042
+I 06.08/06:32:26 solver.py:169 ] => Train  Loss: 7.4737e-03
+
+I 06.08/06:32:26 solver.py:224 ] 
+=! Best NMSE: -1.8119e+01 (epoch=110)
+
+I 06.08/06:32:27 solver.py:159 ] Epoch: [117/200][20/36] lr: 1.16e-04 | MSE loss: 7.6089e-03 | time: 0.050
+I 06.08/06:32:28 solver.py:169 ] => Train  Loss: 7.7814e-03
+
+I 06.08/06:32:28 solver.py:224 ] 
+=! Best NMSE: -1.8119e+01 (epoch=110)
+
+I 06.08/06:32:29 solver.py:159 ] Epoch: [118/200][20/36] lr: 1.15e-04 | MSE loss: 7.6411e-03 | time: 0.042
+I 06.08/06:32:29 solver.py:169 ] => Train  Loss: 7.9795e-03
+
+I 06.08/06:32:29 solver.py:224 ] 
+=! Best NMSE: -1.8119e+01 (epoch=110)
+
+I 06.08/06:32:30 solver.py:159 ] Epoch: [119/200][20/36] lr: 1.14e-04 | MSE loss: 7.4447e-03 | time: 0.046
+I 06.08/06:32:31 solver.py:169 ] => Train  Loss: 7.5559e-03
+
+I 06.08/06:32:31 solver.py:224 ] 
+=! Best NMSE: -1.8119e+01 (epoch=110)
+
+I 06.08/06:32:32 solver.py:159 ] Epoch: [120/200][20/36] lr: 1.13e-04 | MSE loss: 7.4077e-03 | time: 0.045
+I 06.08/06:32:33 solver.py:169 ] => Train  Loss: 7.5602e-03
+
+I 06.08/06:32:33 solver.py:169 ] => Val  Loss: 7.6602e-03
+
+I 06.08/06:32:33 solver.py:413 ] => Test NMSE: -1.8136e+01
+
+I 06.08/06:32:33 solver.py:224 ] 
+=! Best NMSE: -1.8136e+01 (epoch=120)
+
+I 06.08/06:32:34 solver.py:159 ] Epoch: [121/200][20/36] lr: 1.11e-04 | MSE loss: 7.5076e-03 | time: 0.043
+I 06.08/06:32:35 solver.py:169 ] => Train  Loss: 7.4990e-03
+
+I 06.08/06:32:35 solver.py:224 ] 
+=! Best NMSE: -1.8136e+01 (epoch=120)
+
+I 06.08/06:32:36 solver.py:159 ] Epoch: [122/200][20/36] lr: 1.10e-04 | MSE loss: 7.7065e-03 | time: 0.044
+I 06.08/06:32:36 solver.py:169 ] => Train  Loss: 7.4459e-03
+
+I 06.08/06:32:36 solver.py:224 ] 
+=! Best NMSE: -1.8136e+01 (epoch=120)
+
+I 06.08/06:32:37 solver.py:159 ] Epoch: [123/200][20/36] lr: 1.09e-04 | MSE loss: 7.1743e-03 | time: 0.045
+I 06.08/06:32:38 solver.py:169 ] => Train  Loss: 7.5233e-03
+
+I 06.08/06:32:38 solver.py:224 ] 
+=! Best NMSE: -1.8136e+01 (epoch=120)
+
+I 06.08/06:32:39 solver.py:159 ] Epoch: [124/200][20/36] lr: 1.07e-04 | MSE loss: 7.9617e-03 | time: 0.042
+I 06.08/06:32:40 solver.py:169 ] => Train  Loss: 7.4597e-03
+
+I 06.08/06:32:40 solver.py:224 ] 
+=! Best NMSE: -1.8136e+01 (epoch=120)
+
+I 06.08/06:32:41 solver.py:159 ] Epoch: [125/200][20/36] lr: 1.06e-04 | MSE loss: 7.3593e-03 | time: 0.046
+I 06.08/06:32:41 solver.py:169 ] => Train  Loss: 7.6096e-03
+
+I 06.08/06:32:41 solver.py:224 ] 
+=! Best NMSE: -1.8136e+01 (epoch=120)
+
+I 06.08/06:32:42 solver.py:159 ] Epoch: [126/200][20/36] lr: 1.05e-04 | MSE loss: 7.7200e-03 | time: 0.045
+I 06.08/06:32:43 solver.py:169 ] => Train  Loss: 7.7503e-03
+
+I 06.08/06:32:43 solver.py:224 ] 
+=! Best NMSE: -1.8136e+01 (epoch=120)
+
+I 06.08/06:32:44 solver.py:159 ] Epoch: [127/200][20/36] lr: 1.04e-04 | MSE loss: 7.4475e-03 | time: 0.043
+I 06.08/06:32:44 solver.py:169 ] => Train  Loss: 7.5748e-03
+
+I 06.08/06:32:44 solver.py:224 ] 
+=! Best NMSE: -1.8136e+01 (epoch=120)
+
+I 06.08/06:32:45 solver.py:159 ] Epoch: [128/200][20/36] lr: 1.02e-04 | MSE loss: 7.5526e-03 | time: 0.041
+I 06.08/06:32:46 solver.py:169 ] => Train  Loss: 7.4324e-03
+
+I 06.08/06:32:46 solver.py:224 ] 
+=! Best NMSE: -1.8136e+01 (epoch=120)
+
+I 06.08/06:32:47 solver.py:159 ] Epoch: [129/200][20/36] lr: 1.01e-04 | MSE loss: 7.6331e-03 | time: 0.041
+I 06.08/06:32:47 solver.py:169 ] => Train  Loss: 7.4954e-03
+
+I 06.08/06:32:47 solver.py:224 ] 
+=! Best NMSE: -1.8136e+01 (epoch=120)
+
+I 06.08/06:32:48 solver.py:159 ] Epoch: [130/200][20/36] lr: 9.99e-05 | MSE loss: 7.2147e-03 | time: 0.048
+I 06.08/06:32:49 solver.py:169 ] => Train  Loss: 7.4626e-03
+
+I 06.08/06:32:49 solver.py:169 ] => Val  Loss: 7.6340e-03
+
+I 06.08/06:32:49 solver.py:413 ] => Test NMSE: -1.8151e+01
+
+I 06.08/06:32:50 solver.py:224 ] 
+=! Best NMSE: -1.8151e+01 (epoch=130)
+
+I 06.08/06:32:51 solver.py:159 ] Epoch: [131/200][20/36] lr: 9.87e-05 | MSE loss: 7.7702e-03 | time: 0.050
+I 06.08/06:32:52 solver.py:169 ] => Train  Loss: 7.6144e-03
+
+I 06.08/06:32:52 solver.py:224 ] 
+=! Best NMSE: -1.8151e+01 (epoch=130)
+
+I 06.08/06:32:52 solver.py:159 ] Epoch: [132/200][20/36] lr: 9.74e-05 | MSE loss: 7.6016e-03 | time: 0.046
+I 06.08/06:32:53 solver.py:169 ] => Train  Loss: 7.6679e-03
+
+I 06.08/06:32:53 solver.py:224 ] 
+=! Best NMSE: -1.8151e+01 (epoch=130)
+
+I 06.08/06:32:54 solver.py:159 ] Epoch: [133/200][20/36] lr: 9.62e-05 | MSE loss: 7.2060e-03 | time: 0.044
+I 06.08/06:32:55 solver.py:169 ] => Train  Loss: 7.4107e-03
+
+I 06.08/06:32:55 solver.py:224 ] 
+=! Best NMSE: -1.8151e+01 (epoch=130)
+
+I 06.08/06:32:56 solver.py:159 ] Epoch: [134/200][20/36] lr: 9.50e-05 | MSE loss: 7.4476e-03 | time: 0.047
+I 06.08/06:32:56 solver.py:169 ] => Train  Loss: 7.4955e-03
+
+I 06.08/06:32:56 solver.py:224 ] 
+=! Best NMSE: -1.8151e+01 (epoch=130)
+
+I 06.08/06:32:57 solver.py:159 ] Epoch: [135/200][20/36] lr: 9.38e-05 | MSE loss: 7.8579e-03 | time: 0.047
+I 06.08/06:32:58 solver.py:169 ] => Train  Loss: 7.3938e-03
+
+I 06.08/06:32:58 solver.py:224 ] 
+=! Best NMSE: -1.8151e+01 (epoch=130)
+
+I 06.08/06:32:59 solver.py:159 ] Epoch: [136/200][20/36] lr: 9.26e-05 | MSE loss: 7.8758e-03 | time: 0.042
+I 06.08/06:33:00 solver.py:169 ] => Train  Loss: 7.5321e-03
+
+I 06.08/06:33:00 solver.py:224 ] 
+=! Best NMSE: -1.8151e+01 (epoch=130)
+
+I 06.08/06:33:01 solver.py:159 ] Epoch: [137/200][20/36] lr: 9.15e-05 | MSE loss: 7.4249e-03 | time: 0.077
+I 06.08/06:33:03 solver.py:169 ] => Train  Loss: 7.3962e-03
+
+I 06.08/06:33:03 solver.py:224 ] 
+=! Best NMSE: -1.8151e+01 (epoch=130)
+
+I 06.08/06:33:05 solver.py:159 ] Epoch: [138/200][20/36] lr: 9.03e-05 | MSE loss: 7.4646e-03 | time: 0.079
+I 06.08/06:33:05 solver.py:169 ] => Train  Loss: 7.5779e-03
+
+I 06.08/06:33:05 solver.py:224 ] 
+=! Best NMSE: -1.8151e+01 (epoch=130)
+
+I 06.08/06:33:06 solver.py:159 ] Epoch: [139/200][20/36] lr: 8.91e-05 | MSE loss: 7.4035e-03 | time: 0.046
+I 06.08/06:33:07 solver.py:169 ] => Train  Loss: 7.5104e-03
+
+I 06.08/06:33:07 solver.py:224 ] 
+=! Best NMSE: -1.8151e+01 (epoch=130)
+
+I 06.08/06:33:08 solver.py:159 ] Epoch: [140/200][20/36] lr: 8.80e-05 | MSE loss: 7.4775e-03 | time: 0.046
+I 06.08/06:33:09 solver.py:169 ] => Train  Loss: 7.7196e-03
+
+I 06.08/06:33:09 solver.py:169 ] => Val  Loss: 7.6112e-03
+
+I 06.08/06:33:09 solver.py:413 ] => Test NMSE: -1.8164e+01
+
+I 06.08/06:33:09 solver.py:224 ] 
+=! Best NMSE: -1.8164e+01 (epoch=140)
+
+I 06.08/06:33:10 solver.py:159 ] Epoch: [141/200][20/36] lr: 8.69e-05 | MSE loss: 7.4538e-03 | time: 0.047
+I 06.08/06:33:11 solver.py:169 ] => Train  Loss: 7.4226e-03
+
+I 06.08/06:33:11 solver.py:224 ] 
+=! Best NMSE: -1.8164e+01 (epoch=140)
+
+I 06.08/06:33:12 solver.py:159 ] Epoch: [142/200][20/36] lr: 8.58e-05 | MSE loss: 7.4308e-03 | time: 0.046
+I 06.08/06:33:13 solver.py:169 ] => Train  Loss: 7.4332e-03
+
+I 06.08/06:33:13 solver.py:224 ] 
+=! Best NMSE: -1.8164e+01 (epoch=140)
+
+I 06.08/06:33:14 solver.py:159 ] Epoch: [143/200][20/36] lr: 8.46e-05 | MSE loss: 7.8885e-03 | time: 0.046
+I 06.08/06:33:14 solver.py:169 ] => Train  Loss: 7.4691e-03
+
+I 06.08/06:33:14 solver.py:224 ] 
+=! Best NMSE: -1.8164e+01 (epoch=140)
+
+I 06.08/06:33:15 solver.py:159 ] Epoch: [144/200][20/36] lr: 8.35e-05 | MSE loss: 7.8823e-03 | time: 0.045
+I 06.08/06:33:16 solver.py:169 ] => Train  Loss: 7.5633e-03
+
+I 06.08/06:33:16 solver.py:224 ] 
+=! Best NMSE: -1.8164e+01 (epoch=140)
+
+I 06.08/06:33:17 solver.py:159 ] Epoch: [145/200][20/36] lr: 8.25e-05 | MSE loss: 7.3476e-03 | time: 0.045
+I 06.08/06:33:17 solver.py:169 ] => Train  Loss: 7.4737e-03
+
+I 06.08/06:33:17 solver.py:224 ] 
+=! Best NMSE: -1.8164e+01 (epoch=140)
+
+I 06.08/06:33:18 solver.py:159 ] Epoch: [146/200][20/36] lr: 8.14e-05 | MSE loss: 7.5918e-03 | time: 0.044
+I 06.08/06:33:19 solver.py:169 ] => Train  Loss: 7.4200e-03
+
+I 06.08/06:33:19 solver.py:224 ] 
+=! Best NMSE: -1.8164e+01 (epoch=140)
+
+I 06.08/06:33:20 solver.py:159 ] Epoch: [147/200][20/36] lr: 8.03e-05 | MSE loss: 7.3421e-03 | time: 0.046
+I 06.08/06:33:21 solver.py:169 ] => Train  Loss: 7.7544e-03
+
+I 06.08/06:33:21 solver.py:224 ] 
+=! Best NMSE: -1.8164e+01 (epoch=140)
+
+I 06.08/06:33:22 solver.py:159 ] Epoch: [148/200][20/36] lr: 7.93e-05 | MSE loss: 7.6438e-03 | time: 0.045
+I 06.08/06:33:22 solver.py:169 ] => Train  Loss: 7.5298e-03
+
+I 06.08/06:33:22 solver.py:224 ] 
+=! Best NMSE: -1.8164e+01 (epoch=140)
+
+I 06.08/06:33:23 solver.py:159 ] Epoch: [149/200][20/36] lr: 7.83e-05 | MSE loss: 7.2409e-03 | time: 0.045
+I 06.08/06:33:24 solver.py:169 ] => Train  Loss: 7.4630e-03
+
+I 06.08/06:33:24 solver.py:224 ] 
+=! Best NMSE: -1.8164e+01 (epoch=140)
+
+I 06.08/06:33:25 solver.py:159 ] Epoch: [150/200][20/36] lr: 7.72e-05 | MSE loss: 7.6276e-03 | time: 0.044
+I 06.08/06:33:25 solver.py:169 ] => Train  Loss: 7.4452e-03
+
+I 06.08/06:33:26 solver.py:169 ] => Val  Loss: 7.5916e-03
+
+I 06.08/06:33:26 solver.py:413 ] => Test NMSE: -1.8175e+01
+
+I 06.08/06:33:26 solver.py:224 ] 
+=! Best NMSE: -1.8175e+01 (epoch=150)
+
+I 06.08/06:33:27 solver.py:159 ] Epoch: [151/200][20/36] lr: 7.62e-05 | MSE loss: 7.4492e-03 | time: 0.054
+I 06.08/06:33:28 solver.py:169 ] => Train  Loss: 7.3974e-03
+
+I 06.08/06:33:28 solver.py:224 ] 
+=! Best NMSE: -1.8175e+01 (epoch=150)
+
+I 06.08/06:33:29 solver.py:159 ] Epoch: [152/200][20/36] lr: 7.52e-05 | MSE loss: 7.4053e-03 | time: 0.048
+I 06.08/06:33:29 solver.py:169 ] => Train  Loss: 7.6425e-03
+
+I 06.08/06:33:29 solver.py:224 ] 
+=! Best NMSE: -1.8175e+01 (epoch=150)
+
+I 06.08/06:33:30 solver.py:159 ] Epoch: [153/200][20/36] lr: 7.43e-05 | MSE loss: 7.8341e-03 | time: 0.047
+I 06.08/06:33:31 solver.py:169 ] => Train  Loss: 7.5216e-03
+
+I 06.08/06:33:31 solver.py:224 ] 
+=! Best NMSE: -1.8175e+01 (epoch=150)
+
+I 06.08/06:33:32 solver.py:159 ] Epoch: [154/200][20/36] lr: 7.33e-05 | MSE loss: 7.5854e-03 | time: 0.048
+I 06.08/06:33:33 solver.py:169 ] => Train  Loss: 7.3701e-03
+
+I 06.08/06:33:33 solver.py:224 ] 
+=! Best NMSE: -1.8175e+01 (epoch=150)
+
+I 06.08/06:33:34 solver.py:159 ] Epoch: [155/200][20/36] lr: 7.24e-05 | MSE loss: 7.5951e-03 | time: 0.053
+I 06.08/06:33:34 solver.py:169 ] => Train  Loss: 7.5373e-03
+
+I 06.08/06:33:34 solver.py:224 ] 
+=! Best NMSE: -1.8175e+01 (epoch=150)
+
+I 06.08/06:33:35 solver.py:159 ] Epoch: [156/200][20/36] lr: 7.15e-05 | MSE loss: 7.6859e-03 | time: 0.044
+I 06.08/06:33:36 solver.py:169 ] => Train  Loss: 7.5344e-03
+
+I 06.08/06:33:36 solver.py:224 ] 
+=! Best NMSE: -1.8175e+01 (epoch=150)
+
+I 06.08/06:33:37 solver.py:159 ] Epoch: [157/200][20/36] lr: 7.05e-05 | MSE loss: 7.2814e-03 | time: 0.046
+I 06.08/06:33:37 solver.py:169 ] => Train  Loss: 7.3538e-03
+
+I 06.08/06:33:37 solver.py:224 ] 
+=! Best NMSE: -1.8175e+01 (epoch=150)
+
+I 06.08/06:33:38 solver.py:159 ] Epoch: [158/200][20/36] lr: 6.97e-05 | MSE loss: 7.7597e-03 | time: 0.045
+I 06.08/06:33:39 solver.py:169 ] => Train  Loss: 7.4383e-03
+
+I 06.08/06:33:39 solver.py:224 ] 
+=! Best NMSE: -1.8175e+01 (epoch=150)
+
+I 06.08/06:33:40 solver.py:159 ] Epoch: [159/200][20/36] lr: 6.88e-05 | MSE loss: 7.9597e-03 | time: 0.046
+I 06.08/06:33:41 solver.py:169 ] => Train  Loss: 7.3850e-03
+
+I 06.08/06:33:41 solver.py:224 ] 
+=! Best NMSE: -1.8175e+01 (epoch=150)
+
+I 06.08/06:33:42 solver.py:159 ] Epoch: [160/200][20/36] lr: 6.79e-05 | MSE loss: 7.4749e-03 | time: 0.045
+I 06.08/06:33:42 solver.py:169 ] => Train  Loss: 7.6924e-03
+
+I 06.08/06:33:42 solver.py:169 ] => Val  Loss: 7.5745e-03
+
+I 06.08/06:33:42 solver.py:413 ] => Test NMSE: -1.8185e+01
+
+I 06.08/06:33:43 solver.py:224 ] 
+=! Best NMSE: -1.8185e+01 (epoch=160)
+
+I 06.08/06:33:44 solver.py:159 ] Epoch: [161/200][20/36] lr: 6.71e-05 | MSE loss: 7.5107e-03 | time: 0.049
+I 06.08/06:33:45 solver.py:169 ] => Train  Loss: 7.4627e-03
+
+I 06.08/06:33:45 solver.py:224 ] 
+=! Best NMSE: -1.8185e+01 (epoch=160)
+
+I 06.08/06:33:46 solver.py:159 ] Epoch: [162/200][20/36] lr: 6.63e-05 | MSE loss: 7.9808e-03 | time: 0.048
+I 06.08/06:33:46 solver.py:169 ] => Train  Loss: 7.4762e-03
+
+I 06.08/06:33:46 solver.py:224 ] 
+=! Best NMSE: -1.8185e+01 (epoch=160)
+
+I 06.08/06:33:47 solver.py:159 ] Epoch: [163/200][20/36] lr: 6.55e-05 | MSE loss: 7.3894e-03 | time: 0.043
+I 06.08/06:33:48 solver.py:169 ] => Train  Loss: 7.5592e-03
+
+I 06.08/06:33:48 solver.py:224 ] 
+=! Best NMSE: -1.8185e+01 (epoch=160)
+
+I 06.08/06:33:49 solver.py:159 ] Epoch: [164/200][20/36] lr: 6.47e-05 | MSE loss: 7.6065e-03 | time: 0.044
+I 06.08/06:33:49 solver.py:169 ] => Train  Loss: 7.6220e-03
+
+I 06.08/06:33:49 solver.py:224 ] 
+=! Best NMSE: -1.8185e+01 (epoch=160)
+
+I 06.08/06:33:50 solver.py:159 ] Epoch: [165/200][20/36] lr: 6.39e-05 | MSE loss: 7.3035e-03 | time: 0.044
+I 06.08/06:33:51 solver.py:169 ] => Train  Loss: 7.6462e-03
+
+I 06.08/06:33:51 solver.py:224 ] 
+=! Best NMSE: -1.8185e+01 (epoch=160)
+
+I 06.08/06:33:52 solver.py:159 ] Epoch: [166/200][20/36] lr: 6.31e-05 | MSE loss: 7.3815e-03 | time: 0.048
+I 06.08/06:33:53 solver.py:169 ] => Train  Loss: 7.5361e-03
+
+I 06.08/06:33:53 solver.py:224 ] 
+=! Best NMSE: -1.8185e+01 (epoch=160)
+
+I 06.08/06:33:54 solver.py:159 ] Epoch: [167/200][20/36] lr: 6.24e-05 | MSE loss: 7.0440e-03 | time: 0.046
+I 06.08/06:33:54 solver.py:169 ] => Train  Loss: 7.4147e-03
+
+I 06.08/06:33:54 solver.py:224 ] 
+=! Best NMSE: -1.8185e+01 (epoch=160)
+
+I 06.08/06:33:55 solver.py:159 ] Epoch: [168/200][20/36] lr: 6.17e-05 | MSE loss: 6.9446e-03 | time: 0.050
+I 06.08/06:33:56 solver.py:169 ] => Train  Loss: 7.4715e-03
+
+I 06.08/06:33:56 solver.py:224 ] 
+=! Best NMSE: -1.8185e+01 (epoch=160)
+
+I 06.08/06:33:57 solver.py:159 ] Epoch: [169/200][20/36] lr: 6.10e-05 | MSE loss: 6.9630e-03 | time: 0.046
+I 06.08/06:33:58 solver.py:169 ] => Train  Loss: 7.3243e-03
+
+I 06.08/06:33:58 solver.py:224 ] 
+=! Best NMSE: -1.8185e+01 (epoch=160)
+
+I 06.08/06:33:59 solver.py:159 ] Epoch: [170/200][20/36] lr: 6.03e-05 | MSE loss: 8.1101e-03 | time: 0.050
+I 06.08/06:33:59 solver.py:169 ] => Train  Loss: 7.3408e-03
+
+I 06.08/06:33:59 solver.py:169 ] => Val  Loss: 7.5593e-03
+
+I 06.08/06:34:00 solver.py:413 ] => Test NMSE: -1.8194e+01
+
+I 06.08/06:34:00 solver.py:224 ] 
+=! Best NMSE: -1.8194e+01 (epoch=170)
+
+I 06.08/06:34:01 solver.py:159 ] Epoch: [171/200][20/36] lr: 5.97e-05 | MSE loss: 7.3103e-03 | time: 0.064
+I 06.08/06:34:03 solver.py:169 ] => Train  Loss: 7.3300e-03
+
+I 06.08/06:34:03 solver.py:224 ] 
+=! Best NMSE: -1.8194e+01 (epoch=170)
+
+I 06.08/06:34:04 solver.py:159 ] Epoch: [172/200][20/36] lr: 5.91e-05 | MSE loss: 7.3347e-03 | time: 0.092
+I 06.08/06:34:05 solver.py:169 ] => Train  Loss: 7.6805e-03
+
+I 06.08/06:34:05 solver.py:224 ] 
+=! Best NMSE: -1.8194e+01 (epoch=170)
+
+I 06.08/06:34:06 solver.py:159 ] Epoch: [173/200][20/36] lr: 5.84e-05 | MSE loss: 7.0880e-03 | time: 0.047
+I 06.08/06:34:07 solver.py:169 ] => Train  Loss: 7.4911e-03
+
+I 06.08/06:34:07 solver.py:224 ] 
+=! Best NMSE: -1.8194e+01 (epoch=170)
+
+I 06.08/06:34:08 solver.py:159 ] Epoch: [174/200][20/36] lr: 5.78e-05 | MSE loss: 7.6942e-03 | time: 0.043
+I 06.08/06:34:08 solver.py:169 ] => Train  Loss: 7.3642e-03
+
+I 06.08/06:34:08 solver.py:224 ] 
+=! Best NMSE: -1.8194e+01 (epoch=170)
+
+I 06.08/06:34:09 solver.py:159 ] Epoch: [175/200][20/36] lr: 5.73e-05 | MSE loss: 7.1509e-03 | time: 0.044
+I 06.08/06:34:10 solver.py:169 ] => Train  Loss: 7.4195e-03
+
+I 06.08/06:34:10 solver.py:224 ] 
+=! Best NMSE: -1.8194e+01 (epoch=170)
+
+I 06.08/06:34:11 solver.py:159 ] Epoch: [176/200][20/36] lr: 5.67e-05 | MSE loss: 7.2970e-03 | time: 0.048
+I 06.08/06:34:12 solver.py:169 ] => Train  Loss: 7.7654e-03
+
+I 06.08/06:34:12 solver.py:224 ] 
+=! Best NMSE: -1.8194e+01 (epoch=170)
+
+I 06.08/06:34:13 solver.py:159 ] Epoch: [177/200][20/36] lr: 5.62e-05 | MSE loss: 7.6396e-03 | time: 0.044
+I 06.08/06:34:13 solver.py:169 ] => Train  Loss: 7.5126e-03
+
+I 06.08/06:34:13 solver.py:224 ] 
+=! Best NMSE: -1.8194e+01 (epoch=170)
+
+I 06.08/06:34:14 solver.py:159 ] Epoch: [178/200][20/36] lr: 5.57e-05 | MSE loss: 7.5244e-03 | time: 0.050
+I 06.08/06:34:15 solver.py:169 ] => Train  Loss: 7.3414e-03
+
+I 06.08/06:34:15 solver.py:224 ] 
+=! Best NMSE: -1.8194e+01 (epoch=170)
+
+I 06.08/06:34:16 solver.py:159 ] Epoch: [179/200][20/36] lr: 5.52e-05 | MSE loss: 7.8011e-03 | time: 0.052
+I 06.08/06:34:17 solver.py:169 ] => Train  Loss: 7.4765e-03
+
+I 06.08/06:34:17 solver.py:224 ] 
+=! Best NMSE: -1.8194e+01 (epoch=170)
+
+I 06.08/06:34:18 solver.py:159 ] Epoch: [180/200][20/36] lr: 5.47e-05 | MSE loss: 7.3457e-03 | time: 0.045
+I 06.08/06:34:18 solver.py:169 ] => Train  Loss: 7.5022e-03
+
+I 06.08/06:34:19 solver.py:169 ] => Val  Loss: 7.5463e-03
+
+I 06.08/06:34:19 solver.py:413 ] => Test NMSE: -1.8201e+01
+
+I 06.08/06:34:19 solver.py:224 ] 
+=! Best NMSE: -1.8201e+01 (epoch=180)
+
+I 06.08/06:34:20 solver.py:159 ] Epoch: [181/200][20/36] lr: 5.43e-05 | MSE loss: 7.4138e-03 | time: 0.050
+I 06.08/06:34:21 solver.py:169 ] => Train  Loss: 7.4795e-03
+
+I 06.08/06:34:21 solver.py:224 ] 
+=! Best NMSE: -1.8201e+01 (epoch=180)
+
+I 06.08/06:34:22 solver.py:159 ] Epoch: [182/200][20/36] lr: 5.39e-05 | MSE loss: 7.9332e-03 | time: 0.055
+I 06.08/06:34:23 solver.py:169 ] => Train  Loss: 7.3068e-03
+
+I 06.08/06:34:23 solver.py:224 ] 
+=! Best NMSE: -1.8201e+01 (epoch=180)
+
+I 06.08/06:34:24 solver.py:159 ] Epoch: [183/200][20/36] lr: 5.34e-05 | MSE loss: 7.6414e-03 | time: 0.055
+I 06.08/06:34:25 solver.py:169 ] => Train  Loss: 7.7239e-03
+
+I 06.08/06:34:25 solver.py:224 ] 
+=! Best NMSE: -1.8201e+01 (epoch=180)
+
+I 06.08/06:34:26 solver.py:159 ] Epoch: [184/200][20/36] lr: 5.31e-05 | MSE loss: 8.0398e-03 | time: 0.049
+I 06.08/06:34:27 solver.py:169 ] => Train  Loss: 7.4095e-03
+
+I 06.08/06:34:27 solver.py:224 ] 
+=! Best NMSE: -1.8201e+01 (epoch=180)
+
+I 06.08/06:34:28 solver.py:159 ] Epoch: [185/200][20/36] lr: 5.27e-05 | MSE loss: 7.6267e-03 | time: 0.052
+I 06.08/06:34:28 solver.py:169 ] => Train  Loss: 7.4375e-03
+
+I 06.08/06:34:28 solver.py:224 ] 
+=! Best NMSE: -1.8201e+01 (epoch=180)
+
+I 06.08/06:34:29 solver.py:159 ] Epoch: [186/200][20/36] lr: 5.24e-05 | MSE loss: 7.5260e-03 | time: 0.052
+I 06.08/06:34:30 solver.py:169 ] => Train  Loss: 7.4490e-03
+
+I 06.08/06:34:30 solver.py:224 ] 
+=! Best NMSE: -1.8201e+01 (epoch=180)
+
+I 06.08/06:34:31 solver.py:159 ] Epoch: [187/200][20/36] lr: 5.21e-05 | MSE loss: 7.2658e-03 | time: 0.048
+I 06.08/06:34:32 solver.py:169 ] => Train  Loss: 7.4269e-03
+
+I 06.08/06:34:32 solver.py:224 ] 
+=! Best NMSE: -1.8201e+01 (epoch=180)
+
+I 06.08/06:34:33 solver.py:159 ] Epoch: [188/200][20/36] lr: 5.18e-05 | MSE loss: 7.7262e-03 | time: 0.052
+I 06.08/06:34:34 solver.py:169 ] => Train  Loss: 7.5284e-03
+
+I 06.08/06:34:34 solver.py:224 ] 
+=! Best NMSE: -1.8201e+01 (epoch=180)
+
+I 06.08/06:34:35 solver.py:159 ] Epoch: [189/200][20/36] lr: 5.15e-05 | MSE loss: 7.7061e-03 | time: 0.049
+I 06.08/06:34:35 solver.py:169 ] => Train  Loss: 7.4264e-03
+
+I 06.08/06:34:35 solver.py:224 ] 
+=! Best NMSE: -1.8201e+01 (epoch=180)
+
+I 06.08/06:34:37 solver.py:159 ] Epoch: [190/200][20/36] lr: 5.12e-05 | MSE loss: 7.3911e-03 | time: 0.054
+I 06.08/06:34:37 solver.py:169 ] => Train  Loss: 7.3548e-03
+
+I 06.08/06:34:38 solver.py:169 ] => Val  Loss: 7.5340e-03
+
+I 06.08/06:34:38 solver.py:413 ] => Test NMSE: -1.8208e+01
+
+I 06.08/06:34:38 solver.py:224 ] 
+=! Best NMSE: -1.8208e+01 (epoch=190)
+
+I 06.08/06:34:39 solver.py:159 ] Epoch: [191/200][20/36] lr: 5.10e-05 | MSE loss: 7.5652e-03 | time: 0.053
+I 06.08/06:34:40 solver.py:169 ] => Train  Loss: 7.4336e-03
+
+I 06.08/06:34:40 solver.py:224 ] 
+=! Best NMSE: -1.8208e+01 (epoch=190)
+
+I 06.08/06:34:41 solver.py:159 ] Epoch: [192/200][20/36] lr: 5.08e-05 | MSE loss: 7.0762e-03 | time: 0.049
+I 06.08/06:34:42 solver.py:169 ] => Train  Loss: 7.3451e-03
+
+I 06.08/06:34:42 solver.py:224 ] 
+=! Best NMSE: -1.8208e+01 (epoch=190)
+
+I 06.08/06:34:43 solver.py:159 ] Epoch: [193/200][20/36] lr: 5.06e-05 | MSE loss: 7.4974e-03 | time: 0.054
+I 06.08/06:34:44 solver.py:169 ] => Train  Loss: 7.5854e-03
+
+I 06.08/06:34:44 solver.py:224 ] 
+=! Best NMSE: -1.8208e+01 (epoch=190)
+
+I 06.08/06:34:45 solver.py:159 ] Epoch: [194/200][20/36] lr: 5.05e-05 | MSE loss: 6.9811e-03 | time: 0.051
+I 06.08/06:34:46 solver.py:169 ] => Train  Loss: 7.4118e-03
+
+I 06.08/06:34:46 solver.py:224 ] 
+=! Best NMSE: -1.8208e+01 (epoch=190)
+
+I 06.08/06:34:47 solver.py:159 ] Epoch: [195/200][20/36] lr: 5.03e-05 | MSE loss: 7.2940e-03 | time: 0.050
+I 06.08/06:34:48 solver.py:169 ] => Train  Loss: 7.4234e-03
+
+I 06.08/06:34:48 solver.py:224 ] 
+=! Best NMSE: -1.8208e+01 (epoch=190)
+
+I 06.08/06:34:49 solver.py:159 ] Epoch: [196/200][20/36] lr: 5.02e-05 | MSE loss: 7.3393e-03 | time: 0.050
+I 06.08/06:34:49 solver.py:169 ] => Train  Loss: 7.3803e-03
+
+I 06.08/06:34:49 solver.py:224 ] 
+=! Best NMSE: -1.8208e+01 (epoch=190)
+
+I 06.08/06:34:51 solver.py:159 ] Epoch: [197/200][20/36] lr: 5.01e-05 | MSE loss: 7.0059e-03 | time: 0.059
+I 06.08/06:34:51 solver.py:169 ] => Train  Loss: 7.3618e-03
+
+I 06.08/06:34:51 solver.py:224 ] 
+=! Best NMSE: -1.8208e+01 (epoch=190)
+
+I 06.08/06:34:53 solver.py:159 ] Epoch: [198/200][20/36] lr: 5.01e-05 | MSE loss: 7.3980e-03 | time: 0.059
+I 06.08/06:34:53 solver.py:169 ] => Train  Loss: 7.4026e-03
+
+I 06.08/06:34:53 solver.py:224 ] 
+=! Best NMSE: -1.8208e+01 (epoch=190)
+
+I 06.08/06:34:55 solver.py:159 ] Epoch: [199/200][20/36] lr: 5.00e-05 | MSE loss: 7.8381e-03 | time: 0.055
+I 06.08/06:34:55 solver.py:169 ] => Train  Loss: 7.5146e-03
+
+I 06.08/06:34:55 solver.py:224 ] 
+=! Best NMSE: -1.8208e+01 (epoch=190)
+
+I 06.08/06:34:57 solver.py:159 ] Epoch: [200/200][20/36] lr: 5.00e-05 | MSE loss: 7.3783e-03 | time: 0.057
+I 06.08/06:34:57 solver.py:169 ] => Train  Loss: 7.3599e-03
+
+I 06.08/06:34:58 solver.py:169 ] => Val  Loss: 7.5229e-03
+
+I 06.08/06:34:58 solver.py:413 ] => Test NMSE: -1.8214e+01
+
+I 06.08/06:34:58 solver.py:224 ] 
+=! Best NMSE: -1.8214e+01 (epoch=200)
+
+I 06.08/06:35:06 solver.py:247 ] => Saved encoder outputs to /home/hujiacong/zxd/Huawei/TransNet/exps/WAIRD/seed797/scenario_2/06401_freeze_only_fc_decoder_torch_independent/encoder_output.pth
+I 06.08/06:35:06 solver.py:413 ] => Test NMSE: -1.8214e+01
+
+I 06.08/06:35:06 solver.py:370 ] 
+=> Test result: 
+loss: 7.5428e-03    NMSE: -1.8214e+01
+
+I 06.08/06:35:06 main.py:110 ] 
+=! Final test loss: 7.5428e-03
+         test NMSE: -1.8214e+01
+

@@ -1,0 +1,1996 @@
+I 06.08/20:15:31 main.py:23  ] => Experiment directory: /home/hujiacong/zxd/Huawei/TransNet/exps/WAIRD/seed797/scenario_2/01105_adapter_64_0_torch_shared
+I 06.08/20:15:31 main.py:24  ] => PyTorch Version: 2.5.1
+I 06.08/20:15:31 main.py:26  ] ==================================================
+I 06.08/20:15:31 main.py:30  ] => Arguments:
+	train_path: data/WAIRD/scenario_2/01105/train.pt
+	val_path: data/WAIRD/scenario_2/01105/test.pt
+	test_path: data/WAIRD/scenario_2/01105/test.pt
+	batch_size: 256
+	workers: 0
+	evaluate: False
+	pretrained: exps/WAIRD/seed797/base/torch_shared/checkpoints/best_nmse.pth
+	resume: None
+	seed: 797
+	gpu: 5
+	cpu: False
+	cpu_affinity: None
+	epochs: 200
+	cr: 4
+	exp_name: WAIRD/seed797/scenario_2/01105_adapter_64_0_torch_shared
+	channel: 2
+	nt: 64
+	nc: 64
+	d_model: 64
+	dim_feedforward: 2048
+	fc_lora: False
+	fc_lora_rank: None
+	layer_sharing: shared
+	transformer_backend: torch
+	scheduler: cosine
+	lr_init: 0.0002
+	weight_decay: 0.0
+	freeze_components: []
+	lora_component: ['adapter']
+	lora_pretrained: None
+	lora_rank: 64
+	lora_alpha: 0
+I 06.08/20:15:31 main.py:31  ] ==================================================
+I 06.08/20:15:31 init.py:21  ] Random seed set to 797
+I 06.08/20:15:31 init.py:247 ] Running on GPU 5
+I 06.08/20:15:31 dataloader.py:84  ] data/WAIRD/scenario_2/01105/train.pt loaded.
+I 06.08/20:15:31 dataloader.py:86  ] data/WAIRD/scenario_2/01105/test.pt loaded.
+I 06.08/20:15:31 dataloader.py:88  ] data/WAIRD/scenario_2/01105/test.pt loaded.
+I 06.08/20:15:33 init.py:288 ] pretrained model loaded from exps/WAIRD/seed797/base/torch_shared/checkpoints/best_nmse.pth
+I 06.08/20:15:33 init.py:206 ] => LoRA enabled on components: adapter; target_modules=[]; (rank=64, alpha=0); 270400/34414400 scalar params trainable
+I 06.08/20:15:33 init.py:317 ] => Model Name: TransNet [pretrained: exps/WAIRD/seed797/base/torch_shared/checkpoints/best_nmse.pth]
+I 06.08/20:15:33 init.py:318 ] => Model Config: compression ratio=1/4; input shape=(2, 64, 64); input dim=8192; layer sharing=shared; transformer backend=torch; fc_lora=False; fc_lora_rank=None
+I 06.08/20:15:33 init.py:327 ] 
+==================================================
+Transformer(
+  (encoder): SharedTransformerEncoder(
+    (layer): TransformerEncoderLayer(
+      (self_attn): MultiheadAttention(
+        (out_proj): NonDynamicallyQuantizableLinear(in_features=64, out_features=64, bias=True)
+      )
+      (linear1): Linear(in_features=64, out_features=2048, bias=True)
+      (dropout): Dropout(p=0.0, inplace=False)
+      (linear2): Linear(in_features=2048, out_features=64, bias=True)
+      (norm1): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+      (norm2): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+      (dropout1): Dropout(p=0.0, inplace=False)
+      (dropout2): Dropout(p=0.0, inplace=False)
+    )
+    (norm): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+  )
+  (decoder): SharedTransformerDecoder(
+    (layer): TransformerDecoderLayer(
+      (self_attn): MultiheadAttention(
+        (out_proj): NonDynamicallyQuantizableLinear(in_features=64, out_features=64, bias=True)
+      )
+      (multihead_attn): MultiheadAttention(
+        (out_proj): NonDynamicallyQuantizableLinear(in_features=64, out_features=64, bias=True)
+      )
+      (linear1): Linear(in_features=64, out_features=2048, bias=True)
+      (dropout): Dropout(p=0.0, inplace=False)
+      (linear2): Linear(in_features=2048, out_features=64, bias=True)
+      (norm1): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+      (norm2): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+      (norm3): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+      (dropout1): Dropout(p=0.0, inplace=False)
+      (dropout2): Dropout(p=0.0, inplace=False)
+      (dropout3): Dropout(p=0.0, inplace=False)
+    )
+    (norm): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+  )
+  (fc_encoder): Linear(in_features=8192, out_features=2048, bias=True)
+  (fc_decoder): Linear(in_features=2048, out_features=8192, bias=True)
+  (latent_adapter): LatentResidualAdapter(
+    (adapter_norm): LayerNorm((2048,), eps=1e-05, elementwise_affine=True)
+    (adapter_down): Linear(in_features=2048, out_features=64, bias=False)
+    (adapter_mid): Linear(in_features=64, out_features=64, bias=True)
+    (adapter_up): Linear(in_features=64, out_features=2048, bias=False)
+    (adapter_act): GELU(approximate='none')
+  )
+)
+==================================================
+
+I 06.08/20:15:33 init.py:227 ] 
+encoder.layer.self_attn.in_proj_weight                            False    (192, 64)
+encoder.layer.self_attn.in_proj_bias                              False    (192,)
+encoder.layer.self_attn.out_proj.weight                           False    (64, 64)
+encoder.layer.self_attn.out_proj.bias                             False    (64,)
+encoder.layer.linear1.weight                                      False    (2048, 64)
+encoder.layer.linear1.bias                                        False    (2048,)
+encoder.layer.linear2.weight                                      False    (64, 2048)
+encoder.layer.linear2.bias                                        False    (64,)
+encoder.layer.norm1.weight                                        False    (64,)
+encoder.layer.norm1.bias                                          False    (64,)
+encoder.layer.norm2.weight                                        False    (64,)
+encoder.layer.norm2.bias                                          False    (64,)
+encoder.norm.weight                                               False    (64,)
+encoder.norm.bias                                                 False    (64,)
+decoder.layer.self_attn.in_proj_weight                            False    (192, 64)
+decoder.layer.self_attn.in_proj_bias                              False    (192,)
+decoder.layer.self_attn.out_proj.weight                           False    (64, 64)
+decoder.layer.self_attn.out_proj.bias                             False    (64,)
+decoder.layer.multihead_attn.in_proj_weight                       False    (192, 64)
+decoder.layer.multihead_attn.in_proj_bias                         False    (192,)
+decoder.layer.multihead_attn.out_proj.weight                      False    (64, 64)
+decoder.layer.multihead_attn.out_proj.bias                        False    (64,)
+decoder.layer.linear1.weight                                      False    (2048, 64)
+decoder.layer.linear1.bias                                        False    (2048,)
+decoder.layer.linear2.weight                                      False    (64, 2048)
+decoder.layer.linear2.bias                                        False    (64,)
+decoder.layer.norm1.weight                                        False    (64,)
+decoder.layer.norm1.bias                                          False    (64,)
+decoder.layer.norm2.weight                                        False    (64,)
+decoder.layer.norm2.bias                                          False    (64,)
+decoder.layer.norm3.weight                                        False    (64,)
+decoder.layer.norm3.bias                                          False    (64,)
+decoder.norm.weight                                               False    (64,)
+decoder.norm.bias                                                 False    (64,)
+fc_encoder.weight                                                 False    (2048, 8192)
+fc_encoder.bias                                                   False    (2048,)
+fc_decoder.weight                                                 False    (8192, 2048)
+fc_decoder.bias                                                   False    (8192,)
+latent_adapter.adapter_norm.weight                                True     (2048,)
+latent_adapter.adapter_norm.bias                                  True     (2048,)
+latent_adapter.adapter_down.weight                                True     (64, 2048)
+latent_adapter.adapter_mid.weight                                 True     (64, 64)
+latent_adapter.adapter_mid.bias                                   True     (64,)
+latent_adapter.adapter_up.weight                                  True     (2048, 64)
+==================================================
+I 06.08/20:15:34 solver.py:426 ] => Test NMSE: -1.8190e+01
+
+I 06.08/20:15:34 solver.py:358 ] => Adapter monitor [before_train] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.572218e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:0.000000e+00,weight:4.572218e+01 | component_l2=latent_adapter:4.572218e+01 | adapter_abs_max=1.000000e+00 | delta_l2=0.000000e+00 | delta_rel=0.000000e+00 | test_loss=7.585587e-03 | nmse=-1.818981e+01
+I 06.08/20:15:35 solver.py:159 ] Epoch: [1/200][20/36] lr: 5.56e-06 | MSE loss: 7.5133e-03 | time: 0.047
+I 06.08/20:15:36 solver.py:169 ] => Train  Loss: 7.5667e-03
+
+I 06.08/20:15:36 solver.py:426 ] => Test NMSE: -1.8191e+01
+
+I 06.08/20:15:36 solver.py:358 ] => Adapter monitor [epoch=1] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.572248e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.331291e-03,weight:4.572248e+01 | component_l2=latent_adapter:4.572248e+01 | adapter_abs_max=1.000117e+00 | delta_l2=3.138679e-02 | delta_rel=6.864674e-04 | train_loss=7.566714e-03 | test_loss=7.584373e-03 | nmse=-1.819050e+01
+I 06.08/20:15:36 solver.py:224 ] 
+=! Best NMSE: -1.8191e+01 (epoch=1)
+
+I 06.08/20:15:37 solver.py:159 ] Epoch: [2/200][20/36] lr: 1.56e-05 | MSE loss: 7.2756e-03 | time: 0.025
+I 06.08/20:15:37 solver.py:169 ] => Train  Loss: 7.3704e-03
+
+I 06.08/20:15:37 solver.py:426 ] => Test NMSE: -1.8194e+01
+
+I 06.08/20:15:37 solver.py:358 ] => Adapter monitor [epoch=2] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.572660e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.464227e-02,weight:4.572660e+01 | component_l2=latent_adapter:4.572660e+01 | adapter_abs_max=1.000862e+00 | delta_l2=1.677532e-01 | delta_rel=3.668968e-03 | train_loss=7.370395e-03 | test_loss=7.578227e-03 | nmse=-1.819402e+01
+I 06.08/20:15:38 solver.py:224 ] 
+=! Best NMSE: -1.8194e+01 (epoch=2)
+
+I 06.08/20:15:38 solver.py:159 ] Epoch: [3/200][20/36] lr: 2.56e-05 | MSE loss: 7.3458e-03 | time: 0.025
+I 06.08/20:15:38 solver.py:169 ] => Train  Loss: 7.3328e-03
+
+I 06.08/20:15:39 solver.py:426 ] => Test NMSE: -1.8213e+01
+
+I 06.08/20:15:39 solver.py:358 ] => Adapter monitor [epoch=3] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.574488e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:5.422821e-02,weight:4.574485e+01 | component_l2=latent_adapter:4.574488e+01 | adapter_abs_max=1.002488e+00 | delta_l2=4.935638e-01 | delta_rel=1.079484e-02 | train_loss=7.332821e-03 | test_loss=7.544999e-03 | nmse=-1.821311e+01
+I 06.08/20:15:39 solver.py:224 ] 
+=! Best NMSE: -1.8213e+01 (epoch=3)
+
+I 06.08/20:15:39 solver.py:159 ] Epoch: [4/200][20/36] lr: 3.56e-05 | MSE loss: 7.1618e-03 | time: 0.028
+I 06.08/20:15:40 solver.py:169 ] => Train  Loss: 7.2185e-03
+
+I 06.08/20:15:40 solver.py:426 ] => Test NMSE: -1.8286e+01
+
+I 06.08/20:15:40 solver.py:358 ] => Adapter monitor [epoch=4] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.579465e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.181641e-01,weight:4.579450e+01 | component_l2=latent_adapter:4.579465e+01 | adapter_abs_max=1.005118e+00 | delta_l2=1.037666e+00 | delta_rel=2.269502e-02 | train_loss=7.218458e-03 | test_loss=7.420065e-03 | nmse=-1.828563e+01
+I 06.08/20:15:40 solver.py:224 ] 
+=! Best NMSE: -1.8286e+01 (epoch=4)
+
+I 06.08/20:15:41 solver.py:159 ] Epoch: [5/200][20/36] lr: 4.56e-05 | MSE loss: 7.4067e-03 | time: 0.030
+I 06.08/20:15:41 solver.py:169 ] => Train  Loss: 7.1454e-03
+
+I 06.08/20:15:41 solver.py:426 ] => Test NMSE: -1.8402e+01
+
+I 06.08/20:15:41 solver.py:358 ] => Adapter monitor [epoch=5] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.586972e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.835357e-01,weight:4.586935e+01 | component_l2=latent_adapter:4.586972e+01 | adapter_abs_max=1.008564e+00 | delta_l2=1.610488e+00 | delta_rel=3.522334e-02 | train_loss=7.145356e-03 | test_loss=7.223052e-03 | nmse=-1.840249e+01
+I 06.08/20:15:42 solver.py:224 ] 
+=! Best NMSE: -1.8402e+01 (epoch=5)
+
+I 06.08/20:15:42 solver.py:159 ] Epoch: [6/200][20/36] lr: 5.56e-05 | MSE loss: 7.1475e-03 | time: 0.026
+I 06.08/20:15:43 solver.py:169 ] => Train  Loss: 6.7968e-03
+
+I 06.08/20:15:43 solver.py:426 ] => Test NMSE: -1.8503e+01
+
+I 06.08/20:15:43 solver.py:358 ] => Adapter monitor [epoch=6] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.595024e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:2.456225e-01,weight:4.594958e+01 | component_l2=latent_adapter:4.595024e+01 | adapter_abs_max=1.011864e+00 | delta_l2=2.072477e+00 | delta_rel=4.532761e-02 | train_loss=6.796797e-03 | test_loss=7.057391e-03 | nmse=-1.850326e+01
+I 06.08/20:15:43 solver.py:224 ] 
+=! Best NMSE: -1.8503e+01 (epoch=6)
+
+I 06.08/20:15:44 solver.py:159 ] Epoch: [7/200][20/36] lr: 6.56e-05 | MSE loss: 6.4431e-03 | time: 0.031
+I 06.08/20:15:44 solver.py:169 ] => Train  Loss: 6.8039e-03
+
+I 06.08/20:15:44 solver.py:426 ] => Test NMSE: -1.8570e+01
+
+I 06.08/20:15:44 solver.py:358 ] => Adapter monitor [epoch=7] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.602213e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:2.793890e-01,weight:4.602129e+01 | component_l2=latent_adapter:4.602213e+01 | adapter_abs_max=1.014856e+00 | delta_l2=2.417017e+00 | delta_rel=5.286312e-02 | train_loss=6.803874e-03 | test_loss=6.949868e-03 | nmse=-1.856993e+01
+I 06.08/20:15:45 solver.py:224 ] 
+=! Best NMSE: -1.8570e+01 (epoch=7)
+
+I 06.08/20:15:45 solver.py:159 ] Epoch: [8/200][20/36] lr: 7.56e-05 | MSE loss: 6.9058e-03 | time: 0.025
+I 06.08/20:15:45 solver.py:169 ] => Train  Loss: 6.6893e-03
+
+I 06.08/20:15:46 solver.py:426 ] => Test NMSE: -1.8621e+01
+
+I 06.08/20:15:46 solver.py:358 ] => Adapter monitor [epoch=8] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.608485e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:2.845092e-01,weight:4.608397e+01 | component_l2=latent_adapter:4.608485e+01 | adapter_abs_max=1.017938e+00 | delta_l2=2.696918e+00 | delta_rel=5.898489e-02 | train_loss=6.689279e-03 | test_loss=6.868262e-03 | nmse=-1.862123e+01
+I 06.08/20:15:46 solver.py:224 ] 
+=! Best NMSE: -1.8621e+01 (epoch=8)
+
+I 06.08/20:15:46 solver.py:159 ] Epoch: [9/200][20/36] lr: 8.56e-05 | MSE loss: 6.6787e-03 | time: 0.025
+I 06.08/20:15:47 solver.py:169 ] => Train  Loss: 6.5934e-03
+
+I 06.08/20:15:47 solver.py:426 ] => Test NMSE: -1.8658e+01
+
+I 06.08/20:15:47 solver.py:358 ] => Adapter monitor [epoch=9] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.614522e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:2.780247e-01,weight:4.614439e+01 | component_l2=latent_adapter:4.614522e+01 | adapter_abs_max=1.020626e+00 | delta_l2=2.951154e+00 | delta_rel=6.454534e-02 | train_loss=6.593351e-03 | test_loss=6.809920e-03 | nmse=-1.865828e+01
+I 06.08/20:15:47 solver.py:224 ] 
+=! Best NMSE: -1.8658e+01 (epoch=9)
+
+I 06.08/20:15:48 solver.py:159 ] Epoch: [10/200][20/36] lr: 9.56e-05 | MSE loss: 6.3395e-03 | time: 0.032
+I 06.08/20:15:48 solver.py:169 ] => Train  Loss: 6.3910e-03
+
+I 06.08/20:15:48 solver.py:169 ] => Val  Loss: 6.7294e-03
+
+I 06.08/20:15:49 solver.py:426 ] => Test NMSE: -1.8690e+01
+
+I 06.08/20:15:49 solver.py:358 ] => Adapter monitor [epoch=10] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.619955e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:2.666866e-01,weight:4.619878e+01 | component_l2=latent_adapter:4.619955e+01 | adapter_abs_max=1.023849e+00 | delta_l2=3.176515e+00 | delta_rel=6.947426e-02 | train_loss=6.390973e-03 | val_loss=6.729437e-03 | test_loss=6.759989e-03 | nmse=-1.869024e+01
+I 06.08/20:15:49 solver.py:224 ] 
+=! Best NMSE: -1.8690e+01 (epoch=10)
+
+I 06.08/20:15:49 solver.py:159 ] Epoch: [11/200][20/36] lr: 1.06e-04 | MSE loss: 6.5450e-03 | time: 0.027
+I 06.08/20:15:50 solver.py:169 ] => Train  Loss: 6.3360e-03
+
+I 06.08/20:15:50 solver.py:426 ] => Test NMSE: -1.8714e+01
+
+I 06.08/20:15:50 solver.py:358 ] => Adapter monitor [epoch=11] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.625783e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:2.653820e-01,weight:4.625706e+01 | component_l2=latent_adapter:4.625783e+01 | adapter_abs_max=1.027333e+00 | delta_l2=3.405383e+00 | delta_rel=7.447989e-02 | train_loss=6.336032e-03 | test_loss=6.722609e-03 | nmse=-1.871432e+01
+I 06.08/20:15:50 solver.py:224 ] 
+=! Best NMSE: -1.8714e+01 (epoch=11)
+
+I 06.08/20:15:51 solver.py:159 ] Epoch: [12/200][20/36] lr: 1.16e-04 | MSE loss: 6.2872e-03 | time: 0.025
+I 06.08/20:15:51 solver.py:169 ] => Train  Loss: 6.3903e-03
+
+I 06.08/20:15:51 solver.py:426 ] => Test NMSE: -1.8737e+01
+
+I 06.08/20:15:51 solver.py:358 ] => Adapter monitor [epoch=12] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.631854e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:2.675365e-01,weight:4.631777e+01 | component_l2=latent_adapter:4.631854e+01 | adapter_abs_max=1.030848e+00 | delta_l2=3.637812e+00 | delta_rel=7.956340e-02 | train_loss=6.390322e-03 | test_loss=6.688152e-03 | nmse=-1.873664e+01
+I 06.08/20:15:52 solver.py:224 ] 
+=! Best NMSE: -1.8737e+01 (epoch=12)
+
+I 06.08/20:15:52 solver.py:159 ] Epoch: [13/200][20/36] lr: 1.26e-04 | MSE loss: 6.4082e-03 | time: 0.030
+I 06.08/20:15:53 solver.py:169 ] => Train  Loss: 6.4498e-03
+
+I 06.08/20:15:53 solver.py:426 ] => Test NMSE: -1.8756e+01
+
+I 06.08/20:15:53 solver.py:358 ] => Adapter monitor [epoch=13] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.637857e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:2.760197e-01,weight:4.637775e+01 | component_l2=latent_adapter:4.637857e+01 | adapter_abs_max=1.034402e+00 | delta_l2=3.858714e+00 | delta_rel=8.439479e-02 | train_loss=6.449774e-03 | test_loss=6.657694e-03 | nmse=-1.875646e+01
+I 06.08/20:15:53 solver.py:224 ] 
+=! Best NMSE: -1.8756e+01 (epoch=13)
+
+I 06.08/20:15:54 solver.py:159 ] Epoch: [14/200][20/36] lr: 1.36e-04 | MSE loss: 6.4566e-03 | time: 0.023
+I 06.08/20:15:54 solver.py:169 ] => Train  Loss: 6.2143e-03
+
+I 06.08/20:15:54 solver.py:426 ] => Test NMSE: -1.8775e+01
+
+I 06.08/20:15:54 solver.py:358 ] => Adapter monitor [epoch=14] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.644024e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:2.932271e-01,weight:4.643931e+01 | component_l2=latent_adapter:4.644024e+01 | adapter_abs_max=1.037629e+00 | delta_l2=4.071231e+00 | delta_rel=8.904279e-02 | train_loss=6.214335e-03 | test_loss=6.629732e-03 | nmse=-1.877474e+01
+I 06.08/20:15:54 solver.py:224 ] 
+=! Best NMSE: -1.8775e+01 (epoch=14)
+
+I 06.08/20:15:55 solver.py:159 ] Epoch: [15/200][20/36] lr: 1.46e-04 | MSE loss: 6.6607e-03 | time: 0.030
+I 06.08/20:15:55 solver.py:169 ] => Train  Loss: 6.1545e-03
+
+I 06.08/20:15:56 solver.py:426 ] => Test NMSE: -1.8790e+01
+
+I 06.08/20:15:56 solver.py:358 ] => Adapter monitor [epoch=15] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.650667e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:3.073983e-01,weight:4.650566e+01 | component_l2=latent_adapter:4.650667e+01 | adapter_abs_max=1.040855e+00 | delta_l2=4.285312e+00 | delta_rel=9.372501e-02 | train_loss=6.154537e-03 | test_loss=6.607091e-03 | nmse=-1.878960e+01
+I 06.08/20:15:56 solver.py:224 ] 
+=! Best NMSE: -1.8790e+01 (epoch=15)
+
+I 06.08/20:15:57 solver.py:159 ] Epoch: [16/200][20/36] lr: 1.56e-04 | MSE loss: 6.3124e-03 | time: 0.030
+I 06.08/20:15:57 solver.py:169 ] => Train  Loss: 6.3502e-03
+
+I 06.08/20:15:57 solver.py:426 ] => Test NMSE: -1.8801e+01
+
+I 06.08/20:15:57 solver.py:358 ] => Adapter monitor [epoch=16] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.657033e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:3.271884e-01,weight:4.656918e+01 | component_l2=latent_adapter:4.657033e+01 | adapter_abs_max=1.043501e+00 | delta_l2=4.487982e+00 | delta_rel=9.815766e-02 | train_loss=6.350165e-03 | test_loss=6.590457e-03 | nmse=-1.880055e+01
+I 06.08/20:15:57 solver.py:224 ] 
+=! Best NMSE: -1.8801e+01 (epoch=16)
+
+I 06.08/20:15:58 solver.py:159 ] Epoch: [17/200][20/36] lr: 1.66e-04 | MSE loss: 6.2683e-03 | time: 0.024
+I 06.08/20:15:58 solver.py:169 ] => Train  Loss: 6.2056e-03
+
+I 06.08/20:15:58 solver.py:426 ] => Test NMSE: -1.8811e+01
+
+I 06.08/20:15:58 solver.py:358 ] => Adapter monitor [epoch=17] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.663644e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:3.500890e-01,weight:4.663512e+01 | component_l2=latent_adapter:4.663644e+01 | adapter_abs_max=1.045652e+00 | delta_l2=4.704010e+00 | delta_rel=1.028824e-01 | train_loss=6.205585e-03 | test_loss=6.574461e-03 | nmse=-1.881110e+01
+I 06.08/20:15:59 solver.py:224 ] 
+=! Best NMSE: -1.8811e+01 (epoch=17)
+
+I 06.08/20:15:59 solver.py:159 ] Epoch: [18/200][20/36] lr: 1.76e-04 | MSE loss: 6.4227e-03 | time: 0.029
+I 06.08/20:16:00 solver.py:169 ] => Train  Loss: 6.0695e-03
+
+I 06.08/20:16:00 solver.py:426 ] => Test NMSE: -1.8828e+01
+
+I 06.08/20:16:00 solver.py:358 ] => Adapter monitor [epoch=18] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.669991e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:3.745603e-01,weight:4.669841e+01 | component_l2=latent_adapter:4.669991e+01 | adapter_abs_max=1.048319e+00 | delta_l2=4.893268e+00 | delta_rel=1.070218e-01 | train_loss=6.069506e-03 | test_loss=6.549274e-03 | nmse=-1.882777e+01
+I 06.08/20:16:00 solver.py:224 ] 
+=! Best NMSE: -1.8828e+01 (epoch=18)
+
+I 06.08/20:16:01 solver.py:159 ] Epoch: [19/200][20/36] lr: 1.86e-04 | MSE loss: 6.0598e-03 | time: 0.038
+I 06.08/20:16:02 solver.py:169 ] => Train  Loss: 6.0195e-03
+
+I 06.08/20:16:02 solver.py:426 ] => Test NMSE: -1.8839e+01
+
+I 06.08/20:16:02 solver.py:358 ] => Adapter monitor [epoch=19] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.676800e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:3.896632e-01,weight:4.676637e+01 | component_l2=latent_adapter:4.676800e+01 | adapter_abs_max=1.050985e+00 | delta_l2=5.082203e+00 | delta_rel=1.111540e-01 | train_loss=6.019537e-03 | test_loss=6.531869e-03 | nmse=-1.883932e+01
+I 06.08/20:16:02 solver.py:224 ] 
+=! Best NMSE: -1.8839e+01 (epoch=19)
+
+I 06.08/20:16:03 solver.py:159 ] Epoch: [20/200][20/36] lr: 1.96e-04 | MSE loss: 6.1068e-03 | time: 0.048
+I 06.08/20:16:04 solver.py:169 ] => Train  Loss: 6.2186e-03
+
+I 06.08/20:16:04 solver.py:169 ] => Val  Loss: 6.4906e-03
+
+I 06.08/20:16:04 solver.py:426 ] => Test NMSE: -1.8847e+01
+
+I 06.08/20:16:04 solver.py:358 ] => Adapter monitor [epoch=20] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.683822e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:4.055896e-01,weight:4.683646e+01 | component_l2=latent_adapter:4.683822e+01 | adapter_abs_max=1.052989e+00 | delta_l2=5.276914e+00 | delta_rel=1.154126e-01 | train_loss=6.218574e-03 | val_loss=6.490604e-03 | test_loss=6.520118e-03 | nmse=-1.884715e+01
+I 06.08/20:16:05 solver.py:224 ] 
+=! Best NMSE: -1.8847e+01 (epoch=20)
+
+I 06.08/20:16:06 solver.py:159 ] Epoch: [21/200][20/36] lr: 2.00e-04 | MSE loss: 5.9752e-03 | time: 0.064
+I 06.08/20:16:07 solver.py:169 ] => Train  Loss: 5.9862e-03
+
+I 06.08/20:16:07 solver.py:426 ] => Test NMSE: -1.8857e+01
+
+I 06.08/20:16:07 solver.py:358 ] => Adapter monitor [epoch=21] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.690871e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:4.233138e-01,weight:4.690680e+01 | component_l2=latent_adapter:4.690871e+01 | adapter_abs_max=1.055738e+00 | delta_l2=5.468589e+00 | delta_rel=1.196047e-01 | train_loss=5.986165e-03 | test_loss=6.505813e-03 | nmse=-1.885668e+01
+I 06.08/20:16:08 solver.py:224 ] 
+=! Best NMSE: -1.8857e+01 (epoch=21)
+
+I 06.08/20:16:09 solver.py:159 ] Epoch: [22/200][20/36] lr: 2.00e-04 | MSE loss: 5.8097e-03 | time: 0.055
+I 06.08/20:16:10 solver.py:169 ] => Train  Loss: 6.1369e-03
+
+I 06.08/20:16:10 solver.py:426 ] => Test NMSE: -1.8868e+01
+
+I 06.08/20:16:10 solver.py:358 ] => Adapter monitor [epoch=22] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.697914e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:4.425209e-01,weight:4.697705e+01 | component_l2=latent_adapter:4.697914e+01 | adapter_abs_max=1.058158e+00 | delta_l2=5.655503e+00 | delta_rel=1.236928e-01 | train_loss=6.136927e-03 | test_loss=6.489036e-03 | nmse=-1.886790e+01
+I 06.08/20:16:10 solver.py:224 ] 
+=! Best NMSE: -1.8868e+01 (epoch=22)
+
+I 06.08/20:16:11 solver.py:159 ] Epoch: [23/200][20/36] lr: 2.00e-04 | MSE loss: 6.1431e-03 | time: 0.029
+I 06.08/20:16:11 solver.py:169 ] => Train  Loss: 5.9906e-03
+
+I 06.08/20:16:12 solver.py:426 ] => Test NMSE: -1.8875e+01
+
+I 06.08/20:16:12 solver.py:358 ] => Adapter monitor [epoch=23] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.704885e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:4.529637e-01,weight:4.704667e+01 | component_l2=latent_adapter:4.704885e+01 | adapter_abs_max=1.060015e+00 | delta_l2=5.830823e+00 | delta_rel=1.275272e-01 | train_loss=5.990627e-03 | test_loss=6.478751e-03 | nmse=-1.887479e+01
+I 06.08/20:16:12 solver.py:224 ] 
+=! Best NMSE: -1.8875e+01 (epoch=23)
+
+I 06.08/20:16:12 solver.py:159 ] Epoch: [24/200][20/36] lr: 2.00e-04 | MSE loss: 5.9003e-03 | time: 0.030
+I 06.08/20:16:13 solver.py:169 ] => Train  Loss: 6.1134e-03
+
+I 06.08/20:16:13 solver.py:426 ] => Test NMSE: -1.8882e+01
+
+I 06.08/20:16:13 solver.py:358 ] => Adapter monitor [epoch=24] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.711674e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:4.764340e-01,weight:4.711433e+01 | component_l2=latent_adapter:4.711674e+01 | adapter_abs_max=1.062593e+00 | delta_l2=6.000863e+00 | delta_rel=1.312462e-01 | train_loss=6.113400e-03 | test_loss=6.468495e-03 | nmse=-1.888167e+01
+I 06.08/20:16:13 solver.py:224 ] 
+=! Best NMSE: -1.8882e+01 (epoch=24)
+
+I 06.08/20:16:14 solver.py:159 ] Epoch: [25/200][20/36] lr: 2.00e-04 | MSE loss: 5.6958e-03 | time: 0.025
+I 06.08/20:16:14 solver.py:169 ] => Train  Loss: 5.8680e-03
+
+I 06.08/20:16:15 solver.py:426 ] => Test NMSE: -1.8889e+01
+
+I 06.08/20:16:15 solver.py:358 ] => Adapter monitor [epoch=25] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.718416e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:4.928967e-01,weight:4.718158e+01 | component_l2=latent_adapter:4.718416e+01 | adapter_abs_max=1.064517e+00 | delta_l2=6.168504e+00 | delta_rel=1.349127e-01 | train_loss=5.868034e-03 | test_loss=6.457813e-03 | nmse=-1.888885e+01
+I 06.08/20:16:15 solver.py:224 ] 
+=! Best NMSE: -1.8889e+01 (epoch=25)
+
+I 06.08/20:16:16 solver.py:159 ] Epoch: [26/200][20/36] lr: 2.00e-04 | MSE loss: 5.6623e-03 | time: 0.032
+I 06.08/20:16:16 solver.py:169 ] => Train  Loss: 5.9176e-03
+
+I 06.08/20:16:16 solver.py:426 ] => Test NMSE: -1.8895e+01
+
+I 06.08/20:16:16 solver.py:358 ] => Adapter monitor [epoch=26] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.724766e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:5.040768e-01,weight:4.724497e+01 | component_l2=latent_adapter:4.724766e+01 | adapter_abs_max=1.067025e+00 | delta_l2=6.322303e+00 | delta_rel=1.382765e-01 | train_loss=5.917604e-03 | test_loss=6.448121e-03 | nmse=-1.889537e+01
+I 06.08/20:16:16 solver.py:224 ] 
+=! Best NMSE: -1.8895e+01 (epoch=26)
+
+I 06.08/20:16:17 solver.py:159 ] Epoch: [27/200][20/36] lr: 2.00e-04 | MSE loss: 6.3315e-03 | time: 0.028
+I 06.08/20:16:17 solver.py:169 ] => Train  Loss: 6.0528e-03
+
+I 06.08/20:16:17 solver.py:426 ] => Test NMSE: -1.8903e+01
+
+I 06.08/20:16:17 solver.py:358 ] => Adapter monitor [epoch=27] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.731461e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:5.257847e-01,weight:4.731168e+01 | component_l2=latent_adapter:4.731461e+01 | adapter_abs_max=1.069046e+00 | delta_l2=6.479520e+00 | delta_rel=1.417150e-01 | train_loss=6.052828e-03 | test_loss=6.437473e-03 | nmse=-1.890255e+01
+I 06.08/20:16:18 solver.py:224 ] 
+=! Best NMSE: -1.8903e+01 (epoch=27)
+
+I 06.08/20:16:18 solver.py:159 ] Epoch: [28/200][20/36] lr: 1.99e-04 | MSE loss: 5.8209e-03 | time: 0.032
+I 06.08/20:16:19 solver.py:169 ] => Train  Loss: 5.8657e-03
+
+I 06.08/20:16:19 solver.py:426 ] => Test NMSE: -1.8909e+01
+
+I 06.08/20:16:19 solver.py:358 ] => Adapter monitor [epoch=28] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.737907e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:5.292095e-01,weight:4.737611e+01 | component_l2=latent_adapter:4.737907e+01 | adapter_abs_max=1.071702e+00 | delta_l2=6.627952e+00 | delta_rel=1.449614e-01 | train_loss=5.865688e-03 | test_loss=6.427960e-03 | nmse=-1.890897e+01
+I 06.08/20:16:19 solver.py:224 ] 
+=! Best NMSE: -1.8909e+01 (epoch=28)
+
+I 06.08/20:16:20 solver.py:159 ] Epoch: [29/200][20/36] lr: 1.99e-04 | MSE loss: 5.8530e-03 | time: 0.027
+I 06.08/20:16:20 solver.py:169 ] => Train  Loss: 5.8932e-03
+
+I 06.08/20:16:20 solver.py:426 ] => Test NMSE: -1.8911e+01
+
+I 06.08/20:16:20 solver.py:358 ] => Adapter monitor [epoch=29] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.744041e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:5.422625e-01,weight:4.743731e+01 | component_l2=latent_adapter:4.744041e+01 | adapter_abs_max=1.073296e+00 | delta_l2=6.767371e+00 | delta_rel=1.480107e-01 | train_loss=5.893217e-03 | test_loss=6.424261e-03 | nmse=-1.891147e+01
+I 06.08/20:16:21 solver.py:224 ] 
+=! Best NMSE: -1.8911e+01 (epoch=29)
+
+I 06.08/20:16:21 solver.py:159 ] Epoch: [30/200][20/36] lr: 1.99e-04 | MSE loss: 5.8352e-03 | time: 0.033
+I 06.08/20:16:22 solver.py:169 ] => Train  Loss: 5.9468e-03
+
+I 06.08/20:16:22 solver.py:169 ] => Val  Loss: 6.3824e-03
+
+I 06.08/20:16:22 solver.py:426 ] => Test NMSE: -1.8920e+01
+
+I 06.08/20:16:22 solver.py:358 ] => Adapter monitor [epoch=30] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.750368e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:5.585055e-01,weight:4.750040e+01 | component_l2=latent_adapter:4.750368e+01 | adapter_abs_max=1.075182e+00 | delta_l2=6.910177e+00 | delta_rel=1.511340e-01 | train_loss=5.946846e-03 | val_loss=6.382447e-03 | test_loss=6.411887e-03 | nmse=-1.891984e+01
+I 06.08/20:16:22 solver.py:224 ] 
+=! Best NMSE: -1.8920e+01 (epoch=30)
+
+I 06.08/20:16:23 solver.py:159 ] Epoch: [31/200][20/36] lr: 1.99e-04 | MSE loss: 5.7518e-03 | time: 0.027
+I 06.08/20:16:23 solver.py:169 ] => Train  Loss: 5.8787e-03
+
+I 06.08/20:16:23 solver.py:426 ] => Test NMSE: -1.8922e+01
+
+I 06.08/20:16:23 solver.py:358 ] => Adapter monitor [epoch=31] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.756368e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:5.603475e-01,weight:4.756038e+01 | component_l2=latent_adapter:4.756368e+01 | adapter_abs_max=1.076287e+00 | delta_l2=7.041166e+00 | delta_rel=1.539989e-01 | train_loss=5.878665e-03 | test_loss=6.408214e-03 | nmse=-1.892233e+01
+I 06.08/20:16:24 solver.py:224 ] 
+=! Best NMSE: -1.8922e+01 (epoch=31)
+
+I 06.08/20:16:24 solver.py:159 ] Epoch: [32/200][20/36] lr: 1.98e-04 | MSE loss: 5.6971e-03 | time: 0.029
+I 06.08/20:16:25 solver.py:169 ] => Train  Loss: 5.8651e-03
+
+I 06.08/20:16:25 solver.py:426 ] => Test NMSE: -1.8927e+01
+
+I 06.08/20:16:25 solver.py:358 ] => Adapter monitor [epoch=32] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.762806e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:5.856218e-01,weight:4.762446e+01 | component_l2=latent_adapter:4.762806e+01 | adapter_abs_max=1.078580e+00 | delta_l2=7.186268e+00 | delta_rel=1.571725e-01 | train_loss=5.865100e-03 | test_loss=6.401860e-03 | nmse=-1.892664e+01
+I 06.08/20:16:25 solver.py:224 ] 
+=! Best NMSE: -1.8927e+01 (epoch=32)
+
+I 06.08/20:16:26 solver.py:159 ] Epoch: [33/200][20/36] lr: 1.98e-04 | MSE loss: 5.9236e-03 | time: 0.026
+I 06.08/20:16:26 solver.py:169 ] => Train  Loss: 5.9259e-03
+
+I 06.08/20:16:26 solver.py:426 ] => Test NMSE: -1.8932e+01
+
+I 06.08/20:16:26 solver.py:358 ] => Adapter monitor [epoch=33] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.768933e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:5.889910e-01,weight:4.768569e+01 | component_l2=latent_adapter:4.768933e+01 | adapter_abs_max=1.080173e+00 | delta_l2=7.318138e+00 | delta_rel=1.600566e-01 | train_loss=5.925932e-03 | test_loss=6.393591e-03 | nmse=-1.893225e+01
+I 06.08/20:16:27 solver.py:224 ] 
+=! Best NMSE: -1.8932e+01 (epoch=33)
+
+I 06.08/20:16:27 solver.py:159 ] Epoch: [34/200][20/36] lr: 1.98e-04 | MSE loss: 5.9726e-03 | time: 0.026
+I 06.08/20:16:28 solver.py:169 ] => Train  Loss: 5.8149e-03
+
+I 06.08/20:16:28 solver.py:426 ] => Test NMSE: -1.8935e+01
+
+I 06.08/20:16:28 solver.py:358 ] => Adapter monitor [epoch=34] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.774909e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:6.002629e-01,weight:4.774532e+01 | component_l2=latent_adapter:4.774909e+01 | adapter_abs_max=1.081753e+00 | delta_l2=7.446225e+00 | delta_rel=1.628580e-01 | train_loss=5.814851e-03 | test_loss=6.389132e-03 | nmse=-1.893528e+01
+I 06.08/20:16:28 solver.py:224 ] 
+=! Best NMSE: -1.8935e+01 (epoch=34)
+
+I 06.08/20:16:29 solver.py:159 ] Epoch: [35/200][20/36] lr: 1.98e-04 | MSE loss: 5.8746e-03 | time: 0.029
+I 06.08/20:16:29 solver.py:169 ] => Train  Loss: 5.8730e-03
+
+I 06.08/20:16:29 solver.py:426 ] => Test NMSE: -1.8943e+01
+
+I 06.08/20:16:29 solver.py:358 ] => Adapter monitor [epoch=35] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.780253e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:6.136413e-01,weight:4.779859e+01 | component_l2=latent_adapter:4.780253e+01 | adapter_abs_max=1.083510e+00 | delta_l2=7.562132e+00 | delta_rel=1.653931e-01 | train_loss=5.872998e-03 | test_loss=6.377828e-03 | nmse=-1.894297e+01
+I 06.08/20:16:29 solver.py:224 ] 
+=! Best NMSE: -1.8943e+01 (epoch=35)
+
+I 06.08/20:16:30 solver.py:159 ] Epoch: [36/200][20/36] lr: 1.97e-04 | MSE loss: 5.6115e-03 | time: 0.032
+I 06.08/20:16:31 solver.py:169 ] => Train  Loss: 5.8022e-03
+
+I 06.08/20:16:31 solver.py:426 ] => Test NMSE: -1.8946e+01
+
+I 06.08/20:16:31 solver.py:358 ] => Adapter monitor [epoch=36] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.785630e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:6.185700e-01,weight:4.785230e+01 | component_l2=latent_adapter:4.785630e+01 | adapter_abs_max=1.084657e+00 | delta_l2=7.673690e+00 | delta_rel=1.678330e-01 | train_loss=5.802224e-03 | test_loss=6.374034e-03 | nmse=-1.894556e+01
+I 06.08/20:16:31 solver.py:224 ] 
+=! Best NMSE: -1.8946e+01 (epoch=36)
+
+I 06.08/20:16:32 solver.py:159 ] Epoch: [37/200][20/36] lr: 1.97e-04 | MSE loss: 6.0368e-03 | time: 0.029
+I 06.08/20:16:32 solver.py:169 ] => Train  Loss: 5.7233e-03
+
+I 06.08/20:16:32 solver.py:426 ] => Test NMSE: -1.8945e+01
+
+I 06.08/20:16:32 solver.py:358 ] => Adapter monitor [epoch=37] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.791615e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:6.403849e-01,weight:4.791187e+01 | component_l2=latent_adapter:4.791615e+01 | adapter_abs_max=1.086426e+00 | delta_l2=7.800478e+00 | delta_rel=1.706060e-01 | train_loss=5.723302e-03 | test_loss=6.374493e-03 | nmse=-1.894524e+01
+I 06.08/20:16:32 solver.py:224 ] 
+=! Best NMSE: -1.8946e+01 (epoch=36)
+
+I 06.08/20:16:33 solver.py:159 ] Epoch: [38/200][20/36] lr: 1.97e-04 | MSE loss: 5.6069e-03 | time: 0.025
+I 06.08/20:16:33 solver.py:169 ] => Train  Loss: 5.7627e-03
+
+I 06.08/20:16:33 solver.py:426 ] => Test NMSE: -1.8951e+01
+
+I 06.08/20:16:33 solver.py:358 ] => Adapter monitor [epoch=38] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.796669e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:6.419399e-01,weight:4.796239e+01 | component_l2=latent_adapter:4.796669e+01 | adapter_abs_max=1.088217e+00 | delta_l2=7.906032e+00 | delta_rel=1.729146e-01 | train_loss=5.762700e-03 | test_loss=6.366653e-03 | nmse=-1.895059e+01
+I 06.08/20:16:34 solver.py:224 ] 
+=! Best NMSE: -1.8951e+01 (epoch=38)
+
+I 06.08/20:16:34 solver.py:159 ] Epoch: [39/200][20/36] lr: 1.96e-04 | MSE loss: 5.8821e-03 | time: 0.031
+I 06.08/20:16:35 solver.py:169 ] => Train  Loss: 5.7970e-03
+
+I 06.08/20:16:35 solver.py:426 ] => Test NMSE: -1.8957e+01
+
+I 06.08/20:16:35 solver.py:358 ] => Adapter monitor [epoch=39] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.801759e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:6.586950e-01,weight:4.801307e+01 | component_l2=latent_adapter:4.801759e+01 | adapter_abs_max=1.088812e+00 | delta_l2=8.015931e+00 | delta_rel=1.753182e-01 | train_loss=5.797006e-03 | test_loss=6.357160e-03 | nmse=-1.895707e+01
+I 06.08/20:16:35 solver.py:224 ] 
+=! Best NMSE: -1.8957e+01 (epoch=39)
+
+I 06.08/20:16:36 solver.py:159 ] Epoch: [40/200][20/36] lr: 1.96e-04 | MSE loss: 5.8444e-03 | time: 0.028
+I 06.08/20:16:36 solver.py:169 ] => Train  Loss: 5.7559e-03
+
+I 06.08/20:16:36 solver.py:169 ] => Val  Loss: 6.3267e-03
+
+I 06.08/20:16:36 solver.py:426 ] => Test NMSE: -1.8958e+01
+
+I 06.08/20:16:36 solver.py:358 ] => Adapter monitor [epoch=40] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.806672e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:6.638546e-01,weight:4.806214e+01 | component_l2=latent_adapter:4.806672e+01 | adapter_abs_max=1.090204e+00 | delta_l2=8.117216e+00 | delta_rel=1.775334e-01 | train_loss=5.755902e-03 | val_loss=6.326712e-03 | test_loss=6.356299e-03 | nmse=-1.895766e+01
+I 06.08/20:16:37 solver.py:224 ] 
+=! Best NMSE: -1.8958e+01 (epoch=40)
+
+I 06.08/20:16:37 solver.py:159 ] Epoch: [41/200][20/36] lr: 1.95e-04 | MSE loss: 6.2066e-03 | time: 0.036
+I 06.08/20:16:38 solver.py:169 ] => Train  Loss: 5.7005e-03
+
+I 06.08/20:16:38 solver.py:426 ] => Test NMSE: -1.8961e+01
+
+I 06.08/20:16:38 solver.py:358 ] => Adapter monitor [epoch=41] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.811892e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:6.767200e-01,weight:4.811416e+01 | component_l2=latent_adapter:4.811892e+01 | adapter_abs_max=1.091852e+00 | delta_l2=8.223544e+00 | delta_rel=1.798590e-01 | train_loss=5.700481e-03 | test_loss=6.350790e-03 | nmse=-1.896142e+01
+I 06.08/20:16:38 solver.py:224 ] 
+=! Best NMSE: -1.8961e+01 (epoch=41)
+
+I 06.08/20:16:39 solver.py:159 ] Epoch: [42/200][20/36] lr: 1.95e-04 | MSE loss: 5.7456e-03 | time: 0.028
+I 06.08/20:16:39 solver.py:169 ] => Train  Loss: 5.8368e-03
+
+I 06.08/20:16:39 solver.py:426 ] => Test NMSE: -1.8966e+01
+
+I 06.08/20:16:39 solver.py:358 ] => Adapter monitor [epoch=42] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.816860e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:6.824502e-01,weight:4.816376e+01 | component_l2=latent_adapter:4.816860e+01 | adapter_abs_max=1.093513e+00 | delta_l2=8.322075e+00 | delta_rel=1.820140e-01 | train_loss=5.836833e-03 | test_loss=6.343854e-03 | nmse=-1.896617e+01
+I 06.08/20:16:40 solver.py:224 ] 
+=! Best NMSE: -1.8966e+01 (epoch=42)
+
+I 06.08/20:16:40 solver.py:159 ] Epoch: [43/200][20/36] lr: 1.94e-04 | MSE loss: 5.7788e-03 | time: 0.030
+I 06.08/20:16:41 solver.py:169 ] => Train  Loss: 5.7307e-03
+
+I 06.08/20:16:41 solver.py:426 ] => Test NMSE: -1.8970e+01
+
+I 06.08/20:16:41 solver.py:358 ] => Adapter monitor [epoch=43] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.821953e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:6.959795e-01,weight:4.821451e+01 | component_l2=latent_adapter:4.821953e+01 | adapter_abs_max=1.094600e+00 | delta_l2=8.425799e+00 | delta_rel=1.842825e-01 | train_loss=5.730713e-03 | test_loss=6.338676e-03 | nmse=-1.896972e+01
+I 06.08/20:16:41 solver.py:224 ] 
+=! Best NMSE: -1.8970e+01 (epoch=43)
+
+I 06.08/20:16:42 solver.py:159 ] Epoch: [44/200][20/36] lr: 1.94e-04 | MSE loss: 5.7319e-03 | time: 0.026
+I 06.08/20:16:42 solver.py:169 ] => Train  Loss: 5.6954e-03
+
+I 06.08/20:16:42 solver.py:426 ] => Test NMSE: -1.8970e+01
+
+I 06.08/20:16:42 solver.py:358 ] => Adapter monitor [epoch=44] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.826645e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:7.004830e-01,weight:4.826137e+01 | component_l2=latent_adapter:4.826645e+01 | adapter_abs_max=1.096270e+00 | delta_l2=8.517549e+00 | delta_rel=1.862892e-01 | train_loss=5.695352e-03 | test_loss=6.337707e-03 | nmse=-1.897038e+01
+I 06.08/20:16:42 solver.py:224 ] 
+=! Best NMSE: -1.8970e+01 (epoch=44)
+
+I 06.08/20:16:43 solver.py:159 ] Epoch: [45/200][20/36] lr: 1.93e-04 | MSE loss: 5.6518e-03 | time: 0.026
+I 06.08/20:16:43 solver.py:169 ] => Train  Loss: 5.8094e-03
+
+I 06.08/20:16:43 solver.py:426 ] => Test NMSE: -1.8975e+01
+
+I 06.08/20:16:43 solver.py:358 ] => Adapter monitor [epoch=45] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.831442e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:7.092940e-01,weight:4.830921e+01 | component_l2=latent_adapter:4.831442e+01 | adapter_abs_max=1.098649e+00 | delta_l2=8.610626e+00 | delta_rel=1.883249e-01 | train_loss=5.809431e-03 | test_loss=6.331462e-03 | nmse=-1.897466e+01
+I 06.08/20:16:44 solver.py:224 ] 
+=! Best NMSE: -1.8975e+01 (epoch=45)
+
+I 06.08/20:16:44 solver.py:159 ] Epoch: [46/200][20/36] lr: 1.93e-04 | MSE loss: 5.4396e-03 | time: 0.027
+I 06.08/20:16:45 solver.py:169 ] => Train  Loss: 5.7744e-03
+
+I 06.08/20:16:45 solver.py:426 ] => Test NMSE: -1.8974e+01
+
+I 06.08/20:16:45 solver.py:358 ] => Adapter monitor [epoch=46] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.836649e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:7.235052e-01,weight:4.836108e+01 | component_l2=latent_adapter:4.836649e+01 | adapter_abs_max=1.099970e+00 | delta_l2=8.712988e+00 | delta_rel=1.905637e-01 | train_loss=5.774381e-03 | test_loss=6.332589e-03 | nmse=-1.897389e+01
+I 06.08/20:16:45 solver.py:224 ] 
+=! Best NMSE: -1.8975e+01 (epoch=45)
+
+I 06.08/20:16:45 solver.py:159 ] Epoch: [47/200][20/36] lr: 1.92e-04 | MSE loss: 5.6481e-03 | time: 0.025
+I 06.08/20:16:46 solver.py:169 ] => Train  Loss: 5.6993e-03
+
+I 06.08/20:16:46 solver.py:426 ] => Test NMSE: -1.8978e+01
+
+I 06.08/20:16:46 solver.py:358 ] => Adapter monitor [epoch=47] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.841045e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:7.231311e-01,weight:4.840505e+01 | component_l2=latent_adapter:4.841045e+01 | adapter_abs_max=1.101959e+00 | delta_l2=8.799303e+00 | delta_rel=1.924515e-01 | train_loss=5.699322e-03 | test_loss=6.326261e-03 | nmse=-1.897823e+01
+I 06.08/20:16:46 solver.py:224 ] 
+=! Best NMSE: -1.8978e+01 (epoch=47)
+
+I 06.08/20:16:47 solver.py:159 ] Epoch: [48/200][20/36] lr: 1.91e-04 | MSE loss: 5.7417e-03 | time: 0.035
+I 06.08/20:16:47 solver.py:169 ] => Train  Loss: 5.6975e-03
+
+I 06.08/20:16:47 solver.py:426 ] => Test NMSE: -1.8984e+01
+
+I 06.08/20:16:47 solver.py:358 ] => Adapter monitor [epoch=48] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.845687e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:7.397061e-01,weight:4.845122e+01 | component_l2=latent_adapter:4.845687e+01 | adapter_abs_max=1.103482e+00 | delta_l2=8.891050e+00 | delta_rel=1.944581e-01 | train_loss=5.697467e-03 | test_loss=6.318564e-03 | nmse=-1.898352e+01
+I 06.08/20:16:48 solver.py:224 ] 
+=! Best NMSE: -1.8984e+01 (epoch=48)
+
+I 06.08/20:16:48 solver.py:159 ] Epoch: [49/200][20/36] lr: 1.91e-04 | MSE loss: 5.8553e-03 | time: 0.027
+I 06.08/20:16:49 solver.py:169 ] => Train  Loss: 5.7235e-03
+
+I 06.08/20:16:49 solver.py:426 ] => Test NMSE: -1.8987e+01
+
+I 06.08/20:16:49 solver.py:358 ] => Adapter monitor [epoch=49] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.850301e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:7.456926e-01,weight:4.849728e+01 | component_l2=latent_adapter:4.850301e+01 | adapter_abs_max=1.105404e+00 | delta_l2=8.979676e+00 | delta_rel=1.963965e-01 | train_loss=5.723523e-03 | test_loss=6.314139e-03 | nmse=-1.898656e+01
+I 06.08/20:16:49 solver.py:224 ] 
+=! Best NMSE: -1.8987e+01 (epoch=49)
+
+I 06.08/20:16:50 solver.py:159 ] Epoch: [50/200][20/36] lr: 1.90e-04 | MSE loss: 5.8021e-03 | time: 0.023
+I 06.08/20:16:50 solver.py:169 ] => Train  Loss: 5.7019e-03
+
+I 06.08/20:16:50 solver.py:169 ] => Val  Loss: 6.2783e-03
+
+I 06.08/20:16:50 solver.py:426 ] => Test NMSE: -1.8991e+01
+
+I 06.08/20:16:50 solver.py:358 ] => Adapter monitor [epoch=50] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.854605e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:7.529170e-01,weight:4.854021e+01 | component_l2=latent_adapter:4.854605e+01 | adapter_abs_max=1.106410e+00 | delta_l2=9.061686e+00 | delta_rel=1.981901e-01 | train_loss=5.701902e-03 | val_loss=6.278259e-03 | test_loss=6.308027e-03 | nmse=-1.899076e+01
+I 06.08/20:16:50 solver.py:224 ] 
+=! Best NMSE: -1.8991e+01 (epoch=50)
+
+I 06.08/20:16:51 solver.py:159 ] Epoch: [51/200][20/36] lr: 1.90e-04 | MSE loss: 5.6011e-03 | time: 0.029
+I 06.08/20:16:51 solver.py:169 ] => Train  Loss: 5.7135e-03
+
+I 06.08/20:16:52 solver.py:426 ] => Test NMSE: -1.8993e+01
+
+I 06.08/20:16:52 solver.py:358 ] => Adapter monitor [epoch=51] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.858766e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:7.557132e-01,weight:4.858178e+01 | component_l2=latent_adapter:4.858766e+01 | adapter_abs_max=1.108502e+00 | delta_l2=9.140874e+00 | delta_rel=1.999221e-01 | train_loss=5.713530e-03 | test_loss=6.305247e-03 | nmse=-1.899268e+01
+I 06.08/20:16:52 solver.py:224 ] 
+=! Best NMSE: -1.8993e+01 (epoch=51)
+
+I 06.08/20:16:52 solver.py:159 ] Epoch: [52/200][20/36] lr: 1.89e-04 | MSE loss: 5.7489e-03 | time: 0.026
+I 06.08/20:16:53 solver.py:169 ] => Train  Loss: 5.7038e-03
+
+I 06.08/20:16:53 solver.py:426 ] => Test NMSE: -1.8995e+01
+
+I 06.08/20:16:53 solver.py:358 ] => Adapter monitor [epoch=52] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.863375e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:7.641682e-01,weight:4.862774e+01 | component_l2=latent_adapter:4.863375e+01 | adapter_abs_max=1.109309e+00 | delta_l2=9.226820e+00 | delta_rel=2.018018e-01 | train_loss=5.703820e-03 | test_loss=6.302201e-03 | nmse=-1.899478e+01
+I 06.08/20:16:53 solver.py:224 ] 
+=! Best NMSE: -1.8995e+01 (epoch=52)
+
+I 06.08/20:16:54 solver.py:159 ] Epoch: [53/200][20/36] lr: 1.88e-04 | MSE loss: 5.4445e-03 | time: 0.032
+I 06.08/20:16:54 solver.py:169 ] => Train  Loss: 5.8446e-03
+
+I 06.08/20:16:54 solver.py:426 ] => Test NMSE: -1.8997e+01
+
+I 06.08/20:16:54 solver.py:358 ] => Adapter monitor [epoch=53] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.867695e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:7.685692e-01,weight:4.867089e+01 | component_l2=latent_adapter:4.867695e+01 | adapter_abs_max=1.110681e+00 | delta_l2=9.306478e+00 | delta_rel=2.035440e-01 | train_loss=5.844556e-03 | test_loss=6.298716e-03 | nmse=-1.899718e+01
+I 06.08/20:16:55 solver.py:224 ] 
+=! Best NMSE: -1.8997e+01 (epoch=53)
+
+I 06.08/20:16:55 solver.py:159 ] Epoch: [54/200][20/36] lr: 1.88e-04 | MSE loss: 5.6815e-03 | time: 0.029
+I 06.08/20:16:56 solver.py:169 ] => Train  Loss: 5.6112e-03
+
+I 06.08/20:16:56 solver.py:426 ] => Test NMSE: -1.8995e+01
+
+I 06.08/20:16:56 solver.py:358 ] => Adapter monitor [epoch=54] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.872201e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:7.906292e-01,weight:4.871559e+01 | component_l2=latent_adapter:4.872201e+01 | adapter_abs_max=1.112733e+00 | delta_l2=9.395370e+00 | delta_rel=2.054882e-01 | train_loss=5.611165e-03 | test_loss=6.301953e-03 | nmse=-1.899495e+01
+I 06.08/20:16:56 solver.py:224 ] 
+=! Best NMSE: -1.8997e+01 (epoch=53)
+
+I 06.08/20:16:56 solver.py:159 ] Epoch: [55/200][20/36] lr: 1.87e-04 | MSE loss: 5.5533e-03 | time: 0.028
+I 06.08/20:16:57 solver.py:169 ] => Train  Loss: 5.7910e-03
+
+I 06.08/20:16:57 solver.py:426 ] => Test NMSE: -1.8999e+01
+
+I 06.08/20:16:57 solver.py:358 ] => Adapter monitor [epoch=55] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.875879e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:7.899030e-01,weight:4.875240e+01 | component_l2=latent_adapter:4.875879e+01 | adapter_abs_max=1.113907e+00 | delta_l2=9.464895e+00 | delta_rel=2.070088e-01 | train_loss=5.791048e-03 | test_loss=6.295762e-03 | nmse=-1.899922e+01
+I 06.08/20:16:57 solver.py:224 ] 
+=! Best NMSE: -1.8999e+01 (epoch=55)
+
+I 06.08/20:16:58 solver.py:159 ] Epoch: [56/200][20/36] lr: 1.86e-04 | MSE loss: 5.4084e-03 | time: 0.029
+I 06.08/20:16:58 solver.py:169 ] => Train  Loss: 5.6737e-03
+
+I 06.08/20:16:58 solver.py:426 ] => Test NMSE: -1.8999e+01
+
+I 06.08/20:16:58 solver.py:358 ] => Adapter monitor [epoch=56] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.880463e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:8.017636e-01,weight:4.879805e+01 | component_l2=latent_adapter:4.880463e+01 | adapter_abs_max=1.114838e+00 | delta_l2=9.552405e+00 | delta_rel=2.089228e-01 | train_loss=5.673714e-03 | test_loss=6.295715e-03 | nmse=-1.899925e+01
+I 06.08/20:16:59 solver.py:224 ] 
+=! Best NMSE: -1.8999e+01 (epoch=56)
+
+I 06.08/20:16:59 solver.py:159 ] Epoch: [57/200][20/36] lr: 1.85e-04 | MSE loss: 5.4487e-03 | time: 0.025
+I 06.08/20:17:00 solver.py:169 ] => Train  Loss: 5.6070e-03
+
+I 06.08/20:17:00 solver.py:426 ] => Test NMSE: -1.9004e+01
+
+I 06.08/20:17:00 solver.py:358 ] => Adapter monitor [epoch=57] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.884264e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:8.086793e-01,weight:4.883594e+01 | component_l2=latent_adapter:4.884264e+01 | adapter_abs_max=1.116823e+00 | delta_l2=9.625103e+00 | delta_rel=2.105128e-01 | train_loss=5.606988e-03 | test_loss=6.289214e-03 | nmse=-1.900374e+01
+I 06.08/20:17:00 solver.py:224 ] 
+=! Best NMSE: -1.9004e+01 (epoch=57)
+
+I 06.08/20:17:01 solver.py:159 ] Epoch: [58/200][20/36] lr: 1.84e-04 | MSE loss: 5.6601e-03 | time: 0.038
+I 06.08/20:17:01 solver.py:169 ] => Train  Loss: 5.5929e-03
+
+I 06.08/20:17:01 solver.py:426 ] => Test NMSE: -1.9008e+01
+
+I 06.08/20:17:01 solver.py:358 ] => Adapter monitor [epoch=58] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.888059e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:8.120518e-01,weight:4.887385e+01 | component_l2=latent_adapter:4.888059e+01 | adapter_abs_max=1.118430e+00 | delta_l2=9.694397e+00 | delta_rel=2.120283e-01 | train_loss=5.592889e-03 | test_loss=6.283186e-03 | nmse=-1.900790e+01
+I 06.08/20:17:02 solver.py:224 ] 
+=! Best NMSE: -1.9008e+01 (epoch=58)
+
+I 06.08/20:17:03 solver.py:159 ] Epoch: [59/200][20/36] lr: 1.84e-04 | MSE loss: 5.5590e-03 | time: 0.049
+I 06.08/20:17:04 solver.py:169 ] => Train  Loss: 5.7317e-03
+
+I 06.08/20:17:04 solver.py:426 ] => Test NMSE: -1.9009e+01
+
+I 06.08/20:17:04 solver.py:358 ] => Adapter monitor [epoch=59] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.891944e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:8.183450e-01,weight:4.891260e+01 | component_l2=latent_adapter:4.891944e+01 | adapter_abs_max=1.119320e+00 | delta_l2=9.764265e+00 | delta_rel=2.135564e-01 | train_loss=5.731745e-03 | test_loss=6.281753e-03 | nmse=-1.900889e+01
+I 06.08/20:17:04 solver.py:224 ] 
+=! Best NMSE: -1.9009e+01 (epoch=59)
+
+I 06.08/20:17:06 solver.py:159 ] Epoch: [60/200][20/36] lr: 1.83e-04 | MSE loss: 5.8106e-03 | time: 0.072
+I 06.08/20:17:07 solver.py:169 ] => Train  Loss: 5.6301e-03
+
+I 06.08/20:17:07 solver.py:169 ] => Val  Loss: 6.2560e-03
+
+I 06.08/20:17:07 solver.py:426 ] => Test NMSE: -1.9006e+01
+
+I 06.08/20:17:07 solver.py:358 ] => Adapter monitor [epoch=60] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.895834e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:8.291199e-01,weight:4.895132e+01 | component_l2=latent_adapter:4.895834e+01 | adapter_abs_max=1.119848e+00 | delta_l2=9.838686e+00 | delta_rel=2.151841e-01 | train_loss=5.630084e-03 | val_loss=6.255981e-03 | test_loss=6.285914e-03 | nmse=-1.900602e+01
+I 06.08/20:17:07 solver.py:224 ] 
+=! Best NMSE: -1.9009e+01 (epoch=59)
+
+I 06.08/20:17:08 solver.py:159 ] Epoch: [61/200][20/36] lr: 1.82e-04 | MSE loss: 5.5684e-03 | time: 0.059
+I 06.08/20:17:09 solver.py:169 ] => Train  Loss: 5.6537e-03
+
+I 06.08/20:17:09 solver.py:426 ] => Test NMSE: -1.9008e+01
+
+I 06.08/20:17:09 solver.py:358 ] => Adapter monitor [epoch=61] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.899411e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:8.323495e-01,weight:4.898704e+01 | component_l2=latent_adapter:4.899411e+01 | adapter_abs_max=1.121069e+00 | delta_l2=9.904293e+00 | delta_rel=2.166190e-01 | train_loss=5.653678e-03 | test_loss=6.283385e-03 | nmse=-1.900776e+01
+I 06.08/20:17:09 solver.py:224 ] 
+=! Best NMSE: -1.9009e+01 (epoch=59)
+
+I 06.08/20:17:10 solver.py:159 ] Epoch: [62/200][20/36] lr: 1.81e-04 | MSE loss: 5.4936e-03 | time: 0.039
+I 06.08/20:17:11 solver.py:169 ] => Train  Loss: 5.6224e-03
+
+I 06.08/20:17:11 solver.py:426 ] => Test NMSE: -1.9011e+01
+
+I 06.08/20:17:11 solver.py:358 ] => Adapter monitor [epoch=62] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.903229e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:8.420025e-01,weight:4.902506e+01 | component_l2=latent_adapter:4.903229e+01 | adapter_abs_max=1.121984e+00 | delta_l2=9.974287e+00 | delta_rel=2.181499e-01 | train_loss=5.622408e-03 | test_loss=6.278078e-03 | nmse=-1.901143e+01
+I 06.08/20:17:11 solver.py:224 ] 
+=! Best NMSE: -1.9011e+01 (epoch=62)
+
+I 06.08/20:17:12 solver.py:159 ] Epoch: [63/200][20/36] lr: 1.80e-04 | MSE loss: 5.8339e-03 | time: 0.029
+I 06.08/20:17:12 solver.py:169 ] => Train  Loss: 5.6197e-03
+
+I 06.08/20:17:12 solver.py:426 ] => Test NMSE: -1.9014e+01
+
+I 06.08/20:17:12 solver.py:358 ] => Adapter monitor [epoch=63] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.906666e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:8.438595e-01,weight:4.905940e+01 | component_l2=latent_adapter:4.906666e+01 | adapter_abs_max=1.122863e+00 | delta_l2=1.003554e+01 | delta_rel=2.194894e-01 | train_loss=5.619654e-03 | test_loss=6.274316e-03 | nmse=-1.901404e+01
+I 06.08/20:17:13 solver.py:224 ] 
+=! Best NMSE: -1.9014e+01 (epoch=63)
+
+I 06.08/20:17:13 solver.py:159 ] Epoch: [64/200][20/36] lr: 1.79e-04 | MSE loss: 5.5555e-03 | time: 0.035
+I 06.08/20:17:14 solver.py:169 ] => Train  Loss: 5.6497e-03
+
+I 06.08/20:17:14 solver.py:426 ] => Test NMSE: -1.9015e+01
+
+I 06.08/20:17:14 solver.py:358 ] => Adapter monitor [epoch=64] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.910472e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:8.452133e-01,weight:4.909744e+01 | component_l2=latent_adapter:4.910472e+01 | adapter_abs_max=1.124601e+00 | delta_l2=1.010180e+01 | delta_rel=2.209388e-01 | train_loss=5.649690e-03 | test_loss=6.272345e-03 | nmse=-1.901540e+01
+I 06.08/20:17:14 solver.py:224 ] 
+=! Best NMSE: -1.9015e+01 (epoch=64)
+
+I 06.08/20:17:15 solver.py:159 ] Epoch: [65/200][20/36] lr: 1.78e-04 | MSE loss: 5.2965e-03 | time: 0.034
+I 06.08/20:17:16 solver.py:169 ] => Train  Loss: 5.7049e-03
+
+I 06.08/20:17:16 solver.py:426 ] => Test NMSE: -1.9018e+01
+
+I 06.08/20:17:16 solver.py:358 ] => Adapter monitor [epoch=65] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.914091e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:8.553935e-01,weight:4.913347e+01 | component_l2=latent_adapter:4.914091e+01 | adapter_abs_max=1.125381e+00 | delta_l2=1.016779e+01 | delta_rel=2.223819e-01 | train_loss=5.704878e-03 | test_loss=6.268565e-03 | nmse=-1.901802e+01
+I 06.08/20:17:16 solver.py:224 ] 
+=! Best NMSE: -1.9018e+01 (epoch=65)
+
+I 06.08/20:17:17 solver.py:159 ] Epoch: [66/200][20/36] lr: 1.78e-04 | MSE loss: 5.8335e-03 | time: 0.032
+I 06.08/20:17:17 solver.py:169 ] => Train  Loss: 5.5514e-03
+
+I 06.08/20:17:17 solver.py:426 ] => Test NMSE: -1.9013e+01
+
+I 06.08/20:17:17 solver.py:358 ] => Adapter monitor [epoch=66] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.917694e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:8.617845e-01,weight:4.916939e+01 | component_l2=latent_adapter:4.917694e+01 | adapter_abs_max=1.126332e+00 | delta_l2=1.023403e+01 | delta_rel=2.238307e-01 | train_loss=5.551397e-03 | test_loss=6.275345e-03 | nmse=-1.901332e+01
+I 06.08/20:17:17 solver.py:224 ] 
+=! Best NMSE: -1.9018e+01 (epoch=65)
+
+I 06.08/20:17:18 solver.py:159 ] Epoch: [67/200][20/36] lr: 1.77e-04 | MSE loss: 5.6442e-03 | time: 0.039
+I 06.08/20:17:19 solver.py:169 ] => Train  Loss: 5.5756e-03
+
+I 06.08/20:17:19 solver.py:426 ] => Test NMSE: -1.9018e+01
+
+I 06.08/20:17:19 solver.py:358 ] => Adapter monitor [epoch=67] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.921115e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:8.654567e-01,weight:4.920354e+01 | component_l2=latent_adapter:4.921115e+01 | adapter_abs_max=1.127699e+00 | delta_l2=1.029406e+01 | delta_rel=2.251438e-01 | train_loss=5.575568e-03 | test_loss=6.269094e-03 | nmse=-1.901765e+01
+I 06.08/20:17:19 solver.py:224 ] 
+=! Best NMSE: -1.9018e+01 (epoch=65)
+
+I 06.08/20:17:19 solver.py:159 ] Epoch: [68/200][20/36] lr: 1.76e-04 | MSE loss: 5.5539e-03 | time: 0.029
+I 06.08/20:17:20 solver.py:169 ] => Train  Loss: 5.6180e-03
+
+I 06.08/20:17:20 solver.py:426 ] => Test NMSE: -1.9023e+01
+
+I 06.08/20:17:20 solver.py:358 ] => Adapter monitor [epoch=68] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.924262e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:8.704816e-01,weight:4.923493e+01 | component_l2=latent_adapter:4.924262e+01 | adapter_abs_max=1.128450e+00 | delta_l2=1.034990e+01 | delta_rel=2.263649e-01 | train_loss=5.618009e-03 | test_loss=6.261546e-03 | nmse=-1.902288e+01
+I 06.08/20:17:20 solver.py:224 ] 
+=! Best NMSE: -1.9023e+01 (epoch=68)
+
+I 06.08/20:17:21 solver.py:159 ] Epoch: [69/200][20/36] lr: 1.75e-04 | MSE loss: 5.8633e-03 | time: 0.029
+I 06.08/20:17:21 solver.py:169 ] => Train  Loss: 5.5496e-03
+
+I 06.08/20:17:21 solver.py:426 ] => Test NMSE: -1.9021e+01
+
+I 06.08/20:17:21 solver.py:358 ] => Adapter monitor [epoch=69] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.927676e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:8.742073e-01,weight:4.926901e+01 | component_l2=latent_adapter:4.927676e+01 | adapter_abs_max=1.129273e+00 | delta_l2=1.040927e+01 | delta_rel=2.276634e-01 | train_loss=5.549557e-03 | test_loss=6.263878e-03 | nmse=-1.902127e+01
+I 06.08/20:17:21 solver.py:224 ] 
+=! Best NMSE: -1.9023e+01 (epoch=68)
+
+I 06.08/20:17:22 solver.py:159 ] Epoch: [70/200][20/36] lr: 1.74e-04 | MSE loss: 5.6380e-03 | time: 0.027
+I 06.08/20:17:23 solver.py:169 ] => Train  Loss: 5.5437e-03
+
+I 06.08/20:17:23 solver.py:169 ] => Val  Loss: 6.2296e-03
+
+I 06.08/20:17:23 solver.py:426 ] => Test NMSE: -1.9024e+01
+
+I 06.08/20:17:23 solver.py:358 ] => Adapter monitor [epoch=70] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.930860e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:8.786289e-01,weight:4.930077e+01 | component_l2=latent_adapter:4.930860e+01 | adapter_abs_max=1.130288e+00 | delta_l2=1.046502e+01 | delta_rel=2.288827e-01 | train_loss=5.543749e-03 | val_loss=6.229575e-03 | test_loss=6.259769e-03 | nmse=-1.902412e+01
+I 06.08/20:17:23 solver.py:224 ] 
+=! Best NMSE: -1.9024e+01 (epoch=70)
+
+I 06.08/20:17:24 solver.py:159 ] Epoch: [71/200][20/36] lr: 1.73e-04 | MSE loss: 5.4509e-03 | time: 0.032
+I 06.08/20:17:24 solver.py:169 ] => Train  Loss: 5.5641e-03
+
+I 06.08/20:17:24 solver.py:426 ] => Test NMSE: -1.9026e+01
+
+I 06.08/20:17:24 solver.py:358 ] => Adapter monitor [epoch=71] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.933929e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:8.831120e-01,weight:4.933139e+01 | component_l2=latent_adapter:4.933929e+01 | adapter_abs_max=1.131282e+00 | delta_l2=1.051859e+01 | delta_rel=2.300544e-01 | train_loss=5.564051e-03 | test_loss=6.257525e-03 | nmse=-1.902567e+01
+I 06.08/20:17:25 solver.py:224 ] 
+=! Best NMSE: -1.9026e+01 (epoch=71)
+
+I 06.08/20:17:25 solver.py:159 ] Epoch: [72/200][20/36] lr: 1.72e-04 | MSE loss: 5.3363e-03 | time: 0.028
+I 06.08/20:17:26 solver.py:169 ] => Train  Loss: 5.6030e-03
+
+I 06.08/20:17:26 solver.py:426 ] => Test NMSE: -1.9027e+01
+
+I 06.08/20:17:26 solver.py:358 ] => Adapter monitor [epoch=72] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.937129e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:8.881297e-01,weight:4.936330e+01 | component_l2=latent_adapter:4.937129e+01 | adapter_abs_max=1.131879e+00 | delta_l2=1.057427e+01 | delta_rel=2.312722e-01 | train_loss=5.602989e-03 | test_loss=6.255717e-03 | nmse=-1.902693e+01
+I 06.08/20:17:26 solver.py:224 ] 
+=! Best NMSE: -1.9027e+01 (epoch=72)
+
+I 06.08/20:17:27 solver.py:159 ] Epoch: [73/200][20/36] lr: 1.71e-04 | MSE loss: 5.2540e-03 | time: 0.028
+I 06.08/20:17:27 solver.py:169 ] => Train  Loss: 5.5672e-03
+
+I 06.08/20:17:27 solver.py:426 ] => Test NMSE: -1.9027e+01
+
+I 06.08/20:17:27 solver.py:358 ] => Adapter monitor [epoch=73] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.940110e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:8.931273e-01,weight:4.939303e+01 | component_l2=latent_adapter:4.940110e+01 | adapter_abs_max=1.132753e+00 | delta_l2=1.062870e+01 | delta_rel=2.324627e-01 | train_loss=5.567198e-03 | test_loss=6.255660e-03 | nmse=-1.902697e+01
+I 06.08/20:17:27 solver.py:224 ] 
+=! Best NMSE: -1.9027e+01 (epoch=73)
+
+I 06.08/20:17:28 solver.py:159 ] Epoch: [74/200][20/36] lr: 1.70e-04 | MSE loss: 5.5352e-03 | time: 0.026
+I 06.08/20:17:28 solver.py:169 ] => Train  Loss: 5.6423e-03
+
+I 06.08/20:17:28 solver.py:426 ] => Test NMSE: -1.9028e+01
+
+I 06.08/20:17:28 solver.py:358 ] => Adapter monitor [epoch=74] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.943200e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.027332e-01,weight:4.942376e+01 | component_l2=latent_adapter:4.943200e+01 | adapter_abs_max=1.133030e+00 | delta_l2=1.068268e+01 | delta_rel=2.336432e-01 | train_loss=5.642287e-03 | test_loss=6.254551e-03 | nmse=-1.902774e+01
+I 06.08/20:17:29 solver.py:224 ] 
+=! Best NMSE: -1.9028e+01 (epoch=74)
+
+I 06.08/20:17:29 solver.py:159 ] Epoch: [75/200][20/36] lr: 1.68e-04 | MSE loss: 5.3577e-03 | time: 0.028
+I 06.08/20:17:30 solver.py:169 ] => Train  Loss: 5.6431e-03
+
+I 06.08/20:17:30 solver.py:426 ] => Test NMSE: -1.9029e+01
+
+I 06.08/20:17:30 solver.py:358 ] => Adapter monitor [epoch=75] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.946224e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.015387e-01,weight:4.945402e+01 | component_l2=latent_adapter:4.946224e+01 | adapter_abs_max=1.134354e+00 | delta_l2=1.073593e+01 | delta_rel=2.348079e-01 | train_loss=5.643076e-03 | test_loss=6.252442e-03 | nmse=-1.902921e+01
+I 06.08/20:17:30 solver.py:224 ] 
+=! Best NMSE: -1.9029e+01 (epoch=75)
+
+I 06.08/20:17:31 solver.py:159 ] Epoch: [76/200][20/36] lr: 1.67e-04 | MSE loss: 5.4788e-03 | time: 0.029
+I 06.08/20:17:31 solver.py:169 ] => Train  Loss: 5.6655e-03
+
+I 06.08/20:17:31 solver.py:426 ] => Test NMSE: -1.9031e+01
+
+I 06.08/20:17:31 solver.py:358 ] => Adapter monitor [epoch=76] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.949311e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.091498e-01,weight:4.948476e+01 | component_l2=latent_adapter:4.949311e+01 | adapter_abs_max=1.135230e+00 | delta_l2=1.078977e+01 | delta_rel=2.359855e-01 | train_loss=5.665474e-03 | test_loss=6.249766e-03 | nmse=-1.903106e+01
+I 06.08/20:17:32 solver.py:224 ] 
+=! Best NMSE: -1.9031e+01 (epoch=76)
+
+I 06.08/20:17:32 solver.py:159 ] Epoch: [77/200][20/36] lr: 1.66e-04 | MSE loss: 5.5176e-03 | time: 0.030
+I 06.08/20:17:33 solver.py:169 ] => Train  Loss: 5.5762e-03
+
+I 06.08/20:17:33 solver.py:426 ] => Test NMSE: -1.9031e+01
+
+I 06.08/20:17:33 solver.py:358 ] => Adapter monitor [epoch=77] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.952216e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.146793e-01,weight:4.951371e+01 | component_l2=latent_adapter:4.952216e+01 | adapter_abs_max=1.136006e+00 | delta_l2=1.084206e+01 | delta_rel=2.371292e-01 | train_loss=5.576213e-03 | test_loss=6.249202e-03 | nmse=-1.903146e+01
+I 06.08/20:17:33 solver.py:224 ] 
+=! Best NMSE: -1.9031e+01 (epoch=77)
+
+I 06.08/20:17:34 solver.py:159 ] Epoch: [78/200][20/36] lr: 1.65e-04 | MSE loss: 5.6849e-03 | time: 0.027
+I 06.08/20:17:34 solver.py:169 ] => Train  Loss: 5.5957e-03
+
+I 06.08/20:17:34 solver.py:426 ] => Test NMSE: -1.9033e+01
+
+I 06.08/20:17:34 solver.py:358 ] => Adapter monitor [epoch=78] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.954796e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.167565e-01,weight:4.953948e+01 | component_l2=latent_adapter:4.954796e+01 | adapter_abs_max=1.137088e+00 | delta_l2=1.088777e+01 | delta_rel=2.381288e-01 | train_loss=5.595658e-03 | test_loss=6.247331e-03 | nmse=-1.903276e+01
+I 06.08/20:17:35 solver.py:224 ] 
+=! Best NMSE: -1.9033e+01 (epoch=78)
+
+I 06.08/20:17:35 solver.py:159 ] Epoch: [79/200][20/36] lr: 1.64e-04 | MSE loss: 5.4380e-03 | time: 0.029
+I 06.08/20:17:36 solver.py:169 ] => Train  Loss: 5.5302e-03
+
+I 06.08/20:17:36 solver.py:426 ] => Test NMSE: -1.9035e+01
+
+I 06.08/20:17:36 solver.py:358 ] => Adapter monitor [epoch=79] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.957634e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.224677e-01,weight:4.956776e+01 | component_l2=latent_adapter:4.957634e+01 | adapter_abs_max=1.138214e+00 | delta_l2=1.093829e+01 | delta_rel=2.392337e-01 | train_loss=5.530183e-03 | test_loss=6.244033e-03 | nmse=-1.903505e+01
+I 06.08/20:17:36 solver.py:224 ] 
+=! Best NMSE: -1.9035e+01 (epoch=79)
+
+I 06.08/20:17:37 solver.py:159 ] Epoch: [80/200][20/36] lr: 1.63e-04 | MSE loss: 5.6637e-03 | time: 0.035
+I 06.08/20:17:37 solver.py:169 ] => Train  Loss: 5.6244e-03
+
+I 06.08/20:17:37 solver.py:169 ] => Val  Loss: 6.2200e-03
+
+I 06.08/20:17:37 solver.py:426 ] => Test NMSE: -1.9031e+01
+
+I 06.08/20:17:37 solver.py:358 ] => Adapter monitor [epoch=80] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.960332e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.178212e-01,weight:4.959482e+01 | component_l2=latent_adapter:4.960332e+01 | adapter_abs_max=1.138660e+00 | delta_l2=1.098453e+01 | delta_rel=2.402451e-01 | train_loss=5.624359e-03 | val_loss=6.219974e-03 | test_loss=6.250184e-03 | nmse=-1.903077e+01
+I 06.08/20:17:37 solver.py:224 ] 
+=! Best NMSE: -1.9035e+01 (epoch=79)
+
+I 06.08/20:17:38 solver.py:159 ] Epoch: [81/200][20/36] lr: 1.62e-04 | MSE loss: 5.5254e-03 | time: 0.026
+I 06.08/20:17:38 solver.py:169 ] => Train  Loss: 5.6277e-03
+
+I 06.08/20:17:38 solver.py:426 ] => Test NMSE: -1.9036e+01
+
+I 06.08/20:17:38 solver.py:358 ] => Adapter monitor [epoch=81] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.962936e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.285808e-01,weight:4.962067e+01 | component_l2=latent_adapter:4.962936e+01 | adapter_abs_max=1.139029e+00 | delta_l2=1.103072e+01 | delta_rel=2.412553e-01 | train_loss=5.627742e-03 | test_loss=6.242932e-03 | nmse=-1.903581e+01
+I 06.08/20:17:39 solver.py:224 ] 
+=! Best NMSE: -1.9036e+01 (epoch=81)
+
+I 06.08/20:17:39 solver.py:159 ] Epoch: [82/200][20/36] lr: 1.61e-04 | MSE loss: 5.5913e-03 | time: 0.027
+I 06.08/20:17:40 solver.py:169 ] => Train  Loss: 5.5061e-03
+
+I 06.08/20:17:40 solver.py:426 ] => Test NMSE: -1.9033e+01
+
+I 06.08/20:17:40 solver.py:358 ] => Adapter monitor [epoch=82] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.965095e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.384044e-01,weight:4.964208e+01 | component_l2=latent_adapter:4.965095e+01 | adapter_abs_max=1.139583e+00 | delta_l2=1.107504e+01 | delta_rel=2.422246e-01 | train_loss=5.506146e-03 | test_loss=6.246308e-03 | nmse=-1.903347e+01
+I 06.08/20:17:40 solver.py:224 ] 
+=! Best NMSE: -1.9036e+01 (epoch=81)
+
+I 06.08/20:17:40 solver.py:159 ] Epoch: [83/200][20/36] lr: 1.60e-04 | MSE loss: 5.3715e-03 | time: 0.025
+I 06.08/20:17:41 solver.py:169 ] => Train  Loss: 5.5490e-03
+
+I 06.08/20:17:41 solver.py:426 ] => Test NMSE: -1.9036e+01
+
+I 06.08/20:17:41 solver.py:358 ] => Adapter monitor [epoch=83] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.967149e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.399854e-01,weight:4.966260e+01 | component_l2=latent_adapter:4.967149e+01 | adapter_abs_max=1.140240e+00 | delta_l2=1.111434e+01 | delta_rel=2.430841e-01 | train_loss=5.548988e-03 | test_loss=6.241985e-03 | nmse=-1.903647e+01
+I 06.08/20:17:41 solver.py:224 ] 
+=! Best NMSE: -1.9036e+01 (epoch=83)
+
+I 06.08/20:17:42 solver.py:159 ] Epoch: [84/200][20/36] lr: 1.58e-04 | MSE loss: 5.8874e-03 | time: 0.024
+I 06.08/20:17:42 solver.py:169 ] => Train  Loss: 5.5154e-03
+
+I 06.08/20:17:42 solver.py:426 ] => Test NMSE: -1.9036e+01
+
+I 06.08/20:17:42 solver.py:358 ] => Adapter monitor [epoch=84] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.969768e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.440072e-01,weight:4.968871e+01 | component_l2=latent_adapter:4.969768e+01 | adapter_abs_max=1.141879e+00 | delta_l2=1.115944e+01 | delta_rel=2.440706e-01 | train_loss=5.515432e-03 | test_loss=6.242441e-03 | nmse=-1.903616e+01
+I 06.08/20:17:42 solver.py:224 ] 
+=! Best NMSE: -1.9036e+01 (epoch=83)
+
+I 06.08/20:17:43 solver.py:159 ] Epoch: [85/200][20/36] lr: 1.57e-04 | MSE loss: 5.5341e-03 | time: 0.026
+I 06.08/20:17:43 solver.py:169 ] => Train  Loss: 5.6361e-03
+
+I 06.08/20:17:43 solver.py:426 ] => Test NMSE: -1.9039e+01
+
+I 06.08/20:17:43 solver.py:358 ] => Adapter monitor [epoch=85] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.972278e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.412712e-01,weight:4.971387e+01 | component_l2=latent_adapter:4.972278e+01 | adapter_abs_max=1.142553e+00 | delta_l2=1.120141e+01 | delta_rel=2.449885e-01 | train_loss=5.636140e-03 | test_loss=6.237793e-03 | nmse=-1.903939e+01
+I 06.08/20:17:44 solver.py:224 ] 
+=! Best NMSE: -1.9039e+01 (epoch=85)
+
+I 06.08/20:17:44 solver.py:159 ] Epoch: [86/200][20/36] lr: 1.56e-04 | MSE loss: 5.3671e-03 | time: 0.034
+I 06.08/20:17:45 solver.py:169 ] => Train  Loss: 5.5474e-03
+
+I 06.08/20:17:45 solver.py:426 ] => Test NMSE: -1.9031e+01
+
+I 06.08/20:17:45 solver.py:358 ] => Adapter monitor [epoch=86] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.973953e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.554921e-01,weight:4.973035e+01 | component_l2=latent_adapter:4.973953e+01 | adapter_abs_max=1.142700e+00 | delta_l2=1.124152e+01 | delta_rel=2.458658e-01 | train_loss=5.547408e-03 | test_loss=6.249265e-03 | nmse=-1.903141e+01
+I 06.08/20:17:45 solver.py:224 ] 
+=! Best NMSE: -1.9039e+01 (epoch=85)
+
+I 06.08/20:17:45 solver.py:159 ] Epoch: [87/200][20/36] lr: 1.55e-04 | MSE loss: 5.8956e-03 | time: 0.024
+I 06.08/20:17:46 solver.py:169 ] => Train  Loss: 5.4684e-03
+
+I 06.08/20:17:46 solver.py:426 ] => Test NMSE: -1.9041e+01
+
+I 06.08/20:17:46 solver.py:358 ] => Adapter monitor [epoch=87] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.975939e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.565958e-01,weight:4.975020e+01 | component_l2=latent_adapter:4.975939e+01 | adapter_abs_max=1.143210e+00 | delta_l2=1.128020e+01 | delta_rel=2.467117e-01 | train_loss=5.468365e-03 | test_loss=6.234928e-03 | nmse=-1.904139e+01
+I 06.08/20:17:46 solver.py:224 ] 
+=! Best NMSE: -1.9041e+01 (epoch=87)
+
+I 06.08/20:17:47 solver.py:159 ] Epoch: [88/200][20/36] lr: 1.54e-04 | MSE loss: 5.2745e-03 | time: 0.029
+I 06.08/20:17:47 solver.py:169 ] => Train  Loss: 5.4583e-03
+
+I 06.08/20:17:47 solver.py:426 ] => Test NMSE: -1.9042e+01
+
+I 06.08/20:17:47 solver.py:358 ] => Adapter monitor [epoch=88] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.977990e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.530522e-01,weight:4.977078e+01 | component_l2=latent_adapter:4.977990e+01 | adapter_abs_max=1.143731e+00 | delta_l2=1.131611e+01 | delta_rel=2.474971e-01 | train_loss=5.458339e-03 | test_loss=6.233837e-03 | nmse=-1.904214e+01
+I 06.08/20:17:48 solver.py:224 ] 
+=! Best NMSE: -1.9042e+01 (epoch=88)
+
+I 06.08/20:17:48 solver.py:159 ] Epoch: [89/200][20/36] lr: 1.52e-04 | MSE loss: 5.4462e-03 | time: 0.027
+I 06.08/20:17:49 solver.py:169 ] => Train  Loss: 5.4990e-03
+
+I 06.08/20:17:49 solver.py:426 ] => Test NMSE: -1.9044e+01
+
+I 06.08/20:17:49 solver.py:358 ] => Adapter monitor [epoch=89] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.980480e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.559757e-01,weight:4.979563e+01 | component_l2=latent_adapter:4.980480e+01 | adapter_abs_max=1.144500e+00 | delta_l2=1.135673e+01 | delta_rel=2.483856e-01 | train_loss=5.498952e-03 | test_loss=6.231248e-03 | nmse=-1.904395e+01
+I 06.08/20:17:49 solver.py:224 ] 
+=! Best NMSE: -1.9044e+01 (epoch=89)
+
+I 06.08/20:17:50 solver.py:159 ] Epoch: [90/200][20/36] lr: 1.51e-04 | MSE loss: 5.2392e-03 | time: 0.036
+I 06.08/20:17:50 solver.py:169 ] => Train  Loss: 5.4930e-03
+
+I 06.08/20:17:50 solver.py:169 ] => Val  Loss: 6.2019e-03
+
+I 06.08/20:17:50 solver.py:426 ] => Test NMSE: -1.9043e+01
+
+I 06.08/20:17:50 solver.py:358 ] => Adapter monitor [epoch=90] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.982469e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.540379e-01,weight:4.981555e+01 | component_l2=latent_adapter:4.982469e+01 | adapter_abs_max=1.145475e+00 | delta_l2=1.139022e+01 | delta_rel=2.491180e-01 | train_loss=5.493048e-03 | val_loss=6.201863e-03 | test_loss=6.231984e-03 | nmse=-1.904344e+01
+I 06.08/20:17:50 solver.py:224 ] 
+=! Best NMSE: -1.9044e+01 (epoch=89)
+
+I 06.08/20:17:51 solver.py:159 ] Epoch: [91/200][20/36] lr: 1.50e-04 | MSE loss: 5.2950e-03 | time: 0.028
+I 06.08/20:17:51 solver.py:169 ] => Train  Loss: 5.4682e-03
+
+I 06.08/20:17:52 solver.py:426 ] => Test NMSE: -1.9044e+01
+
+I 06.08/20:17:52 solver.py:358 ] => Adapter monitor [epoch=91] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.984756e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.591274e-01,weight:4.983833e+01 | component_l2=latent_adapter:4.984756e+01 | adapter_abs_max=1.146145e+00 | delta_l2=1.142834e+01 | delta_rel=2.499517e-01 | train_loss=5.468178e-03 | test_loss=6.230658e-03 | nmse=-1.904436e+01
+I 06.08/20:17:52 solver.py:224 ] 
+=! Best NMSE: -1.9044e+01 (epoch=91)
+
+I 06.08/20:17:53 solver.py:159 ] Epoch: [92/200][20/36] lr: 1.49e-04 | MSE loss: 5.2601e-03 | time: 0.035
+I 06.08/20:17:53 solver.py:169 ] => Train  Loss: 5.5616e-03
+
+I 06.08/20:17:53 solver.py:426 ] => Test NMSE: -1.9045e+01
+
+I 06.08/20:17:53 solver.py:358 ] => Adapter monitor [epoch=92] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.987144e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.582350e-01,weight:4.986224e+01 | component_l2=latent_adapter:4.987144e+01 | adapter_abs_max=1.146646e+00 | delta_l2=1.146715e+01 | delta_rel=2.508005e-01 | train_loss=5.561580e-03 | test_loss=6.229839e-03 | nmse=-1.904493e+01
+I 06.08/20:17:53 solver.py:224 ] 
+=! Best NMSE: -1.9045e+01 (epoch=92)
+
+I 06.08/20:17:54 solver.py:159 ] Epoch: [93/200][20/36] lr: 1.47e-04 | MSE loss: 5.4342e-03 | time: 0.037
+I 06.08/20:17:55 solver.py:169 ] => Train  Loss: 5.5829e-03
+
+I 06.08/20:17:55 solver.py:426 ] => Test NMSE: -1.9046e+01
+
+I 06.08/20:17:55 solver.py:358 ] => Adapter monitor [epoch=93] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.989347e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.624614e-01,weight:4.988419e+01 | component_l2=latent_adapter:4.989347e+01 | adapter_abs_max=1.147509e+00 | delta_l2=1.150420e+01 | delta_rel=2.516109e-01 | train_loss=5.582864e-03 | test_loss=6.227683e-03 | nmse=-1.904644e+01
+I 06.08/20:17:55 solver.py:224 ] 
+=! Best NMSE: -1.9046e+01 (epoch=93)
+
+I 06.08/20:17:56 solver.py:159 ] Epoch: [94/200][20/36] lr: 1.46e-04 | MSE loss: 5.2864e-03 | time: 0.030
+I 06.08/20:17:56 solver.py:169 ] => Train  Loss: 5.5202e-03
+
+I 06.08/20:17:56 solver.py:426 ] => Test NMSE: -1.9045e+01
+
+I 06.08/20:17:56 solver.py:358 ] => Adapter monitor [epoch=94] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.991537e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.629782e-01,weight:4.990608e+01 | component_l2=latent_adapter:4.991537e+01 | adapter_abs_max=1.148410e+00 | delta_l2=1.154056e+01 | delta_rel=2.524062e-01 | train_loss=5.520245e-03 | test_loss=6.229454e-03 | nmse=-1.904520e+01
+I 06.08/20:17:56 solver.py:224 ] 
+=! Best NMSE: -1.9046e+01 (epoch=93)
+
+I 06.08/20:17:57 solver.py:159 ] Epoch: [95/200][20/36] lr: 1.45e-04 | MSE loss: 5.9240e-03 | time: 0.025
+I 06.08/20:17:57 solver.py:169 ] => Train  Loss: 5.4623e-03
+
+I 06.08/20:17:57 solver.py:426 ] => Test NMSE: -1.9047e+01
+
+I 06.08/20:17:57 solver.py:358 ] => Adapter monitor [epoch=95] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.993704e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.703207e-01,weight:4.992761e+01 | component_l2=latent_adapter:4.993704e+01 | adapter_abs_max=1.149035e+00 | delta_l2=1.157703e+01 | delta_rel=2.532039e-01 | train_loss=5.462270e-03 | test_loss=6.226992e-03 | nmse=-1.904692e+01
+I 06.08/20:17:58 solver.py:224 ] 
+=! Best NMSE: -1.9047e+01 (epoch=95)
+
+I 06.08/20:17:58 solver.py:159 ] Epoch: [96/200][20/36] lr: 1.44e-04 | MSE loss: 5.4601e-03 | time: 0.028
+I 06.08/20:17:59 solver.py:169 ] => Train  Loss: 5.4597e-03
+
+I 06.08/20:17:59 solver.py:426 ] => Test NMSE: -1.9048e+01
+
+I 06.08/20:17:59 solver.py:358 ] => Adapter monitor [epoch=96] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.995706e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.687663e-01,weight:4.994766e+01 | component_l2=latent_adapter:4.995706e+01 | adapter_abs_max=1.149461e+00 | delta_l2=1.161001e+01 | delta_rel=2.539251e-01 | train_loss=5.459690e-03 | test_loss=6.225559e-03 | nmse=-1.904792e+01
+I 06.08/20:17:59 solver.py:224 ] 
+=! Best NMSE: -1.9048e+01 (epoch=96)
+
+I 06.08/20:18:00 solver.py:159 ] Epoch: [97/200][20/36] lr: 1.42e-04 | MSE loss: 5.5326e-03 | time: 0.029
+I 06.08/20:18:00 solver.py:169 ] => Train  Loss: 5.4867e-03
+
+I 06.08/20:18:00 solver.py:426 ] => Test NMSE: -1.9049e+01
+
+I 06.08/20:18:00 solver.py:358 ] => Adapter monitor [epoch=97] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.997992e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.713145e-01,weight:4.997048e+01 | component_l2=latent_adapter:4.997992e+01 | adapter_abs_max=1.150247e+00 | delta_l2=1.164682e+01 | delta_rel=2.547301e-01 | train_loss=5.486715e-03 | test_loss=6.224080e-03 | nmse=-1.904895e+01
+I 06.08/20:18:01 solver.py:224 ] 
+=! Best NMSE: -1.9049e+01 (epoch=97)
+
+I 06.08/20:18:01 solver.py:159 ] Epoch: [98/200][20/36] lr: 1.41e-04 | MSE loss: 5.7645e-03 | time: 0.043
+I 06.08/20:18:02 solver.py:169 ] => Train  Loss: 5.4570e-03
+
+I 06.08/20:18:02 solver.py:426 ] => Test NMSE: -1.9048e+01
+
+I 06.08/20:18:02 solver.py:358 ] => Adapter monitor [epoch=98] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=4.999901e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.764876e-01,weight:4.998947e+01 | component_l2=latent_adapter:4.999901e+01 | adapter_abs_max=1.150734e+00 | delta_l2=1.167940e+01 | delta_rel=2.554427e-01 | train_loss=5.456983e-03 | test_loss=6.224864e-03 | nmse=-1.904840e+01
+I 06.08/20:18:02 solver.py:224 ] 
+=! Best NMSE: -1.9049e+01 (epoch=97)
+
+I 06.08/20:18:03 solver.py:159 ] Epoch: [99/200][20/36] lr: 1.40e-04 | MSE loss: 5.6994e-03 | time: 0.044
+I 06.08/20:18:04 solver.py:169 ] => Train  Loss: 5.4983e-03
+
+I 06.08/20:18:04 solver.py:426 ] => Test NMSE: -1.9050e+01
+
+I 06.08/20:18:04 solver.py:358 ] => Adapter monitor [epoch=99] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.002027e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.749278e-01,weight:5.001077e+01 | component_l2=latent_adapter:5.002027e+01 | adapter_abs_max=1.151157e+00 | delta_l2=1.171367e+01 | delta_rel=2.561923e-01 | train_loss=5.498263e-03 | test_loss=6.222645e-03 | nmse=-1.904995e+01
+I 06.08/20:18:05 solver.py:224 ] 
+=! Best NMSE: -1.9050e+01 (epoch=99)
+
+I 06.08/20:18:06 solver.py:159 ] Epoch: [100/200][20/36] lr: 1.39e-04 | MSE loss: 5.4824e-03 | time: 0.076
+I 06.08/20:18:07 solver.py:169 ] => Train  Loss: 5.5979e-03
+
+I 06.08/20:18:07 solver.py:169 ] => Val  Loss: 6.1909e-03
+
+I 06.08/20:18:07 solver.py:426 ] => Test NMSE: -1.9051e+01
+
+I 06.08/20:18:07 solver.py:358 ] => Adapter monitor [epoch=100] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.004131e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.787883e-01,weight:5.003174e+01 | component_l2=latent_adapter:5.004131e+01 | adapter_abs_max=1.151461e+00 | delta_l2=1.174761e+01 | delta_rel=2.569347e-01 | train_loss=5.597913e-03 | val_loss=6.190949e-03 | test_loss=6.221090e-03 | nmse=-1.905103e+01
+I 06.08/20:18:08 solver.py:224 ] 
+=! Best NMSE: -1.9051e+01 (epoch=100)
+
+I 06.08/20:18:09 solver.py:159 ] Epoch: [101/200][20/36] lr: 1.37e-04 | MSE loss: 5.8181e-03 | time: 0.057
+I 06.08/20:18:10 solver.py:169 ] => Train  Loss: 5.4834e-03
+
+I 06.08/20:18:10 solver.py:426 ] => Test NMSE: -1.9049e+01
+
+I 06.08/20:18:10 solver.py:358 ] => Adapter monitor [epoch=101] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.006013e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.809352e-01,weight:5.005052e+01 | component_l2=latent_adapter:5.006013e+01 | adapter_abs_max=1.152335e+00 | delta_l2=1.177918e+01 | delta_rel=2.576252e-01 | train_loss=5.483400e-03 | test_loss=6.223941e-03 | nmse=-1.904905e+01
+I 06.08/20:18:10 solver.py:224 ] 
+=! Best NMSE: -1.9051e+01 (epoch=100)
+
+I 06.08/20:18:11 solver.py:159 ] Epoch: [102/200][20/36] lr: 1.36e-04 | MSE loss: 5.6787e-03 | time: 0.033
+I 06.08/20:18:11 solver.py:169 ] => Train  Loss: 5.5194e-03
+
+I 06.08/20:18:11 solver.py:426 ] => Test NMSE: -1.9047e+01
+
+I 06.08/20:18:11 solver.py:358 ] => Adapter monitor [epoch=102] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.008196e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.807046e-01,weight:5.007236e+01 | component_l2=latent_adapter:5.008196e+01 | adapter_abs_max=1.153179e+00 | delta_l2=1.181478e+01 | delta_rel=2.584038e-01 | train_loss=5.519390e-03 | test_loss=6.227237e-03 | nmse=-1.904675e+01
+I 06.08/20:18:11 solver.py:224 ] 
+=! Best NMSE: -1.9051e+01 (epoch=100)
+
+I 06.08/20:18:12 solver.py:159 ] Epoch: [103/200][20/36] lr: 1.35e-04 | MSE loss: 5.3423e-03 | time: 0.026
+I 06.08/20:18:12 solver.py:169 ] => Train  Loss: 5.4504e-03
+
+I 06.08/20:18:12 solver.py:426 ] => Test NMSE: -1.9047e+01
+
+I 06.08/20:18:12 solver.py:358 ] => Adapter monitor [epoch=103] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.010271e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.874809e-01,weight:5.009298e+01 | component_l2=latent_adapter:5.010271e+01 | adapter_abs_max=1.154028e+00 | delta_l2=1.185073e+01 | delta_rel=2.591900e-01 | train_loss=5.450449e-03 | test_loss=6.226496e-03 | nmse=-1.904726e+01
+I 06.08/20:18:12 solver.py:224 ] 
+=! Best NMSE: -1.9051e+01 (epoch=100)
+
+I 06.08/20:18:13 solver.py:159 ] Epoch: [104/200][20/36] lr: 1.33e-04 | MSE loss: 5.8785e-03 | time: 0.028
+I 06.08/20:18:13 solver.py:169 ] => Train  Loss: 5.5365e-03
+
+I 06.08/20:18:13 solver.py:426 ] => Test NMSE: -1.9053e+01
+
+I 06.08/20:18:13 solver.py:358 ] => Adapter monitor [epoch=104] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.012068e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.938414e-01,weight:5.011082e+01 | component_l2=latent_adapter:5.012068e+01 | adapter_abs_max=1.154128e+00 | delta_l2=1.188155e+01 | delta_rel=2.598641e-01 | train_loss=5.536520e-03 | test_loss=6.218228e-03 | nmse=-1.905303e+01
+I 06.08/20:18:14 solver.py:224 ] 
+=! Best NMSE: -1.9053e+01 (epoch=104)
+
+I 06.08/20:18:14 solver.py:159 ] Epoch: [105/200][20/36] lr: 1.32e-04 | MSE loss: 5.6023e-03 | time: 0.038
+I 06.08/20:18:15 solver.py:169 ] => Train  Loss: 5.5095e-03
+
+I 06.08/20:18:15 solver.py:426 ] => Test NMSE: -1.9050e+01
+
+I 06.08/20:18:15 solver.py:358 ] => Adapter monitor [epoch=105] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.013840e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.932492e-01,weight:5.012856e+01 | component_l2=latent_adapter:5.013840e+01 | adapter_abs_max=1.154478e+00 | delta_l2=1.191059e+01 | delta_rel=2.604991e-01 | train_loss=5.509454e-03 | test_loss=6.222558e-03 | nmse=-1.905001e+01
+I 06.08/20:18:15 solver.py:224 ] 
+=! Best NMSE: -1.9053e+01 (epoch=104)
+
+I 06.08/20:18:16 solver.py:159 ] Epoch: [106/200][20/36] lr: 1.31e-04 | MSE loss: 5.5940e-03 | time: 0.037
+I 06.08/20:18:16 solver.py:169 ] => Train  Loss: 5.5359e-03
+
+I 06.08/20:18:16 solver.py:426 ] => Test NMSE: -1.9051e+01
+
+I 06.08/20:18:16 solver.py:358 ] => Adapter monitor [epoch=106] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.015734e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.924997e-01,weight:5.014752e+01 | component_l2=latent_adapter:5.015734e+01 | adapter_abs_max=1.155061e+00 | delta_l2=1.194085e+01 | delta_rel=2.611609e-01 | train_loss=5.535929e-03 | test_loss=6.220952e-03 | nmse=-1.905113e+01
+I 06.08/20:18:16 solver.py:224 ] 
+=! Best NMSE: -1.9053e+01 (epoch=104)
+
+I 06.08/20:18:17 solver.py:159 ] Epoch: [107/200][20/36] lr: 1.30e-04 | MSE loss: 5.2603e-03 | time: 0.033
+I 06.08/20:18:17 solver.py:169 ] => Train  Loss: 5.6115e-03
+
+I 06.08/20:18:18 solver.py:426 ] => Test NMSE: -1.9053e+01
+
+I 06.08/20:18:18 solver.py:358 ] => Adapter monitor [epoch=107] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.017511e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.965455e-01,weight:5.016521e+01 | component_l2=latent_adapter:5.017511e+01 | adapter_abs_max=1.155340e+00 | delta_l2=1.197013e+01 | delta_rel=2.618015e-01 | train_loss=5.611513e-03 | test_loss=6.218774e-03 | nmse=-1.905265e+01
+I 06.08/20:18:18 solver.py:224 ] 
+=! Best NMSE: -1.9053e+01 (epoch=104)
+
+I 06.08/20:18:18 solver.py:159 ] Epoch: [108/200][20/36] lr: 1.28e-04 | MSE loss: 5.6869e-03 | time: 0.033
+I 06.08/20:18:19 solver.py:169 ] => Train  Loss: 5.5145e-03
+
+I 06.08/20:18:19 solver.py:426 ] => Test NMSE: -1.9055e+01
+
+I 06.08/20:18:19 solver.py:358 ] => Adapter monitor [epoch=108] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.019435e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:9.976506e-01,weight:5.018443e+01 | component_l2=latent_adapter:5.019435e+01 | adapter_abs_max=1.156199e+00 | delta_l2=1.200050e+01 | delta_rel=2.624655e-01 | train_loss=5.514489e-03 | test_loss=6.215806e-03 | nmse=-1.905473e+01
+I 06.08/20:18:19 solver.py:224 ] 
+=! Best NMSE: -1.9055e+01 (epoch=108)
+
+I 06.08/20:18:20 solver.py:159 ] Epoch: [109/200][20/36] lr: 1.27e-04 | MSE loss: 5.3364e-03 | time: 0.032
+I 06.08/20:18:20 solver.py:169 ] => Train  Loss: 5.4934e-03
+
+I 06.08/20:18:20 solver.py:426 ] => Test NMSE: -1.9054e+01
+
+I 06.08/20:18:20 solver.py:358 ] => Adapter monitor [epoch=109] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.021114e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.001752e+00,weight:5.020114e+01 | component_l2=latent_adapter:5.021114e+01 | adapter_abs_max=1.156655e+00 | delta_l2=1.202799e+01 | delta_rel=2.630668e-01 | train_loss=5.493390e-03 | test_loss=6.217246e-03 | nmse=-1.905372e+01
+I 06.08/20:18:20 solver.py:224 ] 
+=! Best NMSE: -1.9055e+01 (epoch=108)
+
+I 06.08/20:18:21 solver.py:159 ] Epoch: [110/200][20/36] lr: 1.26e-04 | MSE loss: 5.3465e-03 | time: 0.028
+I 06.08/20:18:21 solver.py:169 ] => Train  Loss: 5.4725e-03
+
+I 06.08/20:18:21 solver.py:169 ] => Val  Loss: 6.1845e-03
+
+I 06.08/20:18:22 solver.py:426 ] => Test NMSE: -1.9056e+01
+
+I 06.08/20:18:22 solver.py:358 ] => Adapter monitor [epoch=110] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.022841e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.002715e+00,weight:5.021840e+01 | component_l2=latent_adapter:5.022841e+01 | adapter_abs_max=1.157139e+00 | delta_l2=1.205591e+01 | delta_rel=2.636776e-01 | train_loss=5.472494e-03 | val_loss=6.184523e-03 | test_loss=6.214660e-03 | nmse=-1.905553e+01
+I 06.08/20:18:22 solver.py:224 ] 
+=! Best NMSE: -1.9056e+01 (epoch=110)
+
+I 06.08/20:18:23 solver.py:159 ] Epoch: [111/200][20/36] lr: 1.24e-04 | MSE loss: 5.3621e-03 | time: 0.025
+I 06.08/20:18:23 solver.py:169 ] => Train  Loss: 5.5171e-03
+
+I 06.08/20:18:23 solver.py:426 ] => Test NMSE: -1.9054e+01
+
+I 06.08/20:18:23 solver.py:358 ] => Adapter monitor [epoch=111] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.024710e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.002141e+00,weight:5.023711e+01 | component_l2=latent_adapter:5.024710e+01 | adapter_abs_max=1.158059e+00 | delta_l2=1.208523e+01 | delta_rel=2.643186e-01 | train_loss=5.517075e-03 | test_loss=6.217146e-03 | nmse=-1.905379e+01
+I 06.08/20:18:23 solver.py:224 ] 
+=! Best NMSE: -1.9056e+01 (epoch=110)
+
+I 06.08/20:18:24 solver.py:159 ] Epoch: [112/200][20/36] lr: 1.23e-04 | MSE loss: 5.5303e-03 | time: 0.030
+I 06.08/20:18:24 solver.py:169 ] => Train  Loss: 5.5757e-03
+
+I 06.08/20:18:24 solver.py:426 ] => Test NMSE: -1.9053e+01
+
+I 06.08/20:18:24 solver.py:358 ] => Adapter monitor [epoch=112] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.026538e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.004862e+00,weight:5.025533e+01 | component_l2=latent_adapter:5.026538e+01 | adapter_abs_max=1.158379e+00 | delta_l2=1.211410e+01 | delta_rel=2.649502e-01 | train_loss=5.575693e-03 | test_loss=6.217886e-03 | nmse=-1.905327e+01
+I 06.08/20:18:24 solver.py:224 ] 
+=! Best NMSE: -1.9056e+01 (epoch=110)
+
+I 06.08/20:18:25 solver.py:159 ] Epoch: [113/200][20/36] lr: 1.22e-04 | MSE loss: 5.4713e-03 | time: 0.026
+I 06.08/20:18:25 solver.py:169 ] => Train  Loss: 5.4386e-03
+
+I 06.08/20:18:25 solver.py:426 ] => Test NMSE: -1.9056e+01
+
+I 06.08/20:18:25 solver.py:358 ] => Adapter monitor [epoch=113] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.028123e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.006055e+00,weight:5.027116e+01 | component_l2=latent_adapter:5.028123e+01 | adapter_abs_max=1.159032e+00 | delta_l2=1.213988e+01 | delta_rel=2.655141e-01 | train_loss=5.438597e-03 | test_loss=6.214314e-03 | nmse=-1.905577e+01
+I 06.08/20:18:26 solver.py:224 ] 
+=! Best NMSE: -1.9056e+01 (epoch=113)
+
+I 06.08/20:18:26 solver.py:159 ] Epoch: [114/200][20/36] lr: 1.20e-04 | MSE loss: 5.3016e-03 | time: 0.031
+I 06.08/20:18:27 solver.py:169 ] => Train  Loss: 5.4349e-03
+
+I 06.08/20:18:27 solver.py:426 ] => Test NMSE: -1.9056e+01
+
+I 06.08/20:18:27 solver.py:358 ] => Adapter monitor [epoch=114] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.029848e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.009048e+00,weight:5.028836e+01 | component_l2=latent_adapter:5.029848e+01 | adapter_abs_max=1.159604e+00 | delta_l2=1.216765e+01 | delta_rel=2.661214e-01 | train_loss=5.434914e-03 | test_loss=6.213330e-03 | nmse=-1.905646e+01
+I 06.08/20:18:27 solver.py:224 ] 
+=! Best NMSE: -1.9056e+01 (epoch=114)
+
+I 06.08/20:18:28 solver.py:159 ] Epoch: [115/200][20/36] lr: 1.19e-04 | MSE loss: 5.3953e-03 | time: 0.032
+I 06.08/20:18:28 solver.py:169 ] => Train  Loss: 5.5516e-03
+
+I 06.08/20:18:28 solver.py:426 ] => Test NMSE: -1.9057e+01
+
+I 06.08/20:18:28 solver.py:358 ] => Adapter monitor [epoch=115] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.031658e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.006690e+00,weight:5.030651e+01 | component_l2=latent_adapter:5.031658e+01 | adapter_abs_max=1.159812e+00 | delta_l2=1.219547e+01 | delta_rel=2.667298e-01 | train_loss=5.551564e-03 | test_loss=6.213177e-03 | nmse=-1.905656e+01
+I 06.08/20:18:29 solver.py:224 ] 
+=! Best NMSE: -1.9057e+01 (epoch=115)
+
+I 06.08/20:18:29 solver.py:159 ] Epoch: [116/200][20/36] lr: 1.18e-04 | MSE loss: 5.6786e-03 | time: 0.030
+I 06.08/20:18:30 solver.py:169 ] => Train  Loss: 5.4552e-03
+
+I 06.08/20:18:30 solver.py:426 ] => Test NMSE: -1.9053e+01
+
+I 06.08/20:18:30 solver.py:358 ] => Adapter monitor [epoch=116] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.033413e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.013748e+00,weight:5.032392e+01 | component_l2=latent_adapter:5.033413e+01 | adapter_abs_max=1.160064e+00 | delta_l2=1.222413e+01 | delta_rel=2.673566e-01 | train_loss=5.455224e-03 | test_loss=6.217643e-03 | nmse=-1.905344e+01
+I 06.08/20:18:30 solver.py:224 ] 
+=! Best NMSE: -1.9057e+01 (epoch=115)
+
+I 06.08/20:18:30 solver.py:159 ] Epoch: [117/200][20/36] lr: 1.16e-04 | MSE loss: 5.4976e-03 | time: 0.024
+I 06.08/20:18:31 solver.py:169 ] => Train  Loss: 5.4483e-03
+
+I 06.08/20:18:31 solver.py:426 ] => Test NMSE: -1.9056e+01
+
+I 06.08/20:18:31 solver.py:358 ] => Adapter monitor [epoch=117] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.034949e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.016027e+00,weight:5.033924e+01 | component_l2=latent_adapter:5.034949e+01 | adapter_abs_max=1.160314e+00 | delta_l2=1.224924e+01 | delta_rel=2.679058e-01 | train_loss=5.448337e-03 | test_loss=6.214610e-03 | nmse=-1.905556e+01
+I 06.08/20:18:31 solver.py:224 ] 
+=! Best NMSE: -1.9057e+01 (epoch=115)
+
+I 06.08/20:18:31 solver.py:159 ] Epoch: [118/200][20/36] lr: 1.15e-04 | MSE loss: 5.4152e-03 | time: 0.029
+I 06.08/20:18:32 solver.py:169 ] => Train  Loss: 5.4834e-03
+
+I 06.08/20:18:32 solver.py:426 ] => Test NMSE: -1.9057e+01
+
+I 06.08/20:18:32 solver.py:358 ] => Adapter monitor [epoch=118] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.036466e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.017888e+00,weight:5.035437e+01 | component_l2=latent_adapter:5.036466e+01 | adapter_abs_max=1.160772e+00 | delta_l2=1.227354e+01 | delta_rel=2.684374e-01 | train_loss=5.483380e-03 | test_loss=6.212862e-03 | nmse=-1.905678e+01
+I 06.08/20:18:32 solver.py:224 ] 
+=! Best NMSE: -1.9057e+01 (epoch=118)
+
+I 06.08/20:18:33 solver.py:159 ] Epoch: [119/200][20/36] lr: 1.14e-04 | MSE loss: 5.5631e-03 | time: 0.027
+I 06.08/20:18:33 solver.py:169 ] => Train  Loss: 5.4369e-03
+
+I 06.08/20:18:33 solver.py:426 ] => Test NMSE: -1.9058e+01
+
+I 06.08/20:18:33 solver.py:358 ] => Adapter monitor [epoch=119] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.038191e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.017979e+00,weight:5.037162e+01 | component_l2=latent_adapter:5.038191e+01 | adapter_abs_max=1.161434e+00 | delta_l2=1.230103e+01 | delta_rel=2.690386e-01 | train_loss=5.436878e-03 | test_loss=6.211595e-03 | nmse=-1.905767e+01
+I 06.08/20:18:34 solver.py:224 ] 
+=! Best NMSE: -1.9058e+01 (epoch=119)
+
+I 06.08/20:18:34 solver.py:159 ] Epoch: [120/200][20/36] lr: 1.13e-04 | MSE loss: 5.5439e-03 | time: 0.032
+I 06.08/20:18:35 solver.py:169 ] => Train  Loss: 5.4483e-03
+
+I 06.08/20:18:35 solver.py:169 ] => Val  Loss: 6.1828e-03
+
+I 06.08/20:18:35 solver.py:426 ] => Test NMSE: -1.9057e+01
+
+I 06.08/20:18:35 solver.py:358 ] => Adapter monitor [epoch=120] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.039647e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.019894e+00,weight:5.038615e+01 | component_l2=latent_adapter:5.039647e+01 | adapter_abs_max=1.161877e+00 | delta_l2=1.232466e+01 | delta_rel=2.695555e-01 | train_loss=5.448277e-03 | val_loss=6.182815e-03 | test_loss=6.213057e-03 | nmse=-1.905665e+01
+I 06.08/20:18:35 solver.py:224 ] 
+=! Best NMSE: -1.9058e+01 (epoch=119)
+
+I 06.08/20:18:36 solver.py:159 ] Epoch: [121/200][20/36] lr: 1.11e-04 | MSE loss: 5.5970e-03 | time: 0.027
+I 06.08/20:18:36 solver.py:169 ] => Train  Loss: 5.4668e-03
+
+I 06.08/20:18:36 solver.py:426 ] => Test NMSE: -1.9059e+01
+
+I 06.08/20:18:36 solver.py:358 ] => Adapter monitor [epoch=121] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.041201e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.020580e+00,weight:5.040167e+01 | component_l2=latent_adapter:5.041201e+01 | adapter_abs_max=1.162329e+00 | delta_l2=1.234889e+01 | delta_rel=2.700854e-01 | train_loss=5.466818e-03 | test_loss=6.210258e-03 | nmse=-1.905861e+01
+I 06.08/20:18:36 solver.py:224 ] 
+=! Best NMSE: -1.9059e+01 (epoch=121)
+
+I 06.08/20:18:37 solver.py:159 ] Epoch: [122/200][20/36] lr: 1.10e-04 | MSE loss: 5.3959e-03 | time: 0.031
+I 06.08/20:18:38 solver.py:169 ] => Train  Loss: 5.4473e-03
+
+I 06.08/20:18:38 solver.py:426 ] => Test NMSE: -1.9058e+01
+
+I 06.08/20:18:38 solver.py:358 ] => Adapter monitor [epoch=122] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.042774e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.024579e+00,weight:5.041733e+01 | component_l2=latent_adapter:5.042774e+01 | adapter_abs_max=1.162956e+00 | delta_l2=1.237377e+01 | delta_rel=2.706295e-01 | train_loss=5.447307e-03 | test_loss=6.211294e-03 | nmse=-1.905788e+01
+I 06.08/20:18:38 solver.py:224 ] 
+=! Best NMSE: -1.9059e+01 (epoch=121)
+
+I 06.08/20:18:38 solver.py:159 ] Epoch: [123/200][20/36] lr: 1.09e-04 | MSE loss: 5.4491e-03 | time: 0.025
+I 06.08/20:18:39 solver.py:169 ] => Train  Loss: 5.4277e-03
+
+I 06.08/20:18:39 solver.py:426 ] => Test NMSE: -1.9060e+01
+
+I 06.08/20:18:39 solver.py:358 ] => Adapter monitor [epoch=123] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.044162e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.024230e+00,weight:5.043122e+01 | component_l2=latent_adapter:5.044162e+01 | adapter_abs_max=1.163396e+00 | delta_l2=1.239596e+01 | delta_rel=2.711147e-01 | train_loss=5.427729e-03 | test_loss=6.208034e-03 | nmse=-1.906016e+01
+I 06.08/20:18:39 solver.py:224 ] 
+=! Best NMSE: -1.9060e+01 (epoch=123)
+
+I 06.08/20:18:40 solver.py:159 ] Epoch: [124/200][20/36] lr: 1.07e-04 | MSE loss: 5.2070e-03 | time: 0.027
+I 06.08/20:18:40 solver.py:169 ] => Train  Loss: 5.6080e-03
+
+I 06.08/20:18:40 solver.py:426 ] => Test NMSE: -1.9058e+01
+
+I 06.08/20:18:40 solver.py:358 ] => Adapter monitor [epoch=124] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.045648e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.026018e+00,weight:5.044604e+01 | component_l2=latent_adapter:5.045648e+01 | adapter_abs_max=1.164126e+00 | delta_l2=1.241959e+01 | delta_rel=2.716316e-01 | train_loss=5.608032e-03 | test_loss=6.210541e-03 | nmse=-1.905841e+01
+I 06.08/20:18:40 solver.py:224 ] 
+=! Best NMSE: -1.9060e+01 (epoch=123)
+
+I 06.08/20:18:41 solver.py:159 ] Epoch: [125/200][20/36] lr: 1.06e-04 | MSE loss: 5.4884e-03 | time: 0.029
+I 06.08/20:18:41 solver.py:169 ] => Train  Loss: 5.4941e-03
+
+I 06.08/20:18:41 solver.py:426 ] => Test NMSE: -1.9057e+01
+
+I 06.08/20:18:41 solver.py:358 ] => Adapter monitor [epoch=125] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.047291e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.026167e+00,weight:5.046248e+01 | component_l2=latent_adapter:5.047291e+01 | adapter_abs_max=1.165072e+00 | delta_l2=1.244495e+01 | delta_rel=2.721864e-01 | train_loss=5.494120e-03 | test_loss=6.212594e-03 | nmse=-1.905697e+01
+I 06.08/20:18:41 solver.py:224 ] 
+=! Best NMSE: -1.9060e+01 (epoch=123)
+
+I 06.08/20:18:42 solver.py:159 ] Epoch: [126/200][20/36] lr: 1.05e-04 | MSE loss: 5.3858e-03 | time: 0.024
+I 06.08/20:18:42 solver.py:169 ] => Train  Loss: 5.4872e-03
+
+I 06.08/20:18:42 solver.py:426 ] => Test NMSE: -1.9060e+01
+
+I 06.08/20:18:42 solver.py:358 ] => Adapter monitor [epoch=126] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.048722e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.032536e+00,weight:5.047666e+01 | component_l2=latent_adapter:5.048722e+01 | adapter_abs_max=1.165482e+00 | delta_l2=1.246821e+01 | delta_rel=2.726949e-01 | train_loss=5.487209e-03 | test_loss=6.208869e-03 | nmse=-1.905958e+01
+I 06.08/20:18:42 solver.py:224 ] 
+=! Best NMSE: -1.9060e+01 (epoch=123)
+
+I 06.08/20:18:43 solver.py:159 ] Epoch: [127/200][20/36] lr: 1.04e-04 | MSE loss: 5.4097e-03 | time: 0.025
+I 06.08/20:18:43 solver.py:169 ] => Train  Loss: 5.4173e-03
+
+I 06.08/20:18:43 solver.py:426 ] => Test NMSE: -1.9059e+01
+
+I 06.08/20:18:43 solver.py:358 ] => Adapter monitor [epoch=127] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.050182e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.033592e+00,weight:5.049124e+01 | component_l2=latent_adapter:5.050182e+01 | adapter_abs_max=1.166146e+00 | delta_l2=1.249158e+01 | delta_rel=2.732062e-01 | train_loss=5.417323e-03 | test_loss=6.210209e-03 | nmse=-1.905864e+01
+I 06.08/20:18:43 solver.py:224 ] 
+=! Best NMSE: -1.9060e+01 (epoch=123)
+
+I 06.08/20:18:44 solver.py:159 ] Epoch: [128/200][20/36] lr: 1.02e-04 | MSE loss: 5.2659e-03 | time: 0.024
+I 06.08/20:18:44 solver.py:169 ] => Train  Loss: 5.4378e-03
+
+I 06.08/20:18:44 solver.py:426 ] => Test NMSE: -1.9061e+01
+
+I 06.08/20:18:44 solver.py:358 ] => Adapter monitor [epoch=128] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.051647e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.033344e+00,weight:5.050590e+01 | component_l2=latent_adapter:5.051647e+01 | adapter_abs_max=1.166545e+00 | delta_l2=1.251414e+01 | delta_rel=2.736996e-01 | train_loss=5.437841e-03 | test_loss=6.207385e-03 | nmse=-1.906061e+01
+I 06.08/20:18:45 solver.py:224 ] 
+=! Best NMSE: -1.9061e+01 (epoch=128)
+
+I 06.08/20:18:45 solver.py:159 ] Epoch: [129/200][20/36] lr: 1.01e-04 | MSE loss: 5.6304e-03 | time: 0.031
+I 06.08/20:18:46 solver.py:169 ] => Train  Loss: 5.4796e-03
+
+I 06.08/20:18:46 solver.py:426 ] => Test NMSE: -1.9061e+01
+
+I 06.08/20:18:46 solver.py:358 ] => Adapter monitor [epoch=129] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.053035e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.035506e+00,weight:5.051974e+01 | component_l2=latent_adapter:5.053035e+01 | adapter_abs_max=1.166961e+00 | delta_l2=1.253554e+01 | delta_rel=2.741676e-01 | train_loss=5.479643e-03 | test_loss=6.206534e-03 | nmse=-1.906121e+01
+I 06.08/20:18:46 solver.py:224 ] 
+=! Best NMSE: -1.9061e+01 (epoch=129)
+
+I 06.08/20:18:47 solver.py:159 ] Epoch: [130/200][20/36] lr: 9.99e-05 | MSE loss: 5.4224e-03 | time: 0.026
+I 06.08/20:18:47 solver.py:169 ] => Train  Loss: 5.4340e-03
+
+I 06.08/20:18:47 solver.py:169 ] => Val  Loss: 6.1758e-03
+
+I 06.08/20:18:47 solver.py:426 ] => Test NMSE: -1.9062e+01
+
+I 06.08/20:18:47 solver.py:358 ] => Adapter monitor [epoch=130] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.054428e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.037090e+00,weight:5.053364e+01 | component_l2=latent_adapter:5.054428e+01 | adapter_abs_max=1.167642e+00 | delta_l2=1.255705e+01 | delta_rel=2.746381e-01 | train_loss=5.434018e-03 | val_loss=6.175847e-03 | test_loss=6.205966e-03 | nmse=-1.906161e+01
+I 06.08/20:18:48 solver.py:224 ] 
+=! Best NMSE: -1.9062e+01 (epoch=130)
+
+I 06.08/20:18:48 solver.py:159 ] Epoch: [131/200][20/36] lr: 9.87e-05 | MSE loss: 5.4201e-03 | time: 0.025
+I 06.08/20:18:49 solver.py:169 ] => Train  Loss: 5.4170e-03
+
+I 06.08/20:18:49 solver.py:426 ] => Test NMSE: -1.9062e+01
+
+I 06.08/20:18:49 solver.py:358 ] => Adapter monitor [epoch=131] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.055725e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.038773e+00,weight:5.054658e+01 | component_l2=latent_adapter:5.055725e+01 | adapter_abs_max=1.168095e+00 | delta_l2=1.257731e+01 | delta_rel=2.750812e-01 | train_loss=5.417028e-03 | test_loss=6.205631e-03 | nmse=-1.906184e+01
+I 06.08/20:18:49 solver.py:224 ] 
+=! Best NMSE: -1.9062e+01 (epoch=131)
+
+I 06.08/20:18:50 solver.py:159 ] Epoch: [132/200][20/36] lr: 9.74e-05 | MSE loss: 5.4467e-03 | time: 0.034
+I 06.08/20:18:50 solver.py:169 ] => Train  Loss: 5.4321e-03
+
+I 06.08/20:18:50 solver.py:426 ] => Test NMSE: -1.9060e+01
+
+I 06.08/20:18:50 solver.py:358 ] => Adapter monitor [epoch=132] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.057161e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.039321e+00,weight:5.056093e+01 | component_l2=latent_adapter:5.057161e+01 | adapter_abs_max=1.168607e+00 | delta_l2=1.259911e+01 | delta_rel=2.755580e-01 | train_loss=5.432066e-03 | test_loss=6.207775e-03 | nmse=-1.906034e+01
+I 06.08/20:18:50 solver.py:224 ] 
+=! Best NMSE: -1.9062e+01 (epoch=131)
+
+I 06.08/20:18:51 solver.py:159 ] Epoch: [133/200][20/36] lr: 9.62e-05 | MSE loss: 5.5648e-03 | time: 0.024
+I 06.08/20:18:51 solver.py:169 ] => Train  Loss: 5.4602e-03
+
+I 06.08/20:18:51 solver.py:426 ] => Test NMSE: -1.9062e+01
+
+I 06.08/20:18:51 solver.py:358 ] => Adapter monitor [epoch=133] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.058481e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.041325e+00,weight:5.057409e+01 | component_l2=latent_adapter:5.058481e+01 | adapter_abs_max=1.169022e+00 | delta_l2=1.261937e+01 | delta_rel=2.760011e-01 | train_loss=5.460250e-03 | test_loss=6.205016e-03 | nmse=-1.906227e+01
+I 06.08/20:18:52 solver.py:224 ] 
+=! Best NMSE: -1.9062e+01 (epoch=133)
+
+I 06.08/20:18:52 solver.py:159 ] Epoch: [134/200][20/36] lr: 9.50e-05 | MSE loss: 5.4619e-03 | time: 0.027
+I 06.08/20:18:53 solver.py:169 ] => Train  Loss: 5.5195e-03
+
+I 06.08/20:18:53 solver.py:426 ] => Test NMSE: -1.9061e+01
+
+I 06.08/20:18:53 solver.py:358 ] => Adapter monitor [epoch=134] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.059837e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.042091e+00,weight:5.058764e+01 | component_l2=latent_adapter:5.059837e+01 | adapter_abs_max=1.169319e+00 | delta_l2=1.264026e+01 | delta_rel=2.764580e-01 | train_loss=5.519465e-03 | test_loss=6.206374e-03 | nmse=-1.906132e+01
+I 06.08/20:18:53 solver.py:224 ] 
+=! Best NMSE: -1.9062e+01 (epoch=133)
+
+I 06.08/20:18:53 solver.py:159 ] Epoch: [135/200][20/36] lr: 9.38e-05 | MSE loss: 5.3676e-03 | time: 0.026
+I 06.08/20:18:54 solver.py:169 ] => Train  Loss: 5.4899e-03
+
+I 06.08/20:18:54 solver.py:426 ] => Test NMSE: -1.9063e+01
+
+I 06.08/20:18:54 solver.py:358 ] => Adapter monitor [epoch=135] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.061149e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.045349e+00,weight:5.060069e+01 | component_l2=latent_adapter:5.061149e+01 | adapter_abs_max=1.169633e+00 | delta_l2=1.266106e+01 | delta_rel=2.769129e-01 | train_loss=5.489904e-03 | test_loss=6.204168e-03 | nmse=-1.906286e+01
+I 06.08/20:18:54 solver.py:224 ] 
+=! Best NMSE: -1.9063e+01 (epoch=135)
+
+I 06.08/20:18:55 solver.py:159 ] Epoch: [136/200][20/36] lr: 9.26e-05 | MSE loss: 5.7091e-03 | time: 0.032
+I 06.08/20:18:55 solver.py:169 ] => Train  Loss: 5.4491e-03
+
+I 06.08/20:18:55 solver.py:426 ] => Test NMSE: -1.9063e+01
+
+I 06.08/20:18:55 solver.py:358 ] => Adapter monitor [epoch=136] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.062352e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.048053e+00,weight:5.061267e+01 | component_l2=latent_adapter:5.062352e+01 | adapter_abs_max=1.169964e+00 | delta_l2=1.268028e+01 | delta_rel=2.773333e-01 | train_loss=5.449147e-03 | test_loss=6.204461e-03 | nmse=-1.906266e+01
+I 06.08/20:18:55 solver.py:224 ] 
+=! Best NMSE: -1.9063e+01 (epoch=135)
+
+I 06.08/20:18:56 solver.py:159 ] Epoch: [137/200][20/36] lr: 9.15e-05 | MSE loss: 5.9559e-03 | time: 0.025
+I 06.08/20:18:56 solver.py:169 ] => Train  Loss: 5.4629e-03
+
+I 06.08/20:18:56 solver.py:426 ] => Test NMSE: -1.9062e+01
+
+I 06.08/20:18:56 solver.py:358 ] => Adapter monitor [epoch=137] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.063601e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.049059e+00,weight:5.062515e+01 | component_l2=latent_adapter:5.063601e+01 | adapter_abs_max=1.170465e+00 | delta_l2=1.269966e+01 | delta_rel=2.777571e-01 | train_loss=5.462937e-03 | test_loss=6.205741e-03 | nmse=-1.906176e+01
+I 06.08/20:18:56 solver.py:224 ] 
+=! Best NMSE: -1.9063e+01 (epoch=135)
+
+I 06.08/20:18:57 solver.py:159 ] Epoch: [138/200][20/36] lr: 9.03e-05 | MSE loss: 5.2892e-03 | time: 0.028
+I 06.08/20:18:57 solver.py:169 ] => Train  Loss: 5.7544e-03
+
+I 06.08/20:18:57 solver.py:426 ] => Test NMSE: -1.9063e+01
+
+I 06.08/20:18:57 solver.py:358 ] => Adapter monitor [epoch=138] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.064781e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.049216e+00,weight:5.063694e+01 | component_l2=latent_adapter:5.064781e+01 | adapter_abs_max=1.170988e+00 | delta_l2=1.271805e+01 | delta_rel=2.781593e-01 | train_loss=5.754389e-03 | test_loss=6.204168e-03 | nmse=-1.906287e+01
+I 06.08/20:18:57 solver.py:224 ] 
+=! Best NMSE: -1.9063e+01 (epoch=138)
+
+I 06.08/20:18:58 solver.py:159 ] Epoch: [139/200][20/36] lr: 8.91e-05 | MSE loss: 5.6818e-03 | time: 0.025
+I 06.08/20:18:58 solver.py:169 ] => Train  Loss: 5.4663e-03
+
+I 06.08/20:18:58 solver.py:426 ] => Test NMSE: -1.9064e+01
+
+I 06.08/20:18:58 solver.py:358 ] => Adapter monitor [epoch=139] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.066247e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.054430e+00,weight:5.065150e+01 | component_l2=latent_adapter:5.066247e+01 | adapter_abs_max=1.171837e+00 | delta_l2=1.274041e+01 | delta_rel=2.786483e-01 | train_loss=5.466282e-03 | test_loss=6.201938e-03 | nmse=-1.906443e+01
+I 06.08/20:18:59 solver.py:224 ] 
+=! Best NMSE: -1.9064e+01 (epoch=139)
+
+I 06.08/20:18:59 solver.py:159 ] Epoch: [140/200][20/36] lr: 8.80e-05 | MSE loss: 5.3591e-03 | time: 0.029
+I 06.08/20:19:00 solver.py:169 ] => Train  Loss: 5.5095e-03
+
+I 06.08/20:19:00 solver.py:169 ] => Val  Loss: 6.1718e-03
+
+I 06.08/20:19:00 solver.py:426 ] => Test NMSE: -1.9064e+01
+
+I 06.08/20:19:00 solver.py:358 ] => Adapter monitor [epoch=140] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.067465e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.053225e+00,weight:5.066371e+01 | component_l2=latent_adapter:5.067465e+01 | adapter_abs_max=1.172130e+00 | delta_l2=1.275904e+01 | delta_rel=2.790559e-01 | train_loss=5.509499e-03 | val_loss=6.171828e-03 | test_loss=6.201967e-03 | nmse=-1.906441e+01
+I 06.08/20:19:00 solver.py:224 ] 
+=! Best NMSE: -1.9064e+01 (epoch=139)
+
+I 06.08/20:19:01 solver.py:159 ] Epoch: [141/200][20/36] lr: 8.69e-05 | MSE loss: 5.4734e-03 | time: 0.038
+I 06.08/20:19:01 solver.py:169 ] => Train  Loss: 5.4337e-03
+
+I 06.08/20:19:02 solver.py:426 ] => Test NMSE: -1.9063e+01
+
+I 06.08/20:19:02 solver.py:358 ] => Adapter monitor [epoch=141] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.068641e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.050812e+00,weight:5.067552e+01 | component_l2=latent_adapter:5.068641e+01 | adapter_abs_max=1.172651e+00 | delta_l2=1.277685e+01 | delta_rel=2.794453e-01 | train_loss=5.433721e-03 | test_loss=6.204481e-03 | nmse=-1.906264e+01
+I 06.08/20:19:02 solver.py:224 ] 
+=! Best NMSE: -1.9064e+01 (epoch=139)
+
+I 06.08/20:19:03 solver.py:159 ] Epoch: [142/200][20/36] lr: 8.58e-05 | MSE loss: 5.6896e-03 | time: 0.044
+I 06.08/20:19:03 solver.py:169 ] => Train  Loss: 5.4382e-03
+
+I 06.08/20:19:03 solver.py:426 ] => Test NMSE: -1.9065e+01
+
+I 06.08/20:19:03 solver.py:358 ] => Adapter monitor [epoch=142] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.069829e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.055145e+00,weight:5.068731e+01 | component_l2=latent_adapter:5.069829e+01 | adapter_abs_max=1.172861e+00 | delta_l2=1.279505e+01 | delta_rel=2.798433e-01 | train_loss=5.438228e-03 | test_loss=6.201774e-03 | nmse=-1.906454e+01
+I 06.08/20:19:04 solver.py:224 ] 
+=! Best NMSE: -1.9065e+01 (epoch=142)
+
+I 06.08/20:19:05 solver.py:159 ] Epoch: [143/200][20/36] lr: 8.46e-05 | MSE loss: 5.4084e-03 | time: 0.066
+I 06.08/20:19:06 solver.py:169 ] => Train  Loss: 5.4446e-03
+
+I 06.08/20:19:06 solver.py:426 ] => Test NMSE: -1.9064e+01
+
+I 06.08/20:19:06 solver.py:358 ] => Adapter monitor [epoch=143] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.070889e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.057148e+00,weight:5.069787e+01 | component_l2=latent_adapter:5.070889e+01 | adapter_abs_max=1.173214e+00 | delta_l2=1.281157e+01 | delta_rel=2.802048e-01 | train_loss=5.444555e-03 | test_loss=6.202435e-03 | nmse=-1.906408e+01
+I 06.08/20:19:06 solver.py:224 ] 
+=! Best NMSE: -1.9065e+01 (epoch=142)
+
+I 06.08/20:19:08 solver.py:159 ] Epoch: [144/200][20/36] lr: 8.35e-05 | MSE loss: 5.5141e-03 | time: 0.062
+I 06.08/20:19:09 solver.py:169 ] => Train  Loss: 5.5302e-03
+
+I 06.08/20:19:09 solver.py:426 ] => Test NMSE: -1.9066e+01
+
+I 06.08/20:19:09 solver.py:358 ] => Adapter monitor [epoch=144] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.071981e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.057330e+00,weight:5.070879e+01 | component_l2=latent_adapter:5.071981e+01 | adapter_abs_max=1.173733e+00 | delta_l2=1.282833e+01 | delta_rel=2.805712e-01 | train_loss=5.530191e-03 | test_loss=6.200261e-03 | nmse=-1.906560e+01
+I 06.08/20:19:09 solver.py:224 ] 
+=! Best NMSE: -1.9066e+01 (epoch=144)
+
+I 06.08/20:19:10 solver.py:159 ] Epoch: [145/200][20/36] lr: 8.25e-05 | MSE loss: 5.4821e-03 | time: 0.042
+I 06.08/20:19:11 solver.py:169 ] => Train  Loss: 5.4655e-03
+
+I 06.08/20:19:11 solver.py:426 ] => Test NMSE: -1.9064e+01
+
+I 06.08/20:19:11 solver.py:358 ] => Adapter monitor [epoch=145] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.073226e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.056009e+00,weight:5.072126e+01 | component_l2=latent_adapter:5.073226e+01 | adapter_abs_max=1.173867e+00 | delta_l2=1.284684e+01 | delta_rel=2.809761e-01 | train_loss=5.465460e-03 | test_loss=6.203165e-03 | nmse=-1.906357e+01
+I 06.08/20:19:11 solver.py:224 ] 
+=! Best NMSE: -1.9066e+01 (epoch=144)
+
+I 06.08/20:19:11 solver.py:159 ] Epoch: [146/200][20/36] lr: 8.14e-05 | MSE loss: 5.6699e-03 | time: 0.036
+I 06.08/20:19:12 solver.py:169 ] => Train  Loss: 5.3966e-03
+
+I 06.08/20:19:12 solver.py:426 ] => Test NMSE: -1.9065e+01
+
+I 06.08/20:19:12 solver.py:358 ] => Adapter monitor [epoch=146] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.074166e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.061251e+00,weight:5.073056e+01 | component_l2=latent_adapter:5.074166e+01 | adapter_abs_max=1.173952e+00 | delta_l2=1.286198e+01 | delta_rel=2.813073e-01 | train_loss=5.396649e-03 | test_loss=6.201592e-03 | nmse=-1.906467e+01
+I 06.08/20:19:12 solver.py:224 ] 
+=! Best NMSE: -1.9066e+01 (epoch=144)
+
+I 06.08/20:19:13 solver.py:159 ] Epoch: [147/200][20/36] lr: 8.03e-05 | MSE loss: 5.2113e-03 | time: 0.035
+I 06.08/20:19:13 solver.py:169 ] => Train  Loss: 5.5035e-03
+
+I 06.08/20:19:13 solver.py:426 ] => Test NMSE: -1.9065e+01
+
+I 06.08/20:19:13 solver.py:358 ] => Adapter monitor [epoch=147] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.075250e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.061047e+00,weight:5.074141e+01 | component_l2=latent_adapter:5.075250e+01 | adapter_abs_max=1.174279e+00 | delta_l2=1.287813e+01 | delta_rel=2.816605e-01 | train_loss=5.503513e-03 | test_loss=6.200812e-03 | nmse=-1.906521e+01
+I 06.08/20:19:13 solver.py:224 ] 
+=! Best NMSE: -1.9066e+01 (epoch=144)
+
+I 06.08/20:19:14 solver.py:159 ] Epoch: [148/200][20/36] lr: 7.93e-05 | MSE loss: 5.2128e-03 | time: 0.028
+I 06.08/20:19:14 solver.py:169 ] => Train  Loss: 5.4525e-03
+
+I 06.08/20:19:14 solver.py:426 ] => Test NMSE: -1.9066e+01
+
+I 06.08/20:19:14 solver.py:358 ] => Adapter monitor [epoch=148] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.076242e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.061397e+00,weight:5.075132e+01 | component_l2=latent_adapter:5.076242e+01 | adapter_abs_max=1.174547e+00 | delta_l2=1.289330e+01 | delta_rel=2.819923e-01 | train_loss=5.452479e-03 | test_loss=6.199599e-03 | nmse=-1.906606e+01
+I 06.08/20:19:15 solver.py:224 ] 
+=! Best NMSE: -1.9066e+01 (epoch=148)
+
+I 06.08/20:19:16 solver.py:159 ] Epoch: [149/200][20/36] lr: 7.83e-05 | MSE loss: 5.6763e-03 | time: 0.034
+I 06.08/20:19:16 solver.py:169 ] => Train  Loss: 5.4938e-03
+
+I 06.08/20:19:16 solver.py:426 ] => Test NMSE: -1.9065e+01
+
+I 06.08/20:19:16 solver.py:358 ] => Adapter monitor [epoch=149] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.077421e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.062146e+00,weight:5.076310e+01 | component_l2=latent_adapter:5.077421e+01 | adapter_abs_max=1.174879e+00 | delta_l2=1.291074e+01 | delta_rel=2.823736e-01 | train_loss=5.493754e-03 | test_loss=6.201801e-03 | nmse=-1.906452e+01
+I 06.08/20:19:16 solver.py:224 ] 
+=! Best NMSE: -1.9066e+01 (epoch=148)
+
+I 06.08/20:19:17 solver.py:159 ] Epoch: [150/200][20/36] lr: 7.72e-05 | MSE loss: 5.3408e-03 | time: 0.029
+I 06.08/20:19:17 solver.py:169 ] => Train  Loss: 5.5357e-03
+
+I 06.08/20:19:17 solver.py:169 ] => Val  Loss: 6.1702e-03
+
+I 06.08/20:19:17 solver.py:426 ] => Test NMSE: -1.9066e+01
+
+I 06.08/20:19:17 solver.py:358 ] => Adapter monitor [epoch=150] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.078432e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.061991e+00,weight:5.077322e+01 | component_l2=latent_adapter:5.078432e+01 | adapter_abs_max=1.175251e+00 | delta_l2=1.292587e+01 | delta_rel=2.827046e-01 | train_loss=5.535676e-03 | val_loss=6.170164e-03 | test_loss=6.200292e-03 | nmse=-1.906558e+01
+I 06.08/20:19:17 solver.py:224 ] 
+=! Best NMSE: -1.9066e+01 (epoch=148)
+
+I 06.08/20:19:18 solver.py:159 ] Epoch: [151/200][20/36] lr: 7.62e-05 | MSE loss: 5.6407e-03 | time: 0.031
+I 06.08/20:19:18 solver.py:169 ] => Train  Loss: 5.4291e-03
+
+I 06.08/20:19:18 solver.py:426 ] => Test NMSE: -1.9064e+01
+
+I 06.08/20:19:18 solver.py:358 ] => Adapter monitor [epoch=151] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.079688e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.064634e+00,weight:5.078573e+01 | component_l2=latent_adapter:5.079688e+01 | adapter_abs_max=1.175590e+00 | delta_l2=1.294455e+01 | delta_rel=2.831131e-01 | train_loss=5.429149e-03 | test_loss=6.202548e-03 | nmse=-1.906400e+01
+I 06.08/20:19:18 solver.py:224 ] 
+=! Best NMSE: -1.9066e+01 (epoch=148)
+
+I 06.08/20:19:19 solver.py:159 ] Epoch: [152/200][20/36] lr: 7.52e-05 | MSE loss: 5.4038e-03 | time: 0.033
+I 06.08/20:19:20 solver.py:169 ] => Train  Loss: 5.4610e-03
+
+I 06.08/20:19:20 solver.py:426 ] => Test NMSE: -1.9065e+01
+
+I 06.08/20:19:20 solver.py:358 ] => Adapter monitor [epoch=152] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.080682e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.064881e+00,weight:5.079566e+01 | component_l2=latent_adapter:5.080682e+01 | adapter_abs_max=1.175812e+00 | delta_l2=1.295955e+01 | delta_rel=2.834412e-01 | train_loss=5.460969e-03 | test_loss=6.201499e-03 | nmse=-1.906473e+01
+I 06.08/20:19:20 solver.py:224 ] 
+=! Best NMSE: -1.9066e+01 (epoch=148)
+
+I 06.08/20:19:20 solver.py:159 ] Epoch: [153/200][20/36] lr: 7.43e-05 | MSE loss: 5.4288e-03 | time: 0.030
+I 06.08/20:19:21 solver.py:169 ] => Train  Loss: 5.5119e-03
+
+I 06.08/20:19:21 solver.py:426 ] => Test NMSE: -1.9066e+01
+
+I 06.08/20:19:21 solver.py:358 ] => Adapter monitor [epoch=153] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.081618e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.066096e+00,weight:5.080499e+01 | component_l2=latent_adapter:5.081618e+01 | adapter_abs_max=1.176362e+00 | delta_l2=1.297374e+01 | delta_rel=2.837515e-01 | train_loss=5.511925e-03 | test_loss=6.199831e-03 | nmse=-1.906590e+01
+I 06.08/20:19:21 solver.py:224 ] 
+=! Best NMSE: -1.9066e+01 (epoch=148)
+
+I 06.08/20:19:21 solver.py:159 ] Epoch: [154/200][20/36] lr: 7.33e-05 | MSE loss: 5.3435e-03 | time: 0.031
+I 06.08/20:19:22 solver.py:169 ] => Train  Loss: 5.3970e-03
+
+I 06.08/20:19:22 solver.py:426 ] => Test NMSE: -1.9066e+01
+
+I 06.08/20:19:22 solver.py:358 ] => Adapter monitor [epoch=154] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.082568e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.067832e+00,weight:5.081447e+01 | component_l2=latent_adapter:5.082568e+01 | adapter_abs_max=1.176470e+00 | delta_l2=1.298818e+01 | delta_rel=2.840673e-01 | train_loss=5.396969e-03 | test_loss=6.200389e-03 | nmse=-1.906551e+01
+I 06.08/20:19:22 solver.py:224 ] 
+=! Best NMSE: -1.9066e+01 (epoch=148)
+
+I 06.08/20:19:22 solver.py:159 ] Epoch: [155/200][20/36] lr: 7.24e-05 | MSE loss: 5.7113e-03 | time: 0.028
+I 06.08/20:19:23 solver.py:169 ] => Train  Loss: 5.4604e-03
+
+I 06.08/20:19:23 solver.py:426 ] => Test NMSE: -1.9065e+01
+
+I 06.08/20:19:23 solver.py:358 ] => Adapter monitor [epoch=155] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.083561e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.069088e+00,weight:5.082437e+01 | component_l2=latent_adapter:5.083561e+01 | adapter_abs_max=1.176773e+00 | delta_l2=1.300293e+01 | delta_rel=2.843900e-01 | train_loss=5.460396e-03 | test_loss=6.200412e-03 | nmse=-1.906550e+01
+I 06.08/20:19:23 solver.py:224 ] 
+=! Best NMSE: -1.9066e+01 (epoch=148)
+
+I 06.08/20:19:24 solver.py:159 ] Epoch: [156/200][20/36] lr: 7.15e-05 | MSE loss: 5.5525e-03 | time: 0.032
+I 06.08/20:19:24 solver.py:169 ] => Train  Loss: 5.4660e-03
+
+I 06.08/20:19:24 solver.py:426 ] => Test NMSE: -1.9068e+01
+
+I 06.08/20:19:24 solver.py:358 ] => Adapter monitor [epoch=156] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.084506e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.069384e+00,weight:5.083382e+01 | component_l2=latent_adapter:5.084506e+01 | adapter_abs_max=1.177000e+00 | delta_l2=1.301703e+01 | delta_rel=2.846983e-01 | train_loss=5.466024e-03 | test_loss=6.196960e-03 | nmse=-1.906791e+01
+I 06.08/20:19:24 solver.py:224 ] 
+=! Best NMSE: -1.9068e+01 (epoch=156)
+
+I 06.08/20:19:25 solver.py:159 ] Epoch: [157/200][20/36] lr: 7.05e-05 | MSE loss: 5.4691e-03 | time: 0.028
+I 06.08/20:19:25 solver.py:169 ] => Train  Loss: 5.4856e-03
+
+I 06.08/20:19:26 solver.py:426 ] => Test NMSE: -1.9067e+01
+
+I 06.08/20:19:26 solver.py:358 ] => Adapter monitor [epoch=157] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.085496e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.070648e+00,weight:5.084369e+01 | component_l2=latent_adapter:5.085496e+01 | adapter_abs_max=1.177623e+00 | delta_l2=1.303187e+01 | delta_rel=2.850228e-01 | train_loss=5.485571e-03 | test_loss=6.198692e-03 | nmse=-1.906670e+01
+I 06.08/20:19:26 solver.py:224 ] 
+=! Best NMSE: -1.9068e+01 (epoch=156)
+
+I 06.08/20:19:26 solver.py:159 ] Epoch: [158/200][20/36] lr: 6.97e-05 | MSE loss: 5.3775e-03 | time: 0.031
+I 06.08/20:19:27 solver.py:169 ] => Train  Loss: 5.4358e-03
+
+I 06.08/20:19:27 solver.py:426 ] => Test NMSE: -1.9067e+01
+
+I 06.08/20:19:27 solver.py:358 ] => Adapter monitor [epoch=158] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.086458e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.070482e+00,weight:5.085332e+01 | component_l2=latent_adapter:5.086458e+01 | adapter_abs_max=1.177885e+00 | delta_l2=1.304615e+01 | delta_rel=2.853353e-01 | train_loss=5.435784e-03 | test_loss=6.198370e-03 | nmse=-1.906693e+01
+I 06.08/20:19:27 solver.py:224 ] 
+=! Best NMSE: -1.9068e+01 (epoch=156)
+
+I 06.08/20:19:27 solver.py:159 ] Epoch: [159/200][20/36] lr: 6.88e-05 | MSE loss: 5.4256e-03 | time: 0.031
+I 06.08/20:19:28 solver.py:169 ] => Train  Loss: 5.4701e-03
+
+I 06.08/20:19:28 solver.py:426 ] => Test NMSE: -1.9067e+01
+
+I 06.08/20:19:28 solver.py:358 ] => Adapter monitor [epoch=159] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.087459e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.072323e+00,weight:5.086328e+01 | component_l2=latent_adapter:5.087459e+01 | adapter_abs_max=1.178207e+00 | delta_l2=1.306101e+01 | delta_rel=2.856603e-01 | train_loss=5.470133e-03 | test_loss=6.198131e-03 | nmse=-1.906709e+01
+I 06.08/20:19:28 solver.py:224 ] 
+=! Best NMSE: -1.9068e+01 (epoch=156)
+
+I 06.08/20:19:28 solver.py:159 ] Epoch: [160/200][20/36] lr: 6.79e-05 | MSE loss: 5.4193e-03 | time: 0.028
+I 06.08/20:19:29 solver.py:169 ] => Train  Loss: 5.3875e-03
+
+I 06.08/20:19:29 solver.py:169 ] => Val  Loss: 6.1677e-03
+
+I 06.08/20:19:29 solver.py:426 ] => Test NMSE: -1.9067e+01
+
+I 06.08/20:19:29 solver.py:358 ] => Adapter monitor [epoch=160] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.088313e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.074501e+00,weight:5.087178e+01 | component_l2=latent_adapter:5.088313e+01 | adapter_abs_max=1.178452e+00 | delta_l2=1.307408e+01 | delta_rel=2.859462e-01 | train_loss=5.387521e-03 | val_loss=6.167743e-03 | test_loss=6.197925e-03 | nmse=-1.906724e+01
+I 06.08/20:19:29 solver.py:224 ] 
+=! Best NMSE: -1.9068e+01 (epoch=156)
+
+I 06.08/20:19:30 solver.py:159 ] Epoch: [161/200][20/36] lr: 6.71e-05 | MSE loss: 5.4552e-03 | time: 0.028
+I 06.08/20:19:30 solver.py:169 ] => Train  Loss: 5.4198e-03
+
+I 06.08/20:19:30 solver.py:426 ] => Test NMSE: -1.9067e+01
+
+I 06.08/20:19:30 solver.py:358 ] => Adapter monitor [epoch=161] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.089269e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.074290e+00,weight:5.088135e+01 | component_l2=latent_adapter:5.089269e+01 | adapter_abs_max=1.178640e+00 | delta_l2=1.308807e+01 | delta_rel=2.862521e-01 | train_loss=5.419818e-03 | test_loss=6.198867e-03 | nmse=-1.906658e+01
+I 06.08/20:19:30 solver.py:224 ] 
+=! Best NMSE: -1.9068e+01 (epoch=156)
+
+I 06.08/20:19:31 solver.py:159 ] Epoch: [162/200][20/36] lr: 6.63e-05 | MSE loss: 5.2662e-03 | time: 0.034
+I 06.08/20:19:31 solver.py:169 ] => Train  Loss: 5.4388e-03
+
+I 06.08/20:19:31 solver.py:426 ] => Test NMSE: -1.9069e+01
+
+I 06.08/20:19:31 solver.py:358 ] => Adapter monitor [epoch=162] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.090116e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.075764e+00,weight:5.088979e+01 | component_l2=latent_adapter:5.090116e+01 | adapter_abs_max=1.178905e+00 | delta_l2=1.310093e+01 | delta_rel=2.865333e-01 | train_loss=5.438840e-03 | test_loss=6.195571e-03 | nmse=-1.906889e+01
+I 06.08/20:19:32 solver.py:224 ] 
+=! Best NMSE: -1.9069e+01 (epoch=162)
+
+I 06.08/20:19:32 solver.py:159 ] Epoch: [163/200][20/36] lr: 6.55e-05 | MSE loss: 5.8080e-03 | time: 0.031
+I 06.08/20:19:33 solver.py:169 ] => Train  Loss: 5.3948e-03
+
+I 06.08/20:19:33 solver.py:426 ] => Test NMSE: -1.9068e+01
+
+I 06.08/20:19:33 solver.py:358 ] => Adapter monitor [epoch=163] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.091085e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.076252e+00,weight:5.089947e+01 | component_l2=latent_adapter:5.091085e+01 | adapter_abs_max=1.179176e+00 | delta_l2=1.311503e+01 | delta_rel=2.868418e-01 | train_loss=5.394770e-03 | test_loss=6.196566e-03 | nmse=-1.906819e+01
+I 06.08/20:19:33 solver.py:224 ] 
+=! Best NMSE: -1.9069e+01 (epoch=162)
+
+I 06.08/20:19:34 solver.py:159 ] Epoch: [164/200][20/36] lr: 6.47e-05 | MSE loss: 5.4486e-03 | time: 0.030
+I 06.08/20:19:34 solver.py:169 ] => Train  Loss: 5.4887e-03
+
+I 06.08/20:19:34 solver.py:426 ] => Test NMSE: -1.9067e+01
+
+I 06.08/20:19:34 solver.py:358 ] => Adapter monitor [epoch=164] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.091875e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.078625e+00,weight:5.090733e+01 | component_l2=latent_adapter:5.091875e+01 | adapter_abs_max=1.179404e+00 | delta_l2=1.312700e+01 | delta_rel=2.871036e-01 | train_loss=5.488696e-03 | test_loss=6.198294e-03 | nmse=-1.906698e+01
+I 06.08/20:19:34 solver.py:224 ] 
+=! Best NMSE: -1.9069e+01 (epoch=162)
+
+I 06.08/20:19:35 solver.py:159 ] Epoch: [165/200][20/36] lr: 6.39e-05 | MSE loss: 5.3676e-03 | time: 0.029
+I 06.08/20:19:35 solver.py:169 ] => Train  Loss: 5.5043e-03
+
+I 06.08/20:19:35 solver.py:426 ] => Test NMSE: -1.9066e+01
+
+I 06.08/20:19:35 solver.py:358 ] => Adapter monitor [epoch=165] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.092825e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.080864e+00,weight:5.091677e+01 | component_l2=latent_adapter:5.092825e+01 | adapter_abs_max=1.179676e+00 | delta_l2=1.314154e+01 | delta_rel=2.874216e-01 | train_loss=5.504332e-03 | test_loss=6.199002e-03 | nmse=-1.906648e+01
+I 06.08/20:19:35 solver.py:224 ] 
+=! Best NMSE: -1.9069e+01 (epoch=162)
+
+I 06.08/20:19:36 solver.py:159 ] Epoch: [166/200][20/36] lr: 6.31e-05 | MSE loss: 5.5619e-03 | time: 0.027
+I 06.08/20:19:36 solver.py:169 ] => Train  Loss: 5.3989e-03
+
+I 06.08/20:19:36 solver.py:426 ] => Test NMSE: -1.9067e+01
+
+I 06.08/20:19:36 solver.py:358 ] => Adapter monitor [epoch=166] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.093703e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.082197e+00,weight:5.092553e+01 | component_l2=latent_adapter:5.093703e+01 | adapter_abs_max=1.179826e+00 | delta_l2=1.315454e+01 | delta_rel=2.877058e-01 | train_loss=5.398888e-03 | test_loss=6.198056e-03 | nmse=-1.906714e+01
+I 06.08/20:19:36 solver.py:224 ] 
+=! Best NMSE: -1.9069e+01 (epoch=162)
+
+I 06.08/20:19:37 solver.py:159 ] Epoch: [167/200][20/36] lr: 6.24e-05 | MSE loss: 5.4886e-03 | time: 0.029
+I 06.08/20:19:37 solver.py:169 ] => Train  Loss: 5.5266e-03
+
+I 06.08/20:19:37 solver.py:426 ] => Test NMSE: -1.9067e+01
+
+I 06.08/20:19:37 solver.py:358 ] => Adapter monitor [epoch=167] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.094605e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.082522e+00,weight:5.093455e+01 | component_l2=latent_adapter:5.094605e+01 | adapter_abs_max=1.180628e+00 | delta_l2=1.316777e+01 | delta_rel=2.879953e-01 | train_loss=5.526573e-03 | test_loss=6.198018e-03 | nmse=-1.906717e+01
+I 06.08/20:19:37 solver.py:224 ] 
+=! Best NMSE: -1.9069e+01 (epoch=162)
+
+I 06.08/20:19:38 solver.py:159 ] Epoch: [168/200][20/36] lr: 6.17e-05 | MSE loss: 5.3835e-03 | time: 0.028
+I 06.08/20:19:38 solver.py:169 ] => Train  Loss: 5.3586e-03
+
+I 06.08/20:19:39 solver.py:426 ] => Test NMSE: -1.9068e+01
+
+I 06.08/20:19:39 solver.py:358 ] => Adapter monitor [epoch=168] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.095395e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.084288e+00,weight:5.094242e+01 | component_l2=latent_adapter:5.095395e+01 | adapter_abs_max=1.180630e+00 | delta_l2=1.317954e+01 | delta_rel=2.882527e-01 | train_loss=5.358646e-03 | test_loss=6.196316e-03 | nmse=-1.906837e+01
+I 06.08/20:19:39 solver.py:224 ] 
+=! Best NMSE: -1.9069e+01 (epoch=162)
+
+I 06.08/20:19:39 solver.py:159 ] Epoch: [169/200][20/36] lr: 6.10e-05 | MSE loss: 5.5325e-03 | time: 0.031
+I 06.08/20:19:40 solver.py:169 ] => Train  Loss: 5.4636e-03
+
+I 06.08/20:19:40 solver.py:426 ] => Test NMSE: -1.9068e+01
+
+I 06.08/20:19:40 solver.py:358 ] => Adapter monitor [epoch=169] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.096159e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.084168e+00,weight:5.095005e+01 | component_l2=latent_adapter:5.096159e+01 | adapter_abs_max=1.180863e+00 | delta_l2=1.319087e+01 | delta_rel=2.885005e-01 | train_loss=5.463615e-03 | test_loss=6.196358e-03 | nmse=-1.906833e+01
+I 06.08/20:19:40 solver.py:224 ] 
+=! Best NMSE: -1.9069e+01 (epoch=162)
+
+I 06.08/20:19:40 solver.py:159 ] Epoch: [170/200][20/36] lr: 6.03e-05 | MSE loss: 5.3086e-03 | time: 0.030
+I 06.08/20:19:41 solver.py:169 ] => Train  Loss: 5.5248e-03
+
+I 06.08/20:19:41 solver.py:169 ] => Val  Loss: 6.1674e-03
+
+I 06.08/20:19:41 solver.py:426 ] => Test NMSE: -1.9068e+01
+
+I 06.08/20:19:41 solver.py:358 ] => Adapter monitor [epoch=170] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.097029e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.084810e+00,weight:5.095874e+01 | component_l2=latent_adapter:5.097029e+01 | adapter_abs_max=1.181048e+00 | delta_l2=1.320344e+01 | delta_rel=2.887754e-01 | train_loss=5.524792e-03 | val_loss=6.167368e-03 | test_loss=6.197456e-03 | nmse=-1.906757e+01
+I 06.08/20:19:41 solver.py:224 ] 
+=! Best NMSE: -1.9069e+01 (epoch=162)
+
+I 06.08/20:19:41 solver.py:159 ] Epoch: [171/200][20/36] lr: 5.97e-05 | MSE loss: 5.7687e-03 | time: 0.026
+I 06.08/20:19:42 solver.py:169 ] => Train  Loss: 5.4154e-03
+
+I 06.08/20:19:42 solver.py:426 ] => Test NMSE: -1.9068e+01
+
+I 06.08/20:19:42 solver.py:358 ] => Adapter monitor [epoch=171] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.097902e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.084700e+00,weight:5.096748e+01 | component_l2=latent_adapter:5.097902e+01 | adapter_abs_max=1.181337e+00 | delta_l2=1.321616e+01 | delta_rel=2.890535e-01 | train_loss=5.415394e-03 | test_loss=6.196223e-03 | nmse=-1.906843e+01
+I 06.08/20:19:42 solver.py:224 ] 
+=! Best NMSE: -1.9069e+01 (epoch=162)
+
+I 06.08/20:19:42 solver.py:159 ] Epoch: [172/200][20/36] lr: 5.91e-05 | MSE loss: 5.4423e-03 | time: 0.027
+I 06.08/20:19:43 solver.py:169 ] => Train  Loss: 5.4348e-03
+
+I 06.08/20:19:43 solver.py:426 ] => Test NMSE: -1.9069e+01
+
+I 06.08/20:19:43 solver.py:358 ] => Adapter monitor [epoch=172] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.098660e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.085997e+00,weight:5.097504e+01 | component_l2=latent_adapter:5.098660e+01 | adapter_abs_max=1.181609e+00 | delta_l2=1.322738e+01 | delta_rel=2.892990e-01 | train_loss=5.434764e-03 | test_loss=6.196044e-03 | nmse=-1.906856e+01
+I 06.08/20:19:43 solver.py:224 ] 
+=! Best NMSE: -1.9069e+01 (epoch=162)
+
+I 06.08/20:19:43 solver.py:159 ] Epoch: [173/200][20/36] lr: 5.84e-05 | MSE loss: 5.3370e-03 | time: 0.027
+I 06.08/20:19:44 solver.py:169 ] => Train  Loss: 5.4423e-03
+
+I 06.08/20:19:44 solver.py:426 ] => Test NMSE: -1.9070e+01
+
+I 06.08/20:19:44 solver.py:358 ] => Adapter monitor [epoch=173] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.099419e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.086072e+00,weight:5.098262e+01 | component_l2=latent_adapter:5.099419e+01 | adapter_abs_max=1.181828e+00 | delta_l2=1.323857e+01 | delta_rel=2.895436e-01 | train_loss=5.442324e-03 | test_loss=6.194659e-03 | nmse=-1.906953e+01
+I 06.08/20:19:44 solver.py:224 ] 
+=! Best NMSE: -1.9070e+01 (epoch=173)
+
+I 06.08/20:19:45 solver.py:159 ] Epoch: [174/200][20/36] lr: 5.78e-05 | MSE loss: 5.6987e-03 | time: 0.028
+I 06.08/20:19:45 solver.py:169 ] => Train  Loss: 5.3772e-03
+
+I 06.08/20:19:45 solver.py:426 ] => Test NMSE: -1.9069e+01
+
+I 06.08/20:19:45 solver.py:358 ] => Adapter monitor [epoch=174] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.100175e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.087821e+00,weight:5.099014e+01 | component_l2=latent_adapter:5.100175e+01 | adapter_abs_max=1.182113e+00 | delta_l2=1.324984e+01 | delta_rel=2.897902e-01 | train_loss=5.377218e-03 | test_loss=6.195451e-03 | nmse=-1.906897e+01
+I 06.08/20:19:45 solver.py:224 ] 
+=! Best NMSE: -1.9070e+01 (epoch=173)
+
+I 06.08/20:19:46 solver.py:159 ] Epoch: [175/200][20/36] lr: 5.73e-05 | MSE loss: 5.5449e-03 | time: 0.031
+I 06.08/20:19:46 solver.py:169 ] => Train  Loss: 5.4943e-03
+
+I 06.08/20:19:46 solver.py:426 ] => Test NMSE: -1.9070e+01
+
+I 06.08/20:19:46 solver.py:358 ] => Adapter monitor [epoch=175] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.101003e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.089377e+00,weight:5.099839e+01 | component_l2=latent_adapter:5.101003e+01 | adapter_abs_max=1.182494e+00 | delta_l2=1.326191e+01 | delta_rel=2.900541e-01 | train_loss=5.494266e-03 | test_loss=6.193494e-03 | nmse=-1.907034e+01
+I 06.08/20:19:47 solver.py:224 ] 
+=! Best NMSE: -1.9070e+01 (epoch=175)
+
+I 06.08/20:19:47 solver.py:159 ] Epoch: [176/200][20/36] lr: 5.67e-05 | MSE loss: 5.4353e-03 | time: 0.028
+I 06.08/20:19:48 solver.py:169 ] => Train  Loss: 5.4653e-03
+
+I 06.08/20:19:48 solver.py:426 ] => Test NMSE: -1.9070e+01
+
+I 06.08/20:19:48 solver.py:358 ] => Adapter monitor [epoch=176] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.101699e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.089795e+00,weight:5.100535e+01 | component_l2=latent_adapter:5.101699e+01 | adapter_abs_max=1.182680e+00 | delta_l2=1.327225e+01 | delta_rel=2.902803e-01 | train_loss=5.465275e-03 | test_loss=6.194197e-03 | nmse=-1.906985e+01
+I 06.08/20:19:48 solver.py:224 ] 
+=! Best NMSE: -1.9070e+01 (epoch=175)
+
+I 06.08/20:19:48 solver.py:159 ] Epoch: [177/200][20/36] lr: 5.62e-05 | MSE loss: 5.4325e-03 | time: 0.026
+I 06.08/20:19:49 solver.py:169 ] => Train  Loss: 5.5103e-03
+
+I 06.08/20:19:49 solver.py:426 ] => Test NMSE: -1.9069e+01
+
+I 06.08/20:19:49 solver.py:358 ] => Adapter monitor [epoch=177] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.102513e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.091102e+00,weight:5.101346e+01 | component_l2=latent_adapter:5.102513e+01 | adapter_abs_max=1.182866e+00 | delta_l2=1.328417e+01 | delta_rel=2.905411e-01 | train_loss=5.510308e-03 | test_loss=6.194790e-03 | nmse=-1.906944e+01
+I 06.08/20:19:49 solver.py:224 ] 
+=! Best NMSE: -1.9070e+01 (epoch=175)
+
+I 06.08/20:19:50 solver.py:159 ] Epoch: [178/200][20/36] lr: 5.57e-05 | MSE loss: 5.3236e-03 | time: 0.027
+I 06.08/20:19:50 solver.py:169 ] => Train  Loss: 5.4824e-03
+
+I 06.08/20:19:50 solver.py:426 ] => Test NMSE: -1.9069e+01
+
+I 06.08/20:19:50 solver.py:358 ] => Adapter monitor [epoch=178] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.103128e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.092948e+00,weight:5.101958e+01 | component_l2=latent_adapter:5.103128e+01 | adapter_abs_max=1.183062e+00 | delta_l2=1.329344e+01 | delta_rel=2.907438e-01 | train_loss=5.482438e-03 | test_loss=6.195936e-03 | nmse=-1.906863e+01
+I 06.08/20:19:50 solver.py:224 ] 
+=! Best NMSE: -1.9070e+01 (epoch=175)
+
+I 06.08/20:19:51 solver.py:159 ] Epoch: [179/200][20/36] lr: 5.52e-05 | MSE loss: 5.4164e-03 | time: 0.029
+I 06.08/20:19:51 solver.py:169 ] => Train  Loss: 5.4080e-03
+
+I 06.08/20:19:51 solver.py:426 ] => Test NMSE: -1.9068e+01
+
+I 06.08/20:19:51 solver.py:358 ] => Adapter monitor [epoch=179] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.103873e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.092399e+00,weight:5.102704e+01 | component_l2=latent_adapter:5.103873e+01 | adapter_abs_max=1.183288e+00 | delta_l2=1.330430e+01 | delta_rel=2.909814e-01 | train_loss=5.408034e-03 | test_loss=6.196621e-03 | nmse=-1.906815e+01
+I 06.08/20:19:51 solver.py:224 ] 
+=! Best NMSE: -1.9070e+01 (epoch=175)
+
+I 06.08/20:19:52 solver.py:159 ] Epoch: [180/200][20/36] lr: 5.47e-05 | MSE loss: 5.5368e-03 | time: 0.024
+I 06.08/20:19:52 solver.py:169 ] => Train  Loss: 5.7761e-03
+
+I 06.08/20:19:52 solver.py:169 ] => Val  Loss: 6.1638e-03
+
+I 06.08/20:19:52 solver.py:426 ] => Test NMSE: -1.9070e+01
+
+I 06.08/20:19:52 solver.py:358 ] => Adapter monitor [epoch=180] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.104626e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.092676e+00,weight:5.103456e+01 | component_l2=latent_adapter:5.104626e+01 | adapter_abs_max=1.183605e+00 | delta_l2=1.331518e+01 | delta_rel=2.912192e-01 | train_loss=5.776101e-03 | val_loss=6.163795e-03 | test_loss=6.193853e-03 | nmse=-1.907009e+01
+I 06.08/20:19:52 solver.py:224 ] 
+=! Best NMSE: -1.9070e+01 (epoch=175)
+
+I 06.08/20:19:53 solver.py:159 ] Epoch: [181/200][20/36] lr: 5.43e-05 | MSE loss: 5.4194e-03 | time: 0.025
+I 06.08/20:19:53 solver.py:169 ] => Train  Loss: 5.4313e-03
+
+I 06.08/20:19:53 solver.py:426 ] => Test NMSE: -1.9070e+01
+
+I 06.08/20:19:53 solver.py:358 ] => Adapter monitor [epoch=181] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.105312e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.092923e+00,weight:5.104142e+01 | component_l2=latent_adapter:5.105312e+01 | adapter_abs_max=1.183685e+00 | delta_l2=1.332519e+01 | delta_rel=2.914382e-01 | train_loss=5.431332e-03 | test_loss=6.194548e-03 | nmse=-1.906960e+01
+I 06.08/20:19:53 solver.py:224 ] 
+=! Best NMSE: -1.9070e+01 (epoch=175)
+
+I 06.08/20:19:54 solver.py:159 ] Epoch: [182/200][20/36] lr: 5.39e-05 | MSE loss: 5.3044e-03 | time: 0.026
+I 06.08/20:19:54 solver.py:169 ] => Train  Loss: 5.3733e-03
+
+I 06.08/20:19:54 solver.py:426 ] => Test NMSE: -1.9070e+01
+
+I 06.08/20:19:54 solver.py:358 ] => Adapter monitor [epoch=182] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.106033e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.094243e+00,weight:5.104861e+01 | component_l2=latent_adapter:5.106033e+01 | adapter_abs_max=1.184097e+00 | delta_l2=1.333590e+01 | delta_rel=2.916725e-01 | train_loss=5.373339e-03 | test_loss=6.193349e-03 | nmse=-1.907045e+01
+I 06.08/20:19:54 solver.py:224 ] 
+=! Best NMSE: -1.9070e+01 (epoch=182)
+
+I 06.08/20:19:55 solver.py:159 ] Epoch: [183/200][20/36] lr: 5.34e-05 | MSE loss: 5.2685e-03 | time: 0.029
+I 06.08/20:19:55 solver.py:169 ] => Train  Loss: 5.3641e-03
+
+I 06.08/20:19:55 solver.py:426 ] => Test NMSE: -1.9070e+01
+
+I 06.08/20:19:55 solver.py:358 ] => Adapter monitor [epoch=183] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.106785e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.094708e+00,weight:5.105611e+01 | component_l2=latent_adapter:5.106785e+01 | adapter_abs_max=1.184361e+00 | delta_l2=1.334668e+01 | delta_rel=2.919083e-01 | train_loss=5.364070e-03 | test_loss=6.193687e-03 | nmse=-1.907021e+01
+I 06.08/20:19:55 solver.py:224 ] 
+=! Best NMSE: -1.9070e+01 (epoch=182)
+
+I 06.08/20:19:56 solver.py:159 ] Epoch: [184/200][20/36] lr: 5.31e-05 | MSE loss: 5.2262e-03 | time: 0.028
+I 06.08/20:19:56 solver.py:169 ] => Train  Loss: 5.3464e-03
+
+I 06.08/20:19:57 solver.py:426 ] => Test NMSE: -1.9069e+01
+
+I 06.08/20:19:57 solver.py:358 ] => Adapter monitor [epoch=184] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.107507e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.095815e+00,weight:5.106332e+01 | component_l2=latent_adapter:5.107507e+01 | adapter_abs_max=1.184567e+00 | delta_l2=1.335727e+01 | delta_rel=2.921398e-01 | train_loss=5.346439e-03 | test_loss=6.194898e-03 | nmse=-1.906936e+01
+I 06.08/20:19:57 solver.py:224 ] 
+=! Best NMSE: -1.9070e+01 (epoch=182)
+
+I 06.08/20:19:57 solver.py:159 ] Epoch: [185/200][20/36] lr: 5.27e-05 | MSE loss: 5.5779e-03 | time: 0.026
+I 06.08/20:19:58 solver.py:169 ] => Train  Loss: 5.3785e-03
+
+I 06.08/20:19:58 solver.py:426 ] => Test NMSE: -1.9070e+01
+
+I 06.08/20:19:58 solver.py:358 ] => Adapter monitor [epoch=185] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.108183e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.096088e+00,weight:5.107007e+01 | component_l2=latent_adapter:5.108183e+01 | adapter_abs_max=1.184713e+00 | delta_l2=1.336715e+01 | delta_rel=2.923558e-01 | train_loss=5.378524e-03 | test_loss=6.193541e-03 | nmse=-1.907031e+01
+I 06.08/20:19:58 solver.py:224 ] 
+=! Best NMSE: -1.9070e+01 (epoch=182)
+
+I 06.08/20:19:58 solver.py:159 ] Epoch: [186/200][20/36] lr: 5.24e-05 | MSE loss: 5.3813e-03 | time: 0.033
+I 06.08/20:19:59 solver.py:169 ] => Train  Loss: 5.4398e-03
+
+I 06.08/20:19:59 solver.py:426 ] => Test NMSE: -1.9069e+01
+
+I 06.08/20:19:59 solver.py:358 ] => Adapter monitor [epoch=186] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.108904e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.096700e+00,weight:5.107726e+01 | component_l2=latent_adapter:5.108904e+01 | adapter_abs_max=1.184964e+00 | delta_l2=1.337758e+01 | delta_rel=2.925840e-01 | train_loss=5.439819e-03 | test_loss=6.195215e-03 | nmse=-1.906914e+01
+I 06.08/20:19:59 solver.py:224 ] 
+=! Best NMSE: -1.9070e+01 (epoch=182)
+
+I 06.08/20:19:59 solver.py:159 ] Epoch: [187/200][20/36] lr: 5.21e-05 | MSE loss: 5.4443e-03 | time: 0.032
+I 06.08/20:20:00 solver.py:169 ] => Train  Loss: 5.4211e-03
+
+I 06.08/20:20:00 solver.py:426 ] => Test NMSE: -1.9071e+01
+
+I 06.08/20:20:00 solver.py:358 ] => Adapter monitor [epoch=187] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.109686e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.099829e+00,weight:5.108502e+01 | component_l2=latent_adapter:5.109686e+01 | adapter_abs_max=1.185152e+00 | delta_l2=1.338926e+01 | delta_rel=2.928395e-01 | train_loss=5.421134e-03 | test_loss=6.192972e-03 | nmse=-1.907071e+01
+I 06.08/20:20:00 solver.py:224 ] 
+=! Best NMSE: -1.9071e+01 (epoch=187)
+
+I 06.08/20:20:01 solver.py:159 ] Epoch: [188/200][20/36] lr: 5.18e-05 | MSE loss: 5.0128e-03 | time: 0.042
+I 06.08/20:20:02 solver.py:169 ] => Train  Loss: 5.3860e-03
+
+I 06.08/20:20:02 solver.py:426 ] => Test NMSE: -1.9069e+01
+
+I 06.08/20:20:02 solver.py:358 ] => Adapter monitor [epoch=188] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.110304e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.099466e+00,weight:5.109121e+01 | component_l2=latent_adapter:5.110304e+01 | adapter_abs_max=1.185441e+00 | delta_l2=1.339844e+01 | delta_rel=2.930403e-01 | train_loss=5.386020e-03 | test_loss=6.195534e-03 | nmse=-1.906891e+01
+I 06.08/20:20:02 solver.py:224 ] 
+=! Best NMSE: -1.9071e+01 (epoch=187)
+
+I 06.08/20:20:03 solver.py:159 ] Epoch: [189/200][20/36] lr: 5.15e-05 | MSE loss: 5.3241e-03 | time: 0.046
+I 06.08/20:20:04 solver.py:169 ] => Train  Loss: 5.3582e-03
+
+I 06.08/20:20:04 solver.py:426 ] => Test NMSE: -1.9070e+01
+
+I 06.08/20:20:04 solver.py:358 ] => Adapter monitor [epoch=189] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.111073e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.099947e+00,weight:5.109889e+01 | component_l2=latent_adapter:5.111073e+01 | adapter_abs_max=1.185636e+00 | delta_l2=1.340939e+01 | delta_rel=2.932797e-01 | train_loss=5.358168e-03 | test_loss=6.193577e-03 | nmse=-1.907029e+01
+I 06.08/20:20:04 solver.py:224 ] 
+=! Best NMSE: -1.9071e+01 (epoch=187)
+
+I 06.08/20:20:05 solver.py:159 ] Epoch: [190/200][20/36] lr: 5.12e-05 | MSE loss: 5.7191e-03 | time: 0.073
+I 06.08/20:20:06 solver.py:169 ] => Train  Loss: 5.4206e-03
+
+I 06.08/20:20:07 solver.py:169 ] => Val  Loss: 6.1633e-03
+
+I 06.08/20:20:07 solver.py:426 ] => Test NMSE: -1.9070e+01
+
+I 06.08/20:20:07 solver.py:358 ] => Adapter monitor [epoch=190] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.111698e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.099906e+00,weight:5.110514e+01 | component_l2=latent_adapter:5.111698e+01 | adapter_abs_max=1.185955e+00 | delta_l2=1.341860e+01 | delta_rel=2.934812e-01 | train_loss=5.420581e-03 | val_loss=6.163253e-03 | test_loss=6.193366e-03 | nmse=-1.907043e+01
+I 06.08/20:20:07 solver.py:224 ] 
+=! Best NMSE: -1.9071e+01 (epoch=187)
+
+I 06.08/20:20:08 solver.py:159 ] Epoch: [191/200][20/36] lr: 5.10e-05 | MSE loss: 5.5176e-03 | time: 0.058
+I 06.08/20:20:09 solver.py:169 ] => Train  Loss: 5.3578e-03
+
+I 06.08/20:20:09 solver.py:426 ] => Test NMSE: -1.9071e+01
+
+I 06.08/20:20:09 solver.py:358 ] => Adapter monitor [epoch=191] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.112406e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.100560e+00,weight:5.111221e+01 | component_l2=latent_adapter:5.112406e+01 | adapter_abs_max=1.186132e+00 | delta_l2=1.342886e+01 | delta_rel=2.937055e-01 | train_loss=5.357794e-03 | test_loss=6.193204e-03 | nmse=-1.907055e+01
+I 06.08/20:20:09 solver.py:224 ] 
+=! Best NMSE: -1.9071e+01 (epoch=187)
+
+I 06.08/20:20:10 solver.py:159 ] Epoch: [192/200][20/36] lr: 5.08e-05 | MSE loss: 5.6888e-03 | time: 0.050
+I 06.08/20:20:10 solver.py:169 ] => Train  Loss: 5.4347e-03
+
+I 06.08/20:20:11 solver.py:426 ] => Test NMSE: -1.9071e+01
+
+I 06.08/20:20:11 solver.py:358 ] => Adapter monitor [epoch=192] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.113108e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.101144e+00,weight:5.111922e+01 | component_l2=latent_adapter:5.113108e+01 | adapter_abs_max=1.186387e+00 | delta_l2=1.343896e+01 | delta_rel=2.939264e-01 | train_loss=5.434730e-03 | test_loss=6.193155e-03 | nmse=-1.907058e+01
+I 06.08/20:20:11 solver.py:224 ] 
+=! Best NMSE: -1.9071e+01 (epoch=187)
+
+I 06.08/20:20:11 solver.py:159 ] Epoch: [193/200][20/36] lr: 5.06e-05 | MSE loss: 5.1720e-03 | time: 0.037
+I 06.08/20:20:12 solver.py:169 ] => Train  Loss: 5.4332e-03
+
+I 06.08/20:20:12 solver.py:426 ] => Test NMSE: -1.9071e+01
+
+I 06.08/20:20:12 solver.py:358 ] => Adapter monitor [epoch=193] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.113721e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.102442e+00,weight:5.112533e+01 | component_l2=latent_adapter:5.113721e+01 | adapter_abs_max=1.186585e+00 | delta_l2=1.344807e+01 | delta_rel=2.941257e-01 | train_loss=5.433180e-03 | test_loss=6.192352e-03 | nmse=-1.907114e+01
+I 06.08/20:20:12 solver.py:224 ] 
+=! Best NMSE: -1.9071e+01 (epoch=193)
+
+I 06.08/20:20:13 solver.py:159 ] Epoch: [194/200][20/36] lr: 5.05e-05 | MSE loss: 5.3089e-03 | time: 0.030
+I 06.08/20:20:13 solver.py:169 ] => Train  Loss: 5.3738e-03
+
+I 06.08/20:20:13 solver.py:426 ] => Test NMSE: -1.9071e+01
+
+I 06.08/20:20:13 solver.py:358 ] => Adapter monitor [epoch=194] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.114372e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.103965e+00,weight:5.113180e+01 | component_l2=latent_adapter:5.114372e+01 | adapter_abs_max=1.186772e+00 | delta_l2=1.345767e+01 | delta_rel=2.943356e-01 | train_loss=5.373781e-03 | test_loss=6.192182e-03 | nmse=-1.907126e+01
+I 06.08/20:20:14 solver.py:224 ] 
+=! Best NMSE: -1.9071e+01 (epoch=194)
+
+I 06.08/20:20:14 solver.py:159 ] Epoch: [195/200][20/36] lr: 5.03e-05 | MSE loss: 5.5629e-03 | time: 0.036
+I 06.08/20:20:15 solver.py:169 ] => Train  Loss: 5.4143e-03
+
+I 06.08/20:20:15 solver.py:426 ] => Test NMSE: -1.9071e+01
+
+I 06.08/20:20:15 solver.py:358 ] => Adapter monitor [epoch=195] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.115109e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.104603e+00,weight:5.113916e+01 | component_l2=latent_adapter:5.115109e+01 | adapter_abs_max=1.186882e+00 | delta_l2=1.346819e+01 | delta_rel=2.945657e-01 | train_loss=5.414328e-03 | test_loss=6.192271e-03 | nmse=-1.907120e+01
+I 06.08/20:20:15 solver.py:224 ] 
+=! Best NMSE: -1.9071e+01 (epoch=194)
+
+I 06.08/20:20:16 solver.py:159 ] Epoch: [196/200][20/36] lr: 5.02e-05 | MSE loss: 5.0481e-03 | time: 0.030
+I 06.08/20:20:16 solver.py:169 ] => Train  Loss: 5.6598e-03
+
+I 06.08/20:20:16 solver.py:426 ] => Test NMSE: -1.9070e+01
+
+I 06.08/20:20:16 solver.py:358 ] => Adapter monitor [epoch=196] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.115718e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.104290e+00,weight:5.114526e+01 | component_l2=latent_adapter:5.115718e+01 | adapter_abs_max=1.187172e+00 | delta_l2=1.347717e+01 | delta_rel=2.947622e-01 | train_loss=5.659783e-03 | test_loss=6.193629e-03 | nmse=-1.907025e+01
+I 06.08/20:20:16 solver.py:224 ] 
+=! Best NMSE: -1.9071e+01 (epoch=194)
+
+I 06.08/20:20:17 solver.py:159 ] Epoch: [197/200][20/36] lr: 5.01e-05 | MSE loss: 5.6524e-03 | time: 0.028
+I 06.08/20:20:17 solver.py:169 ] => Train  Loss: 5.4670e-03
+
+I 06.08/20:20:17 solver.py:426 ] => Test NMSE: -1.9070e+01
+
+I 06.08/20:20:17 solver.py:358 ] => Adapter monitor [epoch=197] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.116693e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.106929e+00,weight:5.115496e+01 | component_l2=latent_adapter:5.116693e+01 | adapter_abs_max=1.187494e+00 | delta_l2=1.349119e+01 | delta_rel=2.950687e-01 | train_loss=5.467048e-03 | test_loss=6.193982e-03 | nmse=-1.907000e+01
+I 06.08/20:20:17 solver.py:224 ] 
+=! Best NMSE: -1.9071e+01 (epoch=194)
+
+I 06.08/20:20:18 solver.py:159 ] Epoch: [198/200][20/36] lr: 5.01e-05 | MSE loss: 5.3186e-03 | time: 0.026
+I 06.08/20:20:18 solver.py:169 ] => Train  Loss: 5.4052e-03
+
+I 06.08/20:20:18 solver.py:426 ] => Test NMSE: -1.9070e+01
+
+I 06.08/20:20:18 solver.py:358 ] => Adapter monitor [epoch=198] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.117329e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.106842e+00,weight:5.116132e+01 | component_l2=latent_adapter:5.117329e+01 | adapter_abs_max=1.187634e+00 | delta_l2=1.350059e+01 | delta_rel=2.952745e-01 | train_loss=5.405182e-03 | test_loss=6.193510e-03 | nmse=-1.907033e+01
+I 06.08/20:20:18 solver.py:224 ] 
+=! Best NMSE: -1.9071e+01 (epoch=194)
+
+I 06.08/20:20:19 solver.py:159 ] Epoch: [199/200][20/36] lr: 5.00e-05 | MSE loss: 5.3204e-03 | time: 0.027
+I 06.08/20:20:19 solver.py:169 ] => Train  Loss: 5.4685e-03
+
+I 06.08/20:20:19 solver.py:426 ] => Test NMSE: -1.9071e+01
+
+I 06.08/20:20:19 solver.py:358 ] => Adapter monitor [epoch=199] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.117977e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.109918e+00,weight:5.116773e+01 | component_l2=latent_adapter:5.117977e+01 | adapter_abs_max=1.187941e+00 | delta_l2=1.351023e+01 | delta_rel=2.954851e-01 | train_loss=5.468539e-03 | test_loss=6.192152e-03 | nmse=-1.907129e+01
+I 06.08/20:20:20 solver.py:224 ] 
+=! Best NMSE: -1.9071e+01 (epoch=199)
+
+I 06.08/20:20:20 solver.py:159 ] Epoch: [200/200][20/36] lr: 5.00e-05 | MSE loss: 5.4661e-03 | time: 0.027
+I 06.08/20:20:21 solver.py:169 ] => Train  Loss: 5.4196e-03
+
+I 06.08/20:20:21 solver.py:169 ] => Val  Loss: 6.1613e-03
+
+I 06.08/20:20:21 solver.py:426 ] => Test NMSE: -1.9072e+01
+
+I 06.08/20:20:21 solver.py:358 ] => Adapter monitor [epoch=200] | trainable=270400/270400 | non_adapter_trainable=0 | adapter_l2=5.118605e+01 | lora_A_l2=0.000000e+00 | lora_B_l2=0.000000e+00 | group_l2=bias:1.109683e+00,weight:5.117402e+01 | component_l2=latent_adapter:5.118605e+01 | adapter_abs_max=1.188146e+00 | delta_l2=1.351927e+01 | delta_rel=2.956830e-01 | train_loss=5.419567e-03 | val_loss=6.161347e-03 | test_loss=6.191451e-03 | nmse=-1.907178e+01
+I 06.08/20:20:21 solver.py:224 ] 
+=! Best NMSE: -1.9072e+01 (epoch=200)
+
+I 06.08/20:20:22 solver.py:247 ] => Saved encoder outputs to /home/hujiacong/zxd/Huawei/TransNet/exps/WAIRD/seed797/scenario_2/01105_adapter_64_0_torch_shared/encoder_output.pth
+I 06.08/20:20:22 solver.py:426 ] => Test NMSE: -1.9072e+01
+
+I 06.08/20:20:22 solver.py:383 ] 
+=> Test result: 
+loss: 6.1915e-03    NMSE: -1.9072e+01
+
+I 06.08/20:20:22 main.py:110 ] 
+=! Final test loss: 6.1915e-03
+         test NMSE: -1.9072e+01
+

@@ -1,68 +1,62 @@
-#!/bin/bash
+# #!/bin/bash
 
-lora_components=(encoder_ffn decoder_ffn)
+# lora_components=(fc_encoder)
 
-for lora_component in ${lora_components[@]}; do
-    scen_name=scenario_2/01109 \
-    lora_component=${lora_component} \
-    lora_rank=8 \
-    lora_alpha=16 \
-    epochs=400 \
-    nt=32 \
-    nc=32 \
-    dim_feedforward=2048 \
-    seed=796 \
-    gpu=0 \
-    lr_init=1e-3 \
-    transformer_backend=torch \
-    layer_sharing=shared \
-    bash scripts/lora.sh
+# for lora_component in ${lora_components[@]}; do
+#     seed=797 \
+#     gpu=0 \
+#     scen_name=scenario_2/01105 \
+#     lora_component=${lora_component} \
+#     lora_rank=256 \
+#     lora_alpha=1024 \
+#     epochs=200 \
+#     batch_size=32 \
+#     transformer_backend=torch \
+#     layer_sharing=shared \
+#     bash scripts/train_lora.sh
 
-    scen_name=scenario_2/01109 \
-    lora_component=${lora_component} \
-    lora_rank=8 \
-    lora_alpha=16 \
-    epochs=400 \
-    nt=32 \
-    nc=32 \
-    dim_feedforward=2048 \
-    seed=796 \
-    gpu=3 \
-    lr_init=1e-3 \
-    transformer_backend=torch \
-    layer_sharing=independent \
-    bash scripts/lora.sh
+#     seed=797 \
+#     gpu=3 \
+#     scen_name=scenario_2/01105 \
+#     lora_component=${lora_component} \
+#     lora_rank=256 \
+#     lora_alpha=1024 \
+#     epochs=200 \
+#     batch_size=32 \
+#     transformer_backend=torch \
+#     layer_sharing=independent \
+#     bash scripts/train_lora.sh
 
-    scen_name=scenario_2/01109 \
-    lora_component=${lora_component} \
-    lora_rank=8 \
-    lora_alpha=16 \
-    epochs=400 \
-    nt=32 \
-    nc=32 \
-    dim_feedforward=2048 \
-    seed=796 \
-    gpu=4 \
-    lr_init=1e-3 \
-    transformer_backend=original \
-    layer_sharing=shared \
-    bash scripts/lora.sh
+#     seed=797 \
+#     gpu=4 \
+#     scen_name=scenario_2/01105 \
+#     lora_component=${lora_component} \
+#     lora_rank=256 \
+#     lora_alpha=1024 \
+#     epochs=200 \
+#     batch_size=32 \
+#     transformer_backend=original \
+#     layer_sharing=shared \
+#     bash scripts/train_lora.sh
 
-    scen_name=scenario_2/01109 \
-    lora_component=${lora_component} \
-    lora_rank=8 \
-    lora_alpha=16 \
-    epochs=400 \
-    nt=32 \
-    nc=32 \
-    dim_feedforward=2048 \
-    seed=796 \
-    gpu=5 \
-    lr_init=1e-3 \
-    transformer_backend=original \
-    layer_sharing=independent \
-    bash scripts/lora.sh
+#     seed=797 \
+#     gpu=5 \
+#     scen_name=scenario_2/01105 \
+#     lora_component=${lora_component} \
+#     lora_rank=256 \
+#     lora_alpha=1024 \
+#     epochs=200 \
+#     batch_size=32 \
+#     transformer_backend=original \
+#     layer_sharing=independent \
+#     bash scripts/train_lora.sh
 
-    echo "lora_component: ${lora_component}, waiting 1min"
-    sleep 60
-done
+#     echo "lora_component: ${lora_component}, waiting 1min"
+#     sleep 60
+# done
+
+
+scen_name=city_76_houston_3p5_part_14 lora_component=fc_decoder lora_rank=8 lora_alpha=16 gpu=5 seed=42 bash scripts/lora.sh
+scen_name=city_76_houston_3p5_part_14 lora_component=fc_encoder lora_rank=8 lora_alpha=16 gpu=4 seed=42 bash scripts/lora.sh
+scen_name=city_76_houston_3p5_part_14 lora_component=decoder_ffn lora_rank=8 lora_alpha=16 gpu=4 seed=42 bash scripts/lora.sh
+scen_name=city_76_houston_3p5_part_14 lora_component=encoder_ffn lora_rank=8 lora_alpha=16 gpu=5 seed=42 bash scripts/lora.sh

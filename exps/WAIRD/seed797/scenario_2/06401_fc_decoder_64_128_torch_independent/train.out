@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/hujiacong/zxd/Huawei/TransNet/./main.py", line 6, in <module>
+    from utils.parser import args
+  File "/home/hujiacong/zxd/Huawei/TransNet/utils/__init__.py", line 2, in <module>
+    from .init import *
+  File "/home/hujiacong/zxd/Huawei/TransNet/utils/init.py", line 4, in <module>
+    import thop
+ModuleNotFoundError: No module named 'thop'

@@ -52,6 +52,10 @@ parser.add_argument('-d', '--d_model', type=int, default=64, metavar='N',
                     help='number of Transformer feature dimension')
 parser.add_argument('--dim_feedforward', type=int, default=2048,
                     help='hidden dimension of Transformer feed-forward layers')
+parser.add_argument('--fc_lora', action='store_true',
+                    help='replace fc_encoder/fc_decoder with low-rank Linear factors')
+parser.add_argument('--fc_lora_rank', type=int, default=None,
+                    help='rank for --fc_lora; default is one quarter of the codeword length')
 parser.add_argument('--layer_sharing', type=str, default='shared',
                     choices=['shared', 'independent'],
                     help='reuse one Transformer layer or use independent layers')
@@ -70,7 +74,8 @@ parser.add_argument('--freeze_components', type=str, nargs='+', default=[],
                              'decoder_ffn', 'fc_encoder', 'fc_decoder'],
                     help='freeze components during training (space-separated list)')
 parser.add_argument('--lora_component', type=str, nargs='+', default=[],
-                    choices=['encoder_ffn', 'decoder_ffn'],
+                    choices=['encoder_ffn', 'decoder_ffn', 'fc_encoder',
+                             'fc_decoder', 'adapter'],
                     help='apply LoRA to FFN components (space-separated list); '
                          'leave empty to disable LoRA')
 parser.add_argument('--lora_pretrained', type=str, default=None,

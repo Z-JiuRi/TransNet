@@ -42,6 +42,7 @@ class Trainer:
         self.val_loss = None
         self.test_loss = None
         self.best_nmse = Result()
+        self.adapter_initial_state = None
 
         self.tester = Tester(model, device, criterion, print_freq)
         self.test_loader = None
@@ -61,22 +62,39 @@ class Trainer:
 
         self.all_epoch = epochs
         self._resume()
+        adapter_monitor_enabled = self._has_adapter_params()
+        if adapter_monitor_enabled:
+            self.adapter_initial_state = self._capture_adapter_state()
+            self.test_loss, nmse = self.test(test_loader)
+            self.vision.add_scalar("adapter_monitor/test_loss", self.test_loss,
+                                   global_step=self.cur_epoch - 1)
+            self.vision.add_scalar("adapter_monitor/nmse", nmse,
+                                   global_step=self.cur_epoch - 1)
+            self._log_adapter_monitor("before_train", nmse=nmse,
+                                      test_loss=self.test_loss)
 
         for ep in range(self.cur_epoch, epochs + 1):
             self.cur_epoch = ep
 
             # conduct training, validation and test
             self.train_loss = self.train(train_loader)
+            self.val_loss = None
             if ep % self.val_freq == 0:
                 self.val_loss = self.val(val_loader)
 
-            if ep % self.test_freq == 0:
+            if adapter_monitor_enabled or ep % self.test_freq == 0:
                 self.test_loss, nmse = self.test(test_loader)
                 self.vision.add_scalar("test/loss", self.test_loss, global_step=ep)
                 self.vision.add_scalar("test/nmse", nmse, global_step=ep)
                 self.vision.add_scalar("test/train_loss", self.train_loss, global_step=ep)
             else:
                 nmse = None
+
+            if adapter_monitor_enabled:
+                self._log_adapter_monitor(f"epoch={ep}", nmse=nmse,
+                                          train_loss=self.train_loss,
+                                          val_loss=self.val_loss,
+                                          test_loss=self.test_loss)
 
             # conduct saving, visualization and log printing
             self._loop_postprocessing(nmse)
@@ -227,6 +245,117 @@ class Trainer:
         encoder_outputs_tensor = torch.cat(encoder_outputs, dim=0)
         torch.save(encoder_outputs_tensor, output_path)
         logger.info(f'=> Saved encoder outputs to {output_path}')
+
+    def _adapter_named_parameters(self):
+        return [
+            (name, param) for name, param in self.model.named_parameters()
+            if "lora_" in name or "adapter_" in name
+        ]
+
+    def _has_adapter_params(self):
+        return len(self._adapter_named_parameters()) > 0
+
+    def _capture_adapter_state(self):
+        return {
+            name: param.detach().cpu().clone()
+            for name, param in self._adapter_named_parameters()
+        }
+
+    def _adapter_param_stats(self):
+        adapter_l2_sq = 0.0
+        adapter_abs_max = 0.0
+        adapter_delta_l2_sq = 0.0
+        adapter_initial_l2_sq = 0.0
+        trainable_scalars = 0
+        non_adapter_trainable_scalars = 0
+        total_scalars = 0
+        group_l2_sq = {}
+        component_l2_sq = {}
+
+        for name, param in self.model.named_parameters():
+            if "lora_" not in name and "adapter_" not in name and param.requires_grad:
+                non_adapter_trainable_scalars += param.numel()
+
+        for name, param in self._adapter_named_parameters():
+            data = param.detach()
+            total_scalars += data.numel()
+            if param.requires_grad:
+                trainable_scalars += data.numel()
+
+            adapter_l2_sq += data.square().sum().item()
+            adapter_abs_max = max(adapter_abs_max, data.abs().max().item())
+
+            if "lora_A" in name:
+                group = "lora_A"
+            elif "lora_B" in name:
+                group = "lora_B"
+            else:
+                group = name.rsplit(".", 1)[-1]
+            group_l2_sq[group] = group_l2_sq.get(group, 0.0) + data.square().sum().item()
+            component = name.split(".", 1)[0]
+            component_l2_sq[component] = (
+                component_l2_sq.get(component, 0.0) + data.square().sum().item()
+            )
+
+            if self.adapter_initial_state is not None and name in self.adapter_initial_state:
+                initial = self.adapter_initial_state[name].to(data.device)
+                adapter_delta_l2_sq += (data - initial).square().sum().item()
+                adapter_initial_l2_sq += initial.square().sum().item()
+
+        delta_l2 = adapter_delta_l2_sq ** 0.5
+        initial_l2 = adapter_initial_l2_sq ** 0.5
+        delta_rel = delta_l2 / initial_l2 if initial_l2 > 0 else 0.0
+        return {
+            "trainable_scalars": trainable_scalars,
+            "non_adapter_trainable_scalars": non_adapter_trainable_scalars,
+            "total_scalars": total_scalars,
+            "adapter_l2": adapter_l2_sq ** 0.5,
+            "lora_A_l2": group_l2_sq.get("lora_A", 0.0) ** 0.5,
+            "lora_B_l2": group_l2_sq.get("lora_B", 0.0) ** 0.5,
+            "group_l2": {
+                group: value ** 0.5
+                for group, value in sorted(group_l2_sq.items())
+            },
+            "component_l2": {
+                component: value ** 0.5
+                for component, value in sorted(component_l2_sq.items())
+            },
+            "adapter_abs_max": adapter_abs_max,
+            "delta_l2": delta_l2,
+            "delta_rel": delta_rel,
+        }
+
+    def _log_adapter_monitor(self, label, nmse=None, train_loss=None,
+                             val_loss=None, test_loss=None):
+        stats = self._adapter_param_stats()
+        parts = [
+            f"=> Adapter monitor [{label}]",
+            f"trainable={stats['trainable_scalars']}/{stats['total_scalars']}",
+            f"non_adapter_trainable={stats['non_adapter_trainable_scalars']}",
+            f"adapter_l2={stats['adapter_l2']:.6e}",
+            f"lora_A_l2={stats['lora_A_l2']:.6e}",
+            f"lora_B_l2={stats['lora_B_l2']:.6e}",
+            "group_l2=" + ",".join(
+                f"{name}:{value:.6e}"
+                for name, value in stats["group_l2"].items()
+            ),
+            "component_l2=" + ",".join(
+                f"{name}:{value:.6e}"
+                for name, value in stats["component_l2"].items()
+            ),
+            f"adapter_abs_max={stats['adapter_abs_max']:.6e}",
+            f"delta_l2={stats['delta_l2']:.6e}",
+            f"delta_rel={stats['delta_rel']:.6e}",
+        ]
+        if train_loss is not None:
+            parts.append(f"train_loss={train_loss:.6e}")
+        if val_loss is not None:
+            parts.append(f"val_loss={val_loss:.6e}")
+        if test_loss is not None:
+            parts.append(f"test_loss={test_loss:.6e}")
+        if nmse is not None:
+            parts.append(f"nmse={float(nmse):.6e}")
+        logger.info(" | ".join(parts))
 
 
 

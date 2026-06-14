@@ -52,6 +52,23 @@ class MyDataLoader(object):
     r""" PyTorch DataLoader for COST2100 dataset.
     """
 
+    @staticmethod
+    def _load_tensor(path):
+        suffix = Path(path).suffix.lower()
+        if suffix in ('.pt', '.pth'):
+            data = torch.load(path, weights_only=False, map_location=torch.device('cpu'))
+            return data.to(dtype=torch.float32) if torch.is_tensor(data) else torch.tensor(data, dtype=torch.float32)
+
+        import numpy as np
+        data = np.load(path)
+        if isinstance(data, np.lib.npyio.NpzFile):
+            if len(data.files) != 1:
+                raise ValueError(
+                    f"Cannot infer array from npz file {path}; keys={data.files}"
+                )
+            data = data[data.files[0]]
+        return torch.tensor(data, dtype=torch.float32)
+
     def __init__(self, train_path, val_path, test_path, batch_size, num_workers, pin_memory, channel=2, nt=32, nc=32):
         assert os.path.exists(train_path)
         assert os.path.exists(val_path)
@@ -62,41 +79,17 @@ class MyDataLoader(object):
         self.channel = channel
         self.nt = nt
         self.nc = nc
-        
-        # Training data loading
-        data_train = torch.load(train_path, weights_only=False, map_location=torch.device('cpu'))
-        self.train_dataset = TensorDataset(data_train)
+
+        data_train  = self._load_tensor(train_path)
         logger.info(f'{train_path} loaded.')
-
-        # Validation data loading
-        data_val = torch.load(val_path, weights_only=False, map_location=torch.device('cpu'))
-        self.val_dataset = TensorDataset(data_val)
+        data_val    = self._load_tensor(val_path)
         logger.info(f'{val_path} loaded.')
-
-        # Test data loading
-        data_test = torch.load(test_path, weights_only=False, map_location=torch.device('cpu'))
-        self.test_dataset = TensorDataset(data_test)
+        data_test   = self._load_tensor(test_path)
         logger.info(f'{test_path} loaded.')
-        
 
-        # import scipy.io as sio
-        # # Training data loading
-        # data_train = sio.loadmat(train_path)['HT']
-        # data_train = torch.tensor(data_train, dtype=torch.float32).view(
-        #     data_train.shape[0], self.channel, self.nt, self.nc)
-        # self.train_dataset = TensorDataset(data_train)
-
-        # # Validation data loading
-        # data_val = sio.loadmat(val_path)['HT']
-        # data_val = torch.tensor(data_val, dtype=torch.float32).view(
-        #     data_val.shape[0], self.channel, self.nt, self.nc)
-        # self.val_dataset = TensorDataset(data_val)
-
-        # # Test data loading
-        # data_test = sio.loadmat(test_path)['HT']
-        # data_test = torch.tensor(data_test, dtype=torch.float32).view(
-        #     data_test.shape[0], self.channel, self.nt, self.nc)
-        # self.test_dataset = TensorDataset(data_test)
+        self.train_dataset  = TensorDataset(data_train)
+        self.val_dataset    = TensorDataset(data_val)
+        self.test_dataset   = TensorDataset(data_test)
 
 
     def __call__(self):

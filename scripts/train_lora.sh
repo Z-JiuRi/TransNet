@@ -4,9 +4,9 @@ set -euo pipefail
 # Handwritten FFN LoRA training.
 #
 # Example:
-#   seed=797 scen_name=scenario_2/01109 lora_component=decoder_ffn bash scripts/train_lora.sh
+#   seed=797 gpu=4 scen_name=scenario_2/01105 lora_component=fc_encoder lora_rank=256 lora_alpha=256 epochs=200 batch_size=32 transformer_backend=torch layer_sharing=independent bash scripts/train_lora.sh
 
-scen_name=${scen_name:-scenario_2/01109}
+scen_name=${scen_name:-scenario_2/01105}
 data_root=${data_root:-data}
 train_path=${train_path:-${data_root}/${scen_name}/train.pt}
 val_path=${val_path:-${data_root}/${scen_name}/test.pt}
@@ -18,61 +18,60 @@ nc=${nc:-64}
 dim_feedforward=${dim_feedforward:-2048}
 cr=${cr:-4}
 
-lora_component=${lora_component:-decoder_ffn}
-case "$lora_component" in
-  encoder_ffn|decoder_ffn) ;;
-  *)
-    echo "lora_component must be encoder_ffn or decoder_ffn, got: ${lora_component}" >&2
-    exit 2
-    ;;
-esac
+lora_component=${lora_component:-encoder_ffn}
+
 lora_rank=${lora_rank:-8}
 lora_alpha=${lora_alpha:-16}
 
 epochs=${epochs:-400}
-batch_size=${batch_size:-256}
+batch_size=${batch_size:-32}
 workers=${workers:-0}
 scheduler=${scheduler:-cosine}
-lr_init=${lr_init:-1e-3}
+lr_init=${lr_init:-5e-4}
 weight_decay=${weight_decay:-0}
 seed=${seed:-797}
 gpu=${gpu:-0}
 transformer_backend=${transformer_backend:-torch}
 layer_sharing=${layer_sharing:-shared}
+fc_lora=${fc_lora:-false}
+fc_lora_rank=${fc_lora_rank:-}
 pretrained=${pretrained:-exps/WAIRD/seed${seed}/base/${transformer_backend}_${layer_sharing}/checkpoints/best_nmse.pth}
 exp_name=${exp_name:-WAIRD/seed${seed}/${scen_name}_${lora_component}_${lora_rank}_${lora_alpha}_${transformer_backend}_${layer_sharing}}
 
 log_file="exps/${exp_name}/train.out"
 mkdir -p "$(dirname "$log_file")"
 
-cmd=(
-  python ./main.py
-  --exp_name "$exp_name"
-  --train_path "$train_path"
-  --val_path "$val_path"
-  --test_path "$test_path"
-  --epochs "$epochs"
-  --d_model "$d_model"
-  --nt "$nt"
-  --nc "$nc"
-  --dim_feedforward "$dim_feedforward"
-  --batch_size "$batch_size"
-  --workers "$workers"
-  --cr "$cr"
-  --scheduler "$scheduler"
-  --lr_init "$lr_init"
-  --weight_decay "$weight_decay"
-  --seed "$seed"
-  --pretrained "$pretrained"
-  --lora_component "$lora_component"
-  --lora_rank "$lora_rank"
-  --lora_alpha "$lora_alpha"
-  --transformer_backend "$transformer_backend"
-  --layer_sharing "$layer_sharing"
-  --gpu "$gpu"
-)
+extra_args=()
+if [[ "${fc_lora}" == "true" || "${fc_lora}" == "1" ]]; then
+  extra_args+=(--fc_lora)
+fi
+if [[ -n "${fc_lora_rank}" ]]; then
+  extra_args+=(--fc_lora_rank "${fc_lora_rank}")
+fi
 
-printf 'Running LoRA train: %s\n' "$exp_name"
-printf 'Base checkpoint: %s\n' "$pretrained"
-printf 'Log: %s\n' "$log_file"
-"${cmd[@]}" 2>&1 & | tee "$log_file"
+python ./main.py \
+  --exp_name "${exp_name}" \
+  --train_path "${train_path}" \
+  --val_path "${val_path}" \
+  --test_path "${test_path}" \
+  --epochs "${epochs}" \
+  --d_model "${d_model}" \
+  --nt "${nt}" \
+  --nc "${nc}" \
+  --dim_feedforward "${dim_feedforward}" \
+  --batch_size "${batch_size}" \
+  --workers "${workers}" \
+  --cr "${cr}" \
+  --scheduler "${scheduler}" \
+  --lr_init "${lr_init}" \
+  --weight_decay "${weight_decay}" \
+  --gpu "${gpu}" \
+  --seed "${seed}" \
+  --transformer_backend "${transformer_backend}" \
+  --layer_sharing "${layer_sharing}" \
+  --pretrained "${pretrained}" \
+  --lora_component "${lora_component}" \
+  --lora_rank "${lora_rank}" \
+  --lora_alpha "${lora_alpha}" \
+  "${extra_args[@]}" \
+  > "${log_file}" 2>&1 &
